@@ -16,6 +16,70 @@ local function map(mode, lhs, rhs, opts)
   end
 end
 
+-- Requerimentos do plugin toggleterm
+local toggleterm = require("toggleterm")
+local Terminal = require("toggleterm.terminal").Terminal
+
+-- Configurações de terminais
+local horizontal_size = 15
+local vertical_size = 50
+local float_size = 0.8
+
+-- Criar instâncias de terminais
+local horizontal = Terminal:new({
+  direction = "horizontal",
+  hidden = true,
+  size = horizontal_size,
+})
+
+local vertical = Terminal:new({
+  direction = "vertical",
+  hidden = true,
+  size = vertical_size,
+})
+
+local float = Terminal:new({
+  direction = "float",
+  hidden = true,
+  float_opts = {
+    border = "rounded",
+    width = math.floor(vim.o.columns * float_size),
+    height = math.floor(vim.o.lines * float_size),
+  },
+})
+
+-- Funções de alternância dos terminais
+local function toggle_horizontal()
+  horizontal:toggle()
+end
+
+local function toggle_vertical()
+  vertical:toggle()
+end
+
+local function toggle_float()
+  float:toggle()
+end
+
+-- Mapeando teclas para alternar terminais no modo normal
+map("n", "<C-x>", "<C-\\><C-N>", { desc = "Escape terminal mode" })
+map("n", "<leader>h", toggle_horizontal, { desc = "Toggle Horizontal Terminal" })
+map("n", "<leader>v", toggle_vertical, { desc = "Toggle Vertical Terminal" })
+map("n", "<leader>i", toggle_float, { desc = "Toggle Floating Terminal" })
+
+-- Alternância dos terminais no modo terminal
+map({ "n", "t" }, "<A-v>", toggle_vertical, { desc = "Toggle Vertical Terminal" })
+map({ "n", "t" }, "<A-h>", toggle_horizontal, { desc = "Toggle Horizontal Terminal" })
+map({ "n", "t" }, "<A-i>", toggle_float, { desc = "Toggle Floating Terminal" })
+
+-- Terminal novos no modo normal
+map("n", "<leader>h", function()
+  horizontal:toggle()
+end, { desc = "Terminal new horizontal term" })
+
+map("n", "<leader>v", function()
+  vertical:toggle()
+end, { desc = "Terminal new vertical term" })
 -- Oil.nvim
 map("n", "-", "<cmd>Oil<cr>", { desc = "Open oil.nvim" })
 map("n", "<leader>-", function()
@@ -59,3 +123,11 @@ map("v", ">", ">gv")
 -- moving lines
 map("x", "J", ":m '>+1<cr>gv=gv")
 map("x", "K", ":m '<-2<cr>gv=gv")
+
+-- diagnostics
+map(
+  "n",
+  "<leader>d",
+  "<cmd>lua vim.diagnostic.open_float()<CR>",
+  { desc = "Open diagnostic float", noremap = true, silent = true }
+)
