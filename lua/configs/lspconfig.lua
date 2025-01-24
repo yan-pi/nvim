@@ -1,13 +1,13 @@
 -- load defaults i.e lua_lsp
 require("nvchad.configs.lspconfig").defaults()
+-- Load defaults
+require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
-
--- EXAMPLE
-local servers = { "html", "cssls", "tailwindcss" }
 local nvlsp = require "nvchad.configs.lspconfig"
 
--- lsps with default config
+-- Configuração para múltiplos servidores
+local servers = { "html", "cssls", "tailwindcss", "ts_ls" }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = nvlsp.on_attach,
@@ -16,15 +16,20 @@ for _, lsp in ipairs(servers) do
   }
 end
 
--- configuring single server, example: typescript
-lspconfig.ts_ls.setup {
-  on_attach = nvlsp.on_attach,
-  on_init = nvlsp.on_init,
-  capabilities = nvlsp.capabilities,
+-- Configuração do null-ls
+local null_ls = require "null-ls"
+null_ls.setup {
+  sources = {
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.code_actions.eslint,
+    null_ls.builtins.formatting.prettier,
+  },
 }
 
-lspconfig.tailwindcss.setup {
-  on_attach = nvlsp.on_attach,
-  on_init = nvlsp.on_init,
-  capabilities = nvlsp.capabilities,
+-- Configuração de diagnósticos globais
+vim.diagnostic.config {
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
 }

@@ -6,7 +6,7 @@
 local M = {}
 
 M.base46 = {
-  theme = "gruvbox",
+  theme = "gruvchad",
 
   hl_override = {
     Comment = { italic = true },
@@ -17,7 +17,7 @@ M.base46 = {
 M.ui = {
   cmp = {
     lspkind_text = true,
-    style = "flat_dark", -- default/flat_light/flat_dark/atom/atom_colored
+    style = "default", -- default/flat_light/flat_dark/atom/atom_colored
     format_colors = {
       tailwind = true,
     },
