@@ -5,10 +5,26 @@ return {
     opts = require "configs.conform",
   },
   {
+    "hinell/lsp-timeout.nvim",
+    dependencies = { "neovim/nvim-lspconfig" },
+  },
+  {
     "vyfor/cord.nvim",
     build = "./build || .\\build",
     event = "VeryLazy",
     opts = {}, -- calls require('cord').setup()
+  },
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      local null_ls = require "null-ls"
+      null_ls.setup {
+        sources = {
+          null_ls.builtins.diagnostics.eslint,
+          null_ls.builtins.formatting.prettier,
+        },
+      }
+    end,
   },
   {
     "iamcco/markdown-preview.nvim",
@@ -32,7 +48,6 @@ return {
     ---@type snacks.Config
     opts = {
       bigfile = { enabled = true },
-      dashboard = { enabled = true },
       indent = { enabled = true },
       input = { enabled = true },
       notifier = {
@@ -251,25 +266,26 @@ return {
     },
   },
   { "zbirenbaum/copilot-cmp", opts = {}, dependencies = { "copilot.lua" } },
-  -- {
-  --   "github/copilot.vim",
-  --   lazy = false,
-  --   config = function() -- Mapping tab is already used in NvChad
-  --     vim.g.copilot_no_tab_map = true -- Disable tab mapping
-  --     vim.g.copilot_assume_mapped = true -- Assume that the mapping is already done
-  --   end,
-  -- },
+  {
+    "github/copilot.vim",
+    lazy = false,
+    config = function() -- Mapping tab is already used in NvChad
+      vim.g.copilot_no_tab_map = true -- Disable tab mapping
+      vim.g.copilot_assume_mapped = true -- Assume that the mapping is already done
+    end,
+  },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
-      { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+    opts = {},
+    build = function()
+      vim.cmd "UpdateRemotePlugins" -- You need to restart to make it works
+    end,
+    event = "VeryLazy",
+    keys = {
+      { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
+      { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
+      { "<leader>cco", "<cmd>CopilotChatOpen<cr>", desc = "CopilotChat - Open chat" },
     },
-    build = "make tiktoken", -- Only on MacOS or Linux
-    opts = {
-      -- See Configuration section for options
-    },
-    -- See Commands section for default commands if you want to lazy load on them
   },
   {
     "windwp/nvim-ts-autotag",
@@ -348,6 +364,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
+      require("nvchad.configs.lspconfig").defaults()
       require "configs.lspconfig"
     end,
   },
@@ -379,21 +396,6 @@ return {
     end,
   },
   {
-    "folke/zen-mode.nvim",
-    cmd = "ZenMode",
-  },
-  {
-    "folke/twilight.nvim",
-    cmd = "Twilight",
-  },
-  {
-    "folke/which-key.nvim",
-    event = "BufWinEnter",
-    config = function()
-      require("which-key").setup {}
-    end,
-  },
-  {
     "folke/lsp-colors.nvim",
     event = "BufReadPre",
   },
@@ -410,6 +412,7 @@ return {
         "stylua",
         "html-lsp",
         "css-lsp",
+        "typescript-language-server",
         "prettier",
       },
     },
@@ -430,6 +433,7 @@ return {
         "vimdoc",
         "html",
         "css",
+        "typescript",
       },
     },
   },
