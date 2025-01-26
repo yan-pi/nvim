@@ -1,13 +1,12 @@
 -- load defaults i.e lua_lsp
 require("nvchad.configs.lspconfig").defaults()
--- Load defaults
-require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
 local nvlsp = require "nvchad.configs.lspconfig"
 
 -- Configuração para múltiplos servidores
-local servers = { "html", "cssls", "tailwindcss", "ts_ls" }
+local servers = { "html", "cssls", "tailwindcss", "ts_ls", "gopls" }
+
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = nvlsp.on_attach,
@@ -23,6 +22,8 @@ null_ls.setup {
     null_ls.builtins.diagnostics.eslint,
     null_ls.builtins.code_actions.eslint,
     null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.gofmt,
+    null_ls.builtins.formatting.goimports,
   },
 }
 
