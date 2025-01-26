@@ -37,28 +37,40 @@ M.ui = {
 
 M.nvdash = {
 
-  load_on_startup = false,
+  load_on_startup = true,
 
   header = {
-    "                            ",
-    "     ▄▄         ▄ ▄▄▄▄▄▄▄   ",
-    "   ▄▀███▄     ▄██ █████▀    ",
-    "   ██▄▀███▄   ███           ",
-    "   ███  ▀███▄ ███           ",
-    "   ███    ▀██ ███           ",
-    "   ███      ▀ ███           ",
-    "   ▀██ █████▄▀█▀▄██████▄    ",
-    "     ▀ ▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀   ",
-    "                            ",
+    "▪   ▐ ▄ ·▄▄▄▄  ▪   ▄▄▄·  ▐ ▄ ▄▄▄▄·        ▄· ▄▌",
+    "██ •█▌▐███· ██ ██ ▐█ ▀█ •█▌▐█▐█ ▀█▪ ▄█▀▄ ▐█▪██▌",
+    "▐█·▐█▐▐▌▐█▪ ▐█▌▐█·▄█▀▀█ ▐█▐▐▌▐█▀▀█▄▐█▌.▐▌▐█▌▐█▪",
+    "▐█▌██▐█▌██. ██ ▐█▌▐█▪ ▐▌██▐█▌██▄▪▐█▐█▌.▐▌ ▐█▀·.",
+    "▀▀▀▀▀ █▪▀▀▀▀▀• ▀▀▀ ▀  ▀ ▀▀ █▪·▀▀▀▀  ▀█▄▀▪  ▀ • ",
+    "                                               ",
     "     Powered By  eovim    ",
-    "                            ",
   },
 
   buttons = {
     { txt = "  Find File", keys = "Spc f f", cmd = "Telescope find_files" },
     { txt = "  Recent Files", keys = "Spc f o", cmd = "Telescope oldfiles" },
-    -- more... check nvconfig.lua file for full list of buttons
+    -- { txt = "  Restore Session", keys = "Spc s r", cmd = "SessionManager load_session" },
+    -- { txt = "  New File", keys = "Spc f n", cmd = "ene | startinsert" },
+    { txt = "  Find Word", keys = "Spc f w", cmd = "Telescope live_grep" },
+    -- { txt = "  Project Browser", keys = "Spc p b", cmd = "Telescope projects" },
+    -- { txt = "  Update Plugins", keys = "Spc p u", cmd = "Lazy sync" },
+    -- { txt = "  Open Settings", keys = "Spc e c", cmd = "edit $MYVIMRC" },
+    -- { txt = "  Quit", keys = "Spc q q", cmd = "qa" },
   },
+}
+
+M.mason = { pkgs = {}, skip = {} }
+
+M.lsp = { signature = true }
+
+M.colorify = {
+  enabled = true,
+  mode = "virtual", -- fg, bg, virtual
+  virt_text = "󱓻 ",
+  highlight = { hex = true, lspvars = true },
 }
 
 return M
