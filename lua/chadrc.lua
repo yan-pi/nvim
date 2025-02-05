@@ -6,7 +6,7 @@
 local M = {}
 
 M.base46 = {
-  theme = "chocolate",
+  theme = "kanagawa",
 
   hl_override = {
     Comment = { italic = true },
@@ -26,10 +26,10 @@ M.ui = {
   telescope = { style = "bordered" }, -- borderless / bordered
 
   statusline = {
-    theme = "vscode_colored", -- default/vscode/vscode_colored/minimal
+    theme = "default", -- default/vscode/vscode_colored/minimal
     -- default/round/block/arrow separators work only for default statusline theme
     -- round and block will work for minimal theme only
-    separator_style = "block",
+    separator_style = "default",
     order = nil,
     modules = nil,
   },

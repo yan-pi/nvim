@@ -14,7 +14,7 @@ vim.opt.relativenumber = true
 if vim.g.neovide then
   vim.opt.linespace = 0
   vim.o.guifont = "Fira Code,Noto_Color_Emoji:h14"
-  vim.g.neovide_scale_factor = 0.9
+  vim.g.neovide_scale_factor = 0.8
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_cursor_vfx_mode = "sonicboom"
 end
