@@ -6,4 +6,41 @@
 
 # Credits
 
-1) Lazyvim starter https://github.com/LazyVim/starter as nvchad's starter was inspired by Lazyvim's . It made a lot of things easier!
+1. Lazyvim starter https://github.com/LazyVim/starter as nvchad's starter was inspired by Lazyvim's . It made a lot of things easier!
+
+# Copilot Keybindings
+
+## Suggestion Keybindings
+
+| Key      | Action              | Mode   |
+| -------- | ------------------- | ------ |
+| `Alt-l`  | Accept suggestion   | Insert |
+| `Alt-]`  | Next suggestion     | Insert |
+| `Alt-[`  | Previous suggestion | Insert |
+| `Ctrl-]` | Dismiss suggestion  | Insert |
+
+## Panel Keybindings
+
+| Key         | Action           | Mode   |
+| ----------- | ---------------- | ------ |
+| `[[`        | Jump to previous | Normal |
+| `]]`        | Jump to next     | Normal |
+| `Enter`     | Accept           | Normal |
+| `gr`        | Refresh panel    | Normal |
+| `Alt-Enter` | Open panel       | Normal |
+
+## Copilot Chat Keybindings
+
+| Key           | Action                  | Mode           |
+| ------------- | ----------------------- | -------------- |
+| `<leader>cc`  | Copilot Chat Menu       | Normal         |
+| `<leader>cci` | Inline Chat             | Normal, Visual |
+| `<leader>ccp` | Custom Prompt           | Normal, Visual |
+| `<leader>cce` | Explain Code            | Normal         |
+| `<leader>cct` | Generate Tests          | Normal         |
+| `<leader>ccr` | Refactor Code           | Normal         |
+| `<leader>ccf` | Fix Code                | Normal         |
+| `<leader>cco` | Optimize Code           | Normal         |
+| `<leader>ccd` | Add Documentation       | Normal         |
+| `<leader>ccm` | Generate Commit Message | Normal         |
+| `<leader>ccv` | Code Review             | Normal         |

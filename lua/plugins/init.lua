@@ -3,6 +3,7 @@ return {
   { import = "plugins.formatting" },
   { import = "plugins.ui" },
   { import = "plugins.markdown" },
+  { import = "plugins.merge" },
   { import = "plugins.git" },
   { import = "plugins.treesitter" },
   { import = "plugins.copilot" },
