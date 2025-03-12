@@ -2,7 +2,7 @@ return {
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    event = { "InsertEnter", "BufReadPre" }, -- Load earlier for better experience
+    event = { "InsertEnter", "BufReadPre" }, -- Carrega mais cedo para melhor experiência
     config = function()
       require("copilot").setup {
         suggestion = {
@@ -17,7 +17,7 @@ return {
         },
         panel = {
           enabled = true,
-          auto_refresh = true, -- Changed to true for better UX
+          auto_refresh = true, -- Melhora a UX
           keymap = {
             jump_prev = "[[",
             jump_next = "]]",
@@ -30,12 +30,11 @@ return {
             ratio = 0.4,
           },
         },
-        -- Expanded filetypes support
         filetypes = {
           markdown = true,
           help = true,
           gitcommit = true,
-          ["*"] = true, -- Enable for all filetypes
+          ["*"] = true, -- Habilita para todos os filetypes
         },
       }
     end,
@@ -74,10 +73,9 @@ return {
         Review = "Code review this code and suggest improvements.",
       },
     },
-    build = ":UpdateRemotePlugins", -- Fixed command syntax
+    build = ":UpdateRemotePlugins", -- Comando para atualizar os plugins remotos
     event = "VeryLazy",
     keys = {
-      -- Reorganized keybindings for better consistency
       {
         "<leader>cc",
         desc = "+Copilot Chat",
@@ -92,7 +90,7 @@ return {
       { "<leader>ccd", "<cmd>CopilotChatDocs<cr>", desc = "Add Documentation" },
       { "<leader>ccm", "<cmd>CopilotChatCommit<cr>", desc = "Generate Commit Message" },
       { "<leader>ccv", "<cmd>CopilotChatReview<cr>", desc = "Code Review" },
-      { "<leader>ccy", "<cmd>CopilotChat<cr>", desc = "Open Copilot Chat" }, -- New keybinding
+      { "<leader>ccy", "<cmd>CopilotChat<cr>", desc = "Open Copilot Chat" },
     },
   },
 }
