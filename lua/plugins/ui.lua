@@ -11,6 +11,7 @@ return {
       quickfile = { enabled = true },
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
+      dasboard = { enabled = true },
       words = { enabled = true },
       styles = { notification = {} },
     },

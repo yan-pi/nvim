@@ -4,6 +4,8 @@ require "nvchad.mappings"
 
 local map = vim.keymap.set
 
+local opts = { noremap = true, silent = true }
+
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
@@ -24,3 +26,12 @@ map("n", "<leader>tc", ":tabclose<CR>", { noremap = true, silent = true }) -- Cl
 map("n", "<leader>to", ":tabonly<CR>", { noremap = true, silent = true }) -- Close Other Tabs
 map("n", "<leader>tp", ":tabprevious<CR>", { noremap = true, silent = true }) -- Previous Tab
 map("n", "<leader>tn", ":tabnext<CR>", { noremap = true, silent = true }) -- Next Tab
+
+map("n", "<Space>fd", ":Telescope diagnostics<CR>", opts)
+
+map("n", "<Space>ff", ":Telescope find_files<CR>", opts)
+map("n", "<Space>fo", ":Telescope oldfiles<CR>", opts)
+map("n", "<Space>fw", ":Telescope live_grep<CR>", opts)
+map("n", "<Space>pb", ":Telescope projects<CR>", opts)
+map("n", "<Space>lu", ":Lazy sync<CR>", opts)
+map("n", "<Space>qa", ":qa<CR>", opts)

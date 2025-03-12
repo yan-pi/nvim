@@ -6,7 +6,7 @@
 local M = {}
 
 M.base46 = {
-  theme = "kanagawa",
+  theme = "gruvbox",
 
   hl_override = {
     Comment = { italic = true },
@@ -26,7 +26,7 @@ M.ui = {
   telescope = { style = "bordered" }, -- borderless / bordered
 
   statusline = {
-    theme = "default", -- default/vscode/vscode_colored/minimal
+    theme = "vscode_colored", -- default/vscode/vscode_colored/minimal
     -- default/round/block/arrow separators work only for default statusline theme
     -- round and block will work for minimal theme only
     separator_style = "default",
@@ -45,6 +45,7 @@ M.nvdash = {
     "▐█·▐█▐▐▌▐█▪ ▐█▌▐█·▄█▀▀█ ▐█▐▐▌▐█▀▀█▄▐█▌.▐▌▐█▌▐█▪",
     "▐█▌██▐█▌██. ██ ▐█▌▐█▪ ▐▌██▐█▌██▄▪▐█▐█▌.▐▌ ▐█▀·.",
     "▀▀▀▀▀ █▪▀▀▀▀▀• ▀▀▀ ▀  ▀ ▀▀ █▪·▀▀▀▀  ▀█▄▀▪  ▀ • ",
+    "                             bubu lover        ",
     "                                               ",
     "     Powered By  eovim    ",
   },
@@ -55,10 +56,10 @@ M.nvdash = {
     -- { txt = "  Restore Session", keys = "Spc s r", cmd = "SessionManager load_session" },
     -- { txt = "  New File", keys = "Spc f n", cmd = "ene | startinsert" },
     { txt = "  Find Word", keys = "Spc f w", cmd = "Telescope live_grep" },
-    -- { txt = "  Project Browser", keys = "Spc p b", cmd = "Telescope projects" },
-    -- { txt = "  Update Plugins", keys = "Spc p u", cmd = "Lazy sync" },
+    { txt = "  Project Browser", keys = "Spc p b", cmd = "Telescope projects" },
+    { txt = "  Update Plugins", keys = "Spc l u", cmd = "Lazy sync" },
     -- { txt = "  Open Settings", keys = "Spc e c", cmd = "edit $MYVIMRC" },
-    -- { txt = "  Quit", keys = "Spc q q", cmd = "qa" },
+    { txt = "  Quit", keys = "Spc q a", cmd = "qa" },
   },
 }
 
