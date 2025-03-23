@@ -7,15 +7,16 @@ function M.setup()
   end
 
   lint.linters_by_ft = {
-    javascript = { "eslint" },
-    typescript = { "eslint" },
-    javascriptreact = { "eslint" },
-    typescriptreact = { "eslint" },
+    javascript = { "eslint_d" }, -- Using eslint_d for better performance
+    typescript = { "eslint_d" },
+    javascriptreact = { "eslint_d" },
+    typescriptreact = { "eslint_d" },
     python = { "flake8" },
     lua = { "luacheck" },
     go = { "golangcilint" },
   }
 
+  -- Single autocmd for linting
   vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
     callback = function()
       require("lint").try_lint()

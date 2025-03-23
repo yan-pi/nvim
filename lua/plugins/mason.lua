@@ -17,43 +17,15 @@ return {
     "williamboman/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
-        "lua-language-server",
-        "stylua",
-        "html-lsp",
-        "css-lsp",
-        "typescript-language-server",
-        "prettier",
-        "tailwindcss",
-        "tsserver",
-        "gopls",
+        "lua_ls", -- Lua
+        "html", -- HTML
+        "cssls", -- CSS
+        "ts_ls", -- TypeScript/JavaScript
+        "tailwindcss", -- Tailwind CSS
+        "gopls", -- Go
+        "pyright", -- Python (added)
       },
       automatic_installation = true,
     },
   },
-  {
-    "jay-babu/mason-null-ls.nvim",
-    opts = {
-      ensure_installed = {
-        "prettier",
-        "eslint_d",
-        "gofmt",
-        "goimports",
-      },
-      automatic_installation = true,
-    },
-  },
-  -- {
-  --   "williamboman/mason.nvim",
-  --   opts = {
-  --     ensure_installed = {
-  --       "lua-language-server",
-  --       "stylua",
-  --       "html-lsp",
-  --       "css-lsp",
-  --       "typescript-language-server",
-  --       "prettier",
-  --     },
-  --   },
-  -- },
-  -- { "williamboman/mason-lspconfig.nvim" },
 }
