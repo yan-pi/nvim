@@ -1,31 +1,19 @@
 return {
   {
     "stevearc/conform.nvim",
-    event = "BufWritePre",
-    opts = require "configs.conform",
-  },
-  {
-    "jose-elias-alvarez/null-ls.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        "<leader>fm",
+        function()
+          require("conform").format { timeout_ms = 1000, lsp_fallback = true }
+        end,
+        desc = "Format Document",
+      },
+    },
     config = function()
-      local null_ls = require "null-ls"
-      null_ls.setup {
-        sources = {
-          null_ls.builtins.diagnostics.eslint,
-          null_ls.builtins.formatting.prettier,
-        },
-      }
-    end,
-  },
-  {
-    "MunifTanjim/prettier.nvim",
-    lazy = false,
-    config = function()
-      local prettier = require "prettier"
-      prettier.setup {
-        bin = "prettierd",
-        cli_options = { config_precedence = "prefer-file" },
-        filetypes = { "css", "html", "javascript", "typescript", "markdown" },
-      }
+      require "configs.conform"
     end,
   },
   {
