@@ -14,4 +14,8 @@ return {
       require("markdown-table-mode").setup()
     end,
   },
+  -- {
+  --   "OXY2DEV/markview.nvim",
+  --   lazy = false,
+  -- },
 }
