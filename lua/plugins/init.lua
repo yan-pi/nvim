@@ -3,6 +3,7 @@ return {
   { import = "plugins.formatting" },
   { import = "plugins.ui" },
   { import = "plugins.image" },
+  { import = "plugins.timer" },
   { import = "plugins.latex" },
   { import = "plugins.markdown" },
   { import = "plugins.merge" },
