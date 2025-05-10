@@ -1,6 +1,7 @@
 return {
   { import = "plugins.lsp" },
   { import = "plugins.formatting" },
+  { import = "plugins.cmp" },
   { import = "plugins.ui" },
   { import = "plugins.image" },
   { import = "plugins.timer" },
