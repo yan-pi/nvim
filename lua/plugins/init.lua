@@ -3,6 +3,7 @@ return {
   { import = "plugins.formatting" },
   { import = "plugins.cmp" },
   { import = "plugins.ui" },
+  { import = "plugins.obsidian" },
   { import = "plugins.image" },
   { import = "plugins.timer" },
   { import = "plugins.latex" },
