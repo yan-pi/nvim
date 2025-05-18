@@ -6,13 +6,14 @@ local nvlsp = require "nvchad.configs.lspconfig"
 
 -- Server configuration
 local servers = {
-  "html", -- HTML
-  "cssls", -- CSS
+  "html",        -- HTML
+  "cssls",       -- CSS
   "tailwindcss", -- Tailwind
-  "ts_ls", -- TypeScript/JavaScript (corrected from ts_ls)
-  "gopls", -- Go
-  "pyright", -- Python
-  "lua_ls", -- Lua (corrected name)
+  "ts_ls",       -- TypeScript/JavaScript (corrected from ts_ls)
+  "gopls",       -- Go
+  "pyright",     -- Python
+  "lua_ls",      -- Lua (corrected name)
+  "prismals",    -- Prisma
 }
 
 for _, lsp in ipairs(servers) do

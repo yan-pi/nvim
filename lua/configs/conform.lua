@@ -12,6 +12,7 @@ conform.setup {
     json = { "prettier" },
     markdown = { "prettier" },
     go = { "gofmt", "goimports" },
+    prisma = { "prettier" },
   },
   format_on_save = {
     timeout_ms = 500,
