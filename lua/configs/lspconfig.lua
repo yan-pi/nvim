@@ -9,11 +9,12 @@ local servers = {
   "html",        -- HTML
   "cssls",       -- CSS
   "tailwindcss", -- Tailwind
-  "ts_ls",       -- TypeScript/JavaScript (corrected from ts_ls)
+  "ts_ls",       -- TypeScript/JavaScript
   "gopls",       -- Go
   "pyright",     -- Python
   "lua_ls",      -- Lua (corrected name)
   "prismals",    -- Prisma
+  "marksman",    -- Markdown Language Server
 }
 
 for _, lsp in ipairs(servers) do
