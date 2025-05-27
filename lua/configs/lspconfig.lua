@@ -4,17 +4,17 @@ require("nvchad.configs.lspconfig").defaults()
 local lspconfig = require "lspconfig"
 local nvlsp = require "nvchad.configs.lspconfig"
 
--- Server configuration
 local servers = {
-  "html",        -- HTML
-  "cssls",       -- CSS
-  "tailwindcss", -- Tailwind
-  "ts_ls",       -- TypeScript/JavaScript
-  "gopls",       -- Go
-  "pyright",     -- Python
-  "lua_ls",      -- Lua (corrected name)
-  "prismals",    -- Prisma
-  "marksman",    -- Markdown Language Server
+  "html",          -- HTML
+  "cssls",         -- CSS
+  "tailwindcss",   -- Tailwind
+  "ts_ls",         -- TypeScript/JavaScript
+  "gopls",         -- Go
+  "pyright",       -- Python
+  "lua_ls",        -- Lua (corrected name)
+  "prismals",      -- Prisma
+  "marksman",      -- Markdown Language Server
+  "rust_analyzer", -- Rust Language Server
 }
 
 for _, lsp in ipairs(servers) do

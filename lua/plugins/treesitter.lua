@@ -7,8 +7,8 @@ return {
         "lua",
         "vimdoc",
         "html",
-        "rust",
         "css",
+        "rust",
         "json",
         "yaml",
         "toml",
@@ -16,9 +16,11 @@ return {
         "python",
         "javascript",
         "typescript",
+        "go", -- Adicionado Go
         "latex",
         "markdown",
+        "markdown_inline", -- Para melhor renderização do markdown
       },
-    },
+    }
   },
 }

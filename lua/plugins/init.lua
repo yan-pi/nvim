@@ -2,6 +2,7 @@ return {
   { import = "plugins.lsp" },
   { import = "plugins.formatting" },
   { import = "plugins.cmp" },
+  { import = "plugins.leetcode" },
   { import = "plugins.ui" },
   { import = "plugins.obsidian" },
   { import = "plugins.image" },
