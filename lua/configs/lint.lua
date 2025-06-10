@@ -14,7 +14,10 @@ function M.setup()
     python = { "flake8" },
     lua = { "luacheck" },
     go = { "golangcilint" },
+    rust = { "clippy" },
   }
+
+  lint.try_lint()
 
   -- Single autocmd for linting
   vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
