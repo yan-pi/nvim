@@ -6,7 +6,7 @@
 local M = {}
 
 M.base46 = {
-  theme = "chocolate",
+  theme = "everforest_light",
 
   hl_override = {
     Comment = { italic = true },
@@ -26,10 +26,10 @@ M.ui = {
   telescope = { style = "bordered" }, -- borderless / bordered
 
   statusline = {
-    theme = "vscode_colored", -- default/vscode/vscode_colored/minimal
+    theme = "default", -- default/vscode/vscode_colored/minimal
     -- default/round/block/arrow separators work only for default statusline theme
     -- round and block will work for minimal theme only
-    separator_style = "default",
+    separator_style = "block",
     order = nil,
     modules = nil,
   },
@@ -53,12 +53,8 @@ M.nvdash = {
   buttons = {
     { txt = "  Find File", keys = "Spc f f", cmd = "Telescope find_files" },
     { txt = "  Recent Files", keys = "Spc f o", cmd = "Telescope oldfiles" },
-    -- { txt = "  Restore Session", keys = "Spc s r", cmd = "SessionManager load_session" },
-    -- { txt = "  New File", keys = "Spc f n", cmd = "ene | startinsert" },
     { txt = "  Find Word", keys = "Spc f w", cmd = "Telescope live_grep" },
-    { txt = "  Project Browser", keys = "Spc p b", cmd = "Telescope projects" },
     { txt = "  Update Plugins", keys = "Spc l u", cmd = "Lazy sync" },
-    -- { txt = "  Open Settings", keys = "Spc e c", cmd = "edit $MYVIMRC" },
     { txt = "  Quit", keys = "Spc q a", cmd = "qa" },
   },
 }
@@ -66,6 +62,7 @@ M.nvdash = {
 M.mason = { pkgs = {}, skip = {} }
 
 M.lsp = { signature = true }
+
 
 M.colorify = {
   enabled = true,

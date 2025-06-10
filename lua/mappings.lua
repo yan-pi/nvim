@@ -21,13 +21,19 @@ map(
   { desc = "Open diagnostic float", noremap = true, silent = true }
 )
 
-map("n", "<leader>ty", ":tabnew<CR>", { noremap = true, silent = true }) -- New Tab
-map("n", "<leader>tc", ":tabclose<CR>", { noremap = true, silent = true }) -- Close Tab
-map("n", "<leader>to", ":tabonly<CR>", { noremap = true, silent = true }) -- Close Other Tabs
+map("n", "<leader>ty", ":tabnew<CR>", { noremap = true, silent = true })      -- New Tab
+map("n", "<leader>tc", ":tabclose<CR>", { noremap = true, silent = true })    -- Close Tab
+map("n", "<leader>to", ":tabonly<CR>", { noremap = true, silent = true })     -- Close Other Tabs
 map("n", "<leader>tp", ":tabprevious<CR>", { noremap = true, silent = true }) -- Previous Tab
-map("n", "<leader>tn", ":tabnext<CR>", { noremap = true, silent = true }) -- Next Tab
+map("n", "<leader>tn", ":tabnext<CR>", { noremap = true, silent = true })     -- Next Tab
 
+-- Telescope Mappings
 map("n", "<Space>fd", ":Telescope diagnostics<CR>", opts)
+
+map("n", "<leader>ft", function()
+  require("todo-comments")
+  vim.cmd("TodoTelescope")
+end, opts)
 
 map("n", "<Space>ff", ":Telescope find_files<CR>", opts)
 map("n", "<Space>fo", ":Telescope oldfiles<CR>", opts)

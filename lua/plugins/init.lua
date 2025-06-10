@@ -19,4 +19,5 @@ return {
   { import = "plugins.dap" },
   { import = "plugins.rust" },
   { import = "plugins.misc" },
+  { import = "plugins.terminal_cursor" },
 }
