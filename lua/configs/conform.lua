@@ -13,9 +13,11 @@ conform.setup {
     markdown = { "prettier" },
     go = { "gofmt", "goimports" },
     prisma = { "prettier" },
+    rust = { "rustfmt" },
   },
   format_on_save = {
-    timeout_ms = 500,
     lsp_fallback = true,
+    async = false,
+    timeout_ms = 500,
   },
 }
