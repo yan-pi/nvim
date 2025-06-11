@@ -2,10 +2,8 @@
 return {
   {
     "kawre/leetcode.nvim",
-    build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
     dependencies = {
       "nvim-telescope/telescope.nvim",
-      -- "ibhagwan/fzf-lua",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       "nvim-web-devicons", -- for better icons
@@ -14,9 +12,9 @@ return {
     ft = "leetcode",       -- Lazy loading por filetype
     opts = {
       arg = "leetcode.nvim",
-      lang = "go", -- linguagem padrão
+      lang = "golang", -- linguagem padrão
 
-      cn = {       -- leetcode.cn
+      cn = {           -- leetcode.cn
         enabled = false,
         translator = true,
         translate_problems = true,
@@ -128,49 +126,6 @@ return {
             "    this.val = (val===undefined ? 0 : val);",
             "    this.next = (next===undefined ? null : next);",
             "};",
-          },
-        },
-        ["cpp"] = {
-          before = {
-            "#include <bits/stdc++.h>",
-            "using namespace std;",
-            "",
-            "// Common type definitions",
-            "typedef long long ll;",
-            "typedef vector<int> vi;",
-            "typedef vector<vector<int>> vvi;",
-            "",
-            "// Helper macros",
-            "#define all(x) (x).begin(), (x).end()",
-            "#define sz(x) (int)(x).size()",
-          },
-        },
-        ["java"] = {
-          before = {
-            "import java.util.*;",
-            "import java.util.stream.*;",
-            "",
-            "// Common definitions",
-            "class TreeNode {",
-            "    int val;",
-            "    TreeNode left;",
-            "    TreeNode right;",
-            "    TreeNode() {}",
-            "    TreeNode(int val) { this.val = val; }",
-            "    TreeNode(int val, TreeNode left, TreeNode right) {",
-            "        this.val = val;",
-            "        this.left = left;",
-            "        this.right = right;",
-            "    }",
-            "}",
-            "",
-            "class ListNode {",
-            "    int val;",
-            "    ListNode next;",
-            "    ListNode() {}",
-            "    ListNode(int val) { this.val = val; }",
-            "    ListNode(int val, ListNode next) { this.val = val; this.next = next; }",
-            "}",
           },
         },
       },
