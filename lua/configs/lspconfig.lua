@@ -19,8 +19,8 @@ local servers = {
 
 for _, lsp in ipairs(servers) do
   if lsp == "rust_analyzer" then
-    -- Pular configuração do rust_analyzer aqui, pois estamos usando rustaceanvim
-    -- que já configura o rust-analyzer por conta própria
+    -- Skip the built-in rust_analyzer setup since rustaceanvim handles it
+    goto continue
   else
     lspconfig[lsp].setup {
       on_attach = nvlsp.on_attach,
@@ -28,6 +28,7 @@ for _, lsp in ipairs(servers) do
       capabilities = nvlsp.capabilities,
     }
   end
+  ::continue::
 end
 
 -- Configuração de diagnósticos globais
