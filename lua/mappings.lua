@@ -35,6 +35,8 @@ map("n", "<leader>ft", function()
   vim.cmd("TodoTelescope")
 end, opts)
 
+map('n', '<A-t>', ':FloatermToggle<CR>', { noremap = true, silent = true })
+
 map("n", "<Space>ff", ":Telescope find_files<CR>", opts)
 map("n", "<Space>fo", ":Telescope oldfiles<CR>", opts)
 map("n", "<Space>fw", ":Telescope live_grep<CR>", opts)

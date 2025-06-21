@@ -1,6 +1,9 @@
 return {
   {
     "Saghen/blink.cmp",
+    dependencies = {
+      "Kaiser-Yang/blink-cmp-avante",
+    },
     opts = {
       mapping = function()
         local cmp = require("cmp")
@@ -21,6 +24,16 @@ return {
           end, { "i", "s" }),
         }
       end,
+      sources = {
+        default = { 'avante', 'lsp', 'path', 'luasnip', 'buffer' },
+        providers = {
+          avante = {
+            module = 'blink-cmp-avante',
+            name = 'Avante',
+            opts = {}
+          }
+        },
+      }
     }
   }
 }

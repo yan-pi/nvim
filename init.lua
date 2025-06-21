@@ -57,3 +57,9 @@ vim.api.nvim_create_autocmd("BufDelete", {
     end
   end,
 })
+
+-- vim.defer_fn(function()
+--   pcall(function()
+--     vim.cmd("lua require('goose.api').toggle()")
+--   end)
+-- end, 1500)
