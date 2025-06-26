@@ -11,24 +11,61 @@ return {
     opts = {
       provider = "copilot",
       auto_suggestions_provider = "copilot",
+      input = {
+        provider = "snacks",
+        provider_opts = {
+          title = "Avante Input",
+          icon = " ",
+        },
+      },
+      selector = {
+        provider = "telescope",
+        provider_opts = {},
+      },
       providers = {
         copilot = {
-          model = "claude-sonnet-4",
-          timeout = 30000, -- Timeout in milliseconds
+          model = "gpt-4.1",
+          timeout = 30000,
           extra_request_body = {
-            temperature = 0.75,
-            max_tokens = 20480,
+            temperature = 0.2,
+            max_tokens = 4096,
           },
         },
-        -- claude = {
-        --   endpoint = "https://api.anthropic.com",
-        --   model = "claude-sonnet-4-20250514",
-        --   timeout = 30000, -- Timeout in milliseconds
-        --   extra_request_body = {
-        --     temperature = 0.75,
-        --     max_tokens = 20480,
-        --   },
-        -- },
+      },
+      hints = { enabled = true },
+      windows = {
+        position = "right",
+        wrap = true,
+        width = 30,
+        sidebar_header = {
+          enabled = true,
+          align = "center",
+          rounded = true,
+        },
+        input = {
+          prefix = "> ",
+          height = 8,
+        },
+        edit = {
+          border = "rounded",
+          start_insert = true,
+        },
+        ask = {
+          floating = false,
+          start_insert = true,
+          border = "rounded",
+          focus_on_apply = "ours",
+        },
+      },
+      behaviour = {
+        auto_suggestions = false,
+        auto_set_highlight_group = true,
+        auto_set_keymaps = true,
+        auto_apply_diff_after_generation = false,
+        support_paste_from_clipboard = false,
+        minimize_diff = true,
+        enable_token_counting = true,
+        auto_approve_tool_permissions = false,
       },
     },
     dependencies = {
@@ -52,8 +89,6 @@ return {
             drag_and_drop = {
               insert_mode = true,
             },
-            -- required for Windows users
-            use_absolute_path = true,
           },
         },
       },

@@ -15,6 +15,18 @@ return {
             dismiss = "<C-]>",
           },
         },
+        copilot_node_command = 'node', -- Node.js version must be > 16.x
+
+        -- Commenting this to try to preserve tokens usign a cheaper model
+        -- server_opts_overrides = {
+        --   -- Use GPT-4 for inline suggestions
+        --   settings = {
+        --     advanced = {
+        --       model = "gpt-4.1",
+        --       temperature = 0.1,
+        --     },
+        --   },
+        -- },
         panel = {
           enabled = true,
           auto_refresh = true, -- Melhora a UX
@@ -79,17 +91,18 @@ return {
         "<leader>cc",
         desc = "+Copilot Chat",
       },
-      { "<leader>cci", "<cmd>CopilotChatInline<cr>", desc = "Inline Chat", mode = { "n", "x" } },
-      { "<leader>ccp", "<cmd>CopilotChatPrompt ", desc = "Custom Prompt", mode = { "n", "x" } },
-      { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "Explain Code" },
-      { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "Generate Tests" },
+      { "<leader>cci", "<cmd>CopilotChatInline<cr>",   desc = "Inline Chat",            mode = { "n", "x" } },
+      { "<leader>ccp", "<cmd>CopilotChatPrompt<cr>",   desc = "Custom Prompt",          mode = { "n", "x" } },
+      { "<leader>cce", "<cmd>CopilotChatExplain<cr>",  desc = "Explain Code" },
+      { "<leader>ccs", "<cmd>CopilotChatSave<cr>",     desc = "Explain Code" },
+      { "<leader>cct", "<cmd>CopilotChatTests<cr>",    desc = "Generate Tests" },
       { "<leader>ccr", "<cmd>CopilotChatRefactor<cr>", desc = "Refactor Code" },
-      { "<leader>ccf", "<cmd>CopilotChatFix<cr>", desc = "Fix Code" },
+      { "<leader>ccf", "<cmd>CopilotChatFix<cr>",      desc = "Fix Code" },
       { "<leader>cco", "<cmd>CopilotChatOptimize<cr>", desc = "Optimize Code" },
-      { "<leader>ccd", "<cmd>CopilotChatDocs<cr>", desc = "Add Documentation" },
-      { "<leader>ccm", "<cmd>CopilotChatCommit<cr>", desc = "Generate Commit Message" },
-      { "<leader>ccv", "<cmd>CopilotChatReview<cr>", desc = "Code Review" },
-      { "<leader>ccy", "<cmd>CopilotChat<cr>", desc = "Open Copilot Chat" },
+      { "<leader>ccd", "<cmd>CopilotChatDocs<cr>",     desc = "Add Documentation" },
+      { "<leader>ccm", "<cmd>CopilotChatCommit<cr>",   desc = "Generate Commit Message" },
+      { "<leader>ccv", "<cmd>CopilotChatReview<cr>",   desc = "Code Review" },
+      { "<leader>ccy", "<cmd>CopilotChat<cr>",         desc = "Open Copilot Chat" },
     },
   },
 }
