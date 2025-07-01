@@ -24,11 +24,11 @@ return {
       },
       providers = {
         copilot = {
-          model = "gpt-4.1",
+          model = "claude-sonnet-4",
           timeout = 30000,
           extra_request_body = {
             temperature = 0.2,
-            max_tokens = 4096,
+            max_tokens = 128000,
           },
         },
       },
@@ -67,6 +67,10 @@ return {
         enable_token_counting = true,
         auto_approve_tool_permissions = false,
       },
+      web_search_engine = {
+        provider = "tavily",
+        -- proxy = nil, -- se quiser usar proxy, descomente e configure
+      },
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -91,14 +95,6 @@ return {
             },
           },
         },
-      },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          file_types = { "markdown", "Avante" },
-        },
-        ft = { "markdown", "Avante" },
       },
     },
   },
