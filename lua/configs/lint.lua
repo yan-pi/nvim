@@ -7,14 +7,14 @@ function M.setup()
   end
 
   lint.linters_by_ft = {
-    javascript = { "eslint_d" }, -- Using eslint_d for better performance
-    typescript = { "eslint_d" },
-    javascriptreact = { "eslint_d" },
-    typescriptreact = { "eslint_d" },
-    python = { "flake8" },
-    lua = { "luacheck" },
-    go = { "golangcilint" },
-    rust = { "clippy" },
+    -- javascript = { "eslint_d" }, -- Using eslint_d for better performance
+    -- typescript = { "eslint_d" },
+    -- javascriptreact = { "eslint_d" },
+    -- typescriptreact = { "eslint_d" },
+    -- python = { "flake8" },
+    -- lua = { "luacheck" },
+    -- go = { "golangcilint" },
+    -- rust = { "clippy" },
   }
 
   lint.try_lint()

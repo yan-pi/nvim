@@ -17,16 +17,16 @@ return {
     "williamboman/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
-        "lua_ls",        -- Lua
-        "html",          -- HTML
-        "cssls",         -- CSS
-        "ts_ls",         -- TypeScript/JavaScript
-        "tailwindcss",   -- Tailwind CSS
-        "gopls",         -- Go
-        "pyright",       -- Python (added)
-        "rust_analyzer", -- Rust
-        "codelldb",      -- Debuh adapter para Rust e C/C++
-        "rustfmt",       -- Formatador
+        -- "lua_ls",        -- Lua
+        -- "html",          -- HTML
+        -- "cssls",         -- CSS
+        -- "ts_ls",         -- TypeScript/JavaScript
+        -- "tailwindcss",   -- Tailwind CSS
+        -- "gopls",         -- Go
+        -- "pyright",       -- Python (added)
+        -- "rust_analyzer", -- Rust
+        -- "codelldb",      -- Debuh adapter para Rust e C/C++
+        -- "rustfmt",       -- Formatador
       },
       automatic_installation = true,
     },
