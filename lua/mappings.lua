@@ -44,12 +44,31 @@ map("n", "<Space>fw", ":Telescope live_grep<CR>", opts)
 map("n", "<Space>lu", ":Lazy sync<CR>", opts)
 map("n", "<Space>qa", ":qa<CR>", opts)
 
--- Claude Code Integration Mappings (using <leader>cl to avoid copilot conflicts)
-map("n", "<leader>clc", ":ClaudeCode<CR>", { desc = "Start Claude Code", noremap = true, silent = true })
-map("n", "<leader>cla", ":ClaudeCodeAdd<CR>", { desc = "Add file to Claude Code", noremap = true, silent = true })
-map("v", "<leader>cla", ":ClaudeCodeAdd<CR>", { desc = "Add selection to Claude Code", noremap = true, silent = true })
-map("n", "<leader>clt", ":ClaudeCodeToggle<CR>", { desc = "Toggle Claude Code terminal", noremap = true, silent = true })
-map("n", "<leader>clr", ":ClaudeCodeReload<CR>", { desc = "Reload Claude Code session", noremap = true, silent = true })
+-- Claude Code Integration Mappings (using <leader>cl to avoid conflicts with Copilot Chat)
+map("n", "<leader>clt", ":ClaudeCode<CR>", { desc = "Toggle Claude Code terminal", noremap = true, silent = true })
+map("n", "<leader>clf", ":ClaudeCodeFocus<CR>", { desc = "Focus Claude Code terminal", noremap = true, silent = true })
+map("n", "<leader>clo", ":ClaudeCodeOpen<CR>", { desc = "Open Claude Code terminal", noremap = true, silent = true })
+map("n", "<leader>clq", ":ClaudeCodeClose<CR>", { desc = "Close Claude Code terminal", noremap = true, silent = true })
+
+-- File/selection sending
+map("n", "<leader>cls", ":ClaudeCodeSend<CR>",
+  { desc = "Send current file/selection to Claude", noremap = true, silent = true })
+map("v", "<leader>cls", ":ClaudeCodeSend<CR>",
+  { desc = "Send visual selection to Claude", noremap = true, silent = true })
+map("n", "<leader>cla", ":ClaudeCodeTreeAdd<CR>",
+  { desc = "Add file from tree to Claude", noremap = true, silent = true })
+
+-- Diff management
+map("n", "<leader>clda", ":ClaudeCodeDiffAccept<CR>", { desc = "Accept Claude diff", noremap = true, silent = true })
+map("n", "<leader>cldd", ":ClaudeCodeDiffDeny<CR>", { desc = "Deny Claude diff", noremap = true, silent = true })
+
+-- Server management
+map("n", "<leader>clss", ":ClaudeCodeStart<CR>", { desc = "Start Claude Code server", noremap = true, silent = true })
+map("n", "<leader>clsx", ":ClaudeCodeStop<CR>", { desc = "Stop Claude Code server", noremap = true, silent = true })
+map("n", "<leader>clsi", ":ClaudeCodeStatus<CR>", { desc = "Show Claude Code status", noremap = true, silent = true })
+
+-- Model selection
+map("n", "<leader>clm", ":ClaudeCodeSelectModel<CR>", { desc = "Select Claude model", noremap = true, silent = true })
 
 -- Alternative terminal-based Claude Code (if using greggh/claude-code.nvim)
 -- map("n", "<leader>clt", "<cmd>lua require('claude-code').toggle()<CR>", { desc = "Toggle Claude Code terminal", noremap = true, silent = true })
