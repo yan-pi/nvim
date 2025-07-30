@@ -36,9 +36,25 @@ map("n", "<leader>ft", function()
 end, opts)
 
 map('n', '<A-t>', ':FloatermToggle<CR>', { noremap = true, silent = true })
+map('t', '<C-n>', '<C-\\><C-n>', { noremap = true, silent = true })
 
 map("n", "<Space>ff", ":Telescope find_files<CR>", opts)
 map("n", "<Space>fo", ":Telescope oldfiles<CR>", opts)
 map("n", "<Space>fw", ":Telescope live_grep<CR>", opts)
 map("n", "<Space>lu", ":Lazy sync<CR>", opts)
 map("n", "<Space>qa", ":qa<CR>", opts)
+
+-- Claude Code Integration Mappings (using <leader>cl to avoid copilot conflicts)
+map("n", "<leader>clc", ":ClaudeCode<CR>", { desc = "Start Claude Code", noremap = true, silent = true })
+map("n", "<leader>cla", ":ClaudeCodeAdd<CR>", { desc = "Add file to Claude Code", noremap = true, silent = true })
+map("v", "<leader>cla", ":ClaudeCodeAdd<CR>", { desc = "Add selection to Claude Code", noremap = true, silent = true })
+map("n", "<leader>clt", ":ClaudeCodeToggle<CR>", { desc = "Toggle Claude Code terminal", noremap = true, silent = true })
+map("n", "<leader>clr", ":ClaudeCodeReload<CR>", { desc = "Reload Claude Code session", noremap = true, silent = true })
+
+-- Alternative terminal-based Claude Code (if using greggh/claude-code.nvim)
+-- map("n", "<leader>clt", "<cmd>lua require('claude-code').toggle()<CR>", { desc = "Toggle Claude Code terminal", noremap = true, silent = true })
+-- map("n", "<leader>cls", "<cmd>lua require('claude-code').start_session()<CR>", { desc = "Start Claude Code session", noremap = true, silent = true })
+
+-- Direct Claude AI integration (if using IntoTheNull/claude.nvim)
+-- map("n", "<leader>clq", "<cmd>lua require('claude').ask()<CR>", { desc = "Ask Claude", noremap = true, silent = true })
+-- map("v", "<leader>clq", "<cmd>lua require('claude').ask_with_selection()<CR>", { desc = "Ask Claude with selection", noremap = true, silent = true })

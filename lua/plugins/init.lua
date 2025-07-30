@@ -3,7 +3,6 @@ return {
   { import = "plugins.formatting" },
   { import = "plugins.cmp" },
   { import = "plugins.leetcode" },
-  { import = "plugins.goose" },
   { import = "plugins.avante" },
   { import = "plugins.ui" },
   { import = "plugins.obsidian" },
