@@ -12,11 +12,11 @@ return {
     "nvzone/floaterm",
     dependencies = "nvzone/volt",
     opts = {
-      border = true
+      border = true,
     },
     cmd = "FloatermToggle",
     keys = {
       { "<leader>fn", "<cmd>FloatermToggle<cr>", desc = "Toggle Floaterm" },
     },
-  }
+  },
 }
