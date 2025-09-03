@@ -4,6 +4,12 @@
 - So you just import its modules , like `require "nvchad.options" , require "nvchad.mappings"`
 - So you can delete the .git from this repo ( when you clone it locally ) or fork it :)
 
+TODO:
+
+- add rust suport
+- add latext suport
+- fix global diagnostics
+
 # Credits
 
 1. Lazyvim starter https://github.com/LazyVim/starter as nvchad's starter was inspired by Lazyvim's . It made a lot of things easier!

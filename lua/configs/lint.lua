@@ -15,6 +15,7 @@ function M.setup()
     lua = { "luacheck" },
     go = { "golangcilint" },
     rust = { "clippy" },
+    prisma = { "prisma-lint" },
   }
 
   lint.try_lint()

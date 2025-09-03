@@ -5,22 +5,53 @@ local lspconfig = require "lspconfig"
 local nvlsp = require "nvchad.configs.lspconfig"
 
 local servers = {
-  "html",          -- HTML
-  "cssls",         -- CSS
-  "tailwindcss",   -- Tailwind
-  "ts_ls",         -- TypeScript/JavaScript
-  "gopls",         -- Go
-  "pyright",       -- Python
-  "lua_ls",        -- Lua (corrected name)
-  "prismals",      -- Prisma
-  "marksman",      -- Markdown Language Server
+  "html", -- HTML
+  "cssls", -- CSS
+  "tailwindcss", -- Tailwind
+  "ts_ls", -- TypeScript/JavaScript
+  "gopls", -- Go
+  "pyright", -- Python
+  "lua_ls", -- Lua (corrected name)
+  "prismals", -- Prisma
+  "marksman", -- Markdown Language Server
   "rust_analyzer", -- Rust Language Server
+  "texlab", -- LaTeX Language Server
 }
 
 for _, lsp in ipairs(servers) do
   if lsp == "rust_analyzer" then
     -- Skip the built-in rust_analyzer setup since rustaceanvim handles it
     goto continue
+  elseif lsp == "texlab" then
+    -- Special configuration for texlab with forward/inverse search
+    lspconfig[lsp].setup {
+      on_attach = nvlsp.on_attach,
+      on_init = nvlsp.on_init,
+      capabilities = nvlsp.capabilities,
+      settings = {
+        texlab = {
+          build = {
+            executable = "latexmk",
+            args = {
+              "-pdf",
+              "-interaction=nonstopmode",
+              "-synctex=1",
+              "%f"
+            },
+            onSave = true,
+          },
+          forwardSearch = {
+            executable = "zathura",
+            args = { "--synctex-forward", "%l:1:%f", "%p" },
+            onSave = false,
+          },
+          chktex = {
+            onOpenAndSave = true,
+            onEdit = false,
+          },
+        }
+      }
+    }
   else
     lspconfig[lsp].setup {
       on_attach = nvlsp.on_attach,
