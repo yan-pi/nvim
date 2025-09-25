@@ -46,7 +46,47 @@ vim.keymap.set('n', '<leader>tc', '<cmd>tabclose<cr>', { desc = '[T]ab [C]lose w
 vim.keymap.set('n', '<leader>to', '<cmd>tabonly<cr>', { desc = '[T]ab [O]nly (close other workspaces)' })
 vim.keymap.set('n', '<leader>tm', '<cmd>tabmove<cr>', { desc = '[T]ab [M]ove workspace' })
 
--- Note: Buffer navigation (Tab/Shift+Tab) and buffer management (<leader>b*)
--- are handled by nvchad-ui.lua and work within the current tab/workspace only
+-- Buffer navigation within current tab/workspace (Tab-scoped)
+-- These work only with buffers opened within the current tab
+vim.keymap.set('n', '<Tab>', function()
+  if _G.TabScopedBuffers then
+    _G.TabScopedBuffers.next_buffer()
+  end
+end, { desc = 'Next buffer (in current tab)' })
+
+vim.keymap.set('n', '<S-Tab>', function()
+  if _G.TabScopedBuffers then
+    _G.TabScopedBuffers.prev_buffer()
+  end
+end, { desc = 'Previous buffer (in current tab)' })
+
+-- Buffer operations within current tab
+-- Switch to buffer by number within current tab (1-9)
+for i = 1, 9 do
+  vim.keymap.set('n', '<leader>' .. i, function()
+    if _G.TabScopedBuffers then
+      _G.TabScopedBuffers.goto_buffer(i)
+    end
+  end, { desc = 'Buffer ' .. i .. ' (in current tab)' })
+end
+
+-- Additional buffer management keymaps
+vim.keymap.set('n', '<leader>bc', function()
+  if _G.TabScopedBuffers then
+    _G.TabScopedBuffers.close_buffer()
+  end
+end, { desc = '[B]uffer [C]lose (tab-scoped)' })
+
+vim.keymap.set('n', '<leader>bn', function()
+  if _G.TabScopedBuffers then
+    _G.TabScopedBuffers.next_buffer()
+  end
+end, { desc = '[B]uffer [N]ext (in current tab)' })
+
+vim.keymap.set('n', '<leader>bp', function()
+  if _G.TabScopedBuffers then
+    _G.TabScopedBuffers.prev_buffer()
+  end
+end, { desc = '[B]uffer [P]revious (in current tab)' })
 
 

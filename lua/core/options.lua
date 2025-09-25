@@ -57,6 +57,10 @@ vim.o.splitbelow = true
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+-- Hide end-of-buffer tilde characters (~) by replacing them with spaces
+-- See `:help 'fillchars'`
+vim.opt.fillchars:append({ eob = ' ' })
+
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 

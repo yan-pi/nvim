@@ -73,6 +73,44 @@ return {
         desc = 'Buffers',
       },
       {
+        '<leader>bt',
+        function()
+          if _G.TabScopedBuffers then
+            -- Get tab-scoped buffers and create a custom picker
+            local tab_buffers = _G.TabScopedBuffers.get_tab_buffers()
+            if #tab_buffers > 0 then
+              local items = {}
+              for i, bufnr in ipairs(tab_buffers) do
+                local name = vim.api.nvim_buf_get_name(bufnr)
+                local basename = vim.fn.fnamemodify(name, ':t')
+                if basename == '' then
+                  basename = '[No Name]'
+                end
+                table.insert(items, {
+                  text = string.format('%d: %s', i, basename),
+                  file = name,
+                  buffer = bufnr,
+                  idx = i,
+                })
+              end
+              Snacks.picker.pick({ items = items }, {
+                format = function(item)
+                  return item.text
+                end,
+                confirm = function(item)
+                  vim.api.nvim_set_current_buf(item.buffer)
+                end,
+              })
+            else
+              vim.notify('No buffers in current tab', vim.log.levels.INFO)
+            end
+          else
+            Snacks.picker.buffers() -- Fallback
+          end
+        end,
+        desc = 'Buffers (current tab only)',
+      },
+      {
         '<leader>fc',
         function()
           Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
@@ -425,9 +463,13 @@ return {
       {
         '<leader>bd',
         function()
-          Snacks.bufdelete()
+          if _G.TabScopedBuffers then
+            _G.TabScopedBuffers.close_buffer()
+          else
+            Snacks.bufdelete()
+          end
         end,
-        desc = 'Delete Buffer',
+        desc = 'Delete Buffer (tab-scoped)',
       },
       {
         '<leader>cR',
