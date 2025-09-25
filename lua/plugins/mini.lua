@@ -10,7 +10,14 @@ return {
       --  - va)  - [V]isually select [A]round [)]paren
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
+      -- require('mini.ai').setup { n_lines = 500 }
+      require('mini.files').setup()
+      require('mini.pick').setup()
+      require('mini.move').setup()
+      require('mini.files').setup()
+      require('mini.starter').setup()
+      require('mini.bracketed').setup()
+      require('mini.indentscope').setup()
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
