@@ -50,12 +50,30 @@ return {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          mappings = {
+            i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          },
+        },
+        pickers = {
+          colorscheme = {
+            enable_preview = true,
+            theme = 'dropdown',
+            layout_config = {
+              preview_cutoff = 1, -- Preview from the start
+              width = function(_, max_columns, _)
+                return math.min(max_columns, 80)
+              end,
+              height = function(_, _, max_lines)
+                return math.min(max_lines, 15)
+              end,
+            },
+            -- Show current colorscheme at the top
+            initial_mode = 'insert',
+            sorting_strategy = 'ascending',
+            layout_strategy = 'vertical',
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -102,6 +120,7 @@ return {
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
     end,
   },
 }

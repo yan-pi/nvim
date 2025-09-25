@@ -60,8 +60,8 @@ return {
   },
 
   -- === COLORSCHEMES ===
-  -- You can easily switch between colorschemes using :Telescope colorscheme
-  -- or by changing the active theme in the config section below
+  -- You can easily switch between colorschemes using <leader>th (Themery)
+  -- or :Themery command. Changes persist across Neovim sessions.
 
   -- Gruvbox (Currently Active)
   {
@@ -186,72 +186,5 @@ return {
     -- end,
   },
 
-  -- === THEME PERSISTENCE (Custom Implementation) ===
-  {
-    'nvim-lua/plenary.nvim', -- Dependency for file operations
-    config = function()
-      local data_path = vim.fn.stdpath('data')
-      local colorscheme_file = data_path .. '/last_colorscheme.txt'
 
-      -- Function to save current colorscheme
-      local function save_colorscheme()
-        local current_colorscheme = vim.g.colors_name
-        if current_colorscheme then
-          local file = io.open(colorscheme_file, 'w')
-          if file then
-            file:write(current_colorscheme)
-            file:close()
-          end
-        end
-      end
-
-      -- Function to load saved colorscheme
-      local function load_colorscheme()
-        local file = io.open(colorscheme_file, 'r')
-        if file then
-          local saved_colorscheme = file:read('*all'):gsub('%s+', '') -- Remove whitespace
-          file:close()
-
-          if saved_colorscheme and saved_colorscheme ~= '' then
-            -- Try to set the saved colorscheme
-            local success = pcall(vim.cmd.colorscheme, saved_colorscheme)
-            if not success then
-              -- Fallback to gruvbox if saved theme doesn't exist
-              pcall(vim.cmd.colorscheme, 'gruvbox')
-            end
-          end
-        end
-      end
-
-      -- Load saved colorscheme on startup (with delay to ensure themes are loaded)
-      vim.defer_fn(load_colorscheme, 100)
-
-      -- Save colorscheme when it changes
-      vim.api.nvim_create_autocmd('ColorScheme', {
-        pattern = '*',
-        callback = function()
-          vim.defer_fn(save_colorscheme, 50)
-        end,
-        desc = 'Save colorscheme to file when changed',
-      })
-    end,
-  },
-
-  -- === KEYMAPS ===
-  {
-    'nvim-telescope/telescope.nvim',
-    optional = true,
-    config = function()
-      -- Global keymap for theme selector (works in any buffer)
-      vim.keymap.set('n', '<leader>th', function()
-        -- Check if telescope is available
-        local telescope_ok, telescope = pcall(require, 'telescope.builtin')
-        if telescope_ok then
-          telescope.colorscheme({ enable_preview = true })
-        else
-          vim.notify('Telescope not available', vim.log.levels.ERROR)
-        end
-      end, { desc = '[T]heme [H]elper', silent = true })
-    end,
-  },
 }
