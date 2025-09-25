@@ -10,7 +10,6 @@ return {
 
       vim.opt.termguicolors = true
 
-      -- === TAB-SCOPED BUFFER MANAGEMENT ===
       -- Proper buffer-to-tab tracking using autocmds and persistent state
 
       local M = {}
@@ -22,7 +21,7 @@ return {
         if not M.tab_buffers[tabpage] then
           M.tab_buffers[tabpage] = {
             buffers = {},
-            active_index = 1
+            active_index = 1,
           }
         end
       end
@@ -84,7 +83,9 @@ return {
         local tabpage = vim.api.nvim_get_current_tabpage()
         local tab_buffers = M.get_tab_buffers(tabpage)
 
-        if #tab_buffers <= 1 then return end
+        if #tab_buffers <= 1 then
+          return
+        end
 
         local tab_data = M.tab_buffers[tabpage]
         tab_data.active_index = tab_data.active_index >= #tab_buffers and 1 or tab_data.active_index + 1
@@ -96,7 +97,9 @@ return {
         local tabpage = vim.api.nvim_get_current_tabpage()
         local tab_buffers = M.get_tab_buffers(tabpage)
 
-        if #tab_buffers <= 1 then return end
+        if #tab_buffers <= 1 then
+          return
+        end
 
         local tab_data = M.tab_buffers[tabpage]
         tab_data.active_index = tab_data.active_index <= 1 and #tab_buffers or tab_data.active_index - 1
@@ -120,7 +123,9 @@ return {
         tabpage = tabpage or vim.api.nvim_get_current_tabpage()
         bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-        if not M.tab_buffers[tabpage] then return end
+        if not M.tab_buffers[tabpage] then
+          return
+        end
 
         local tab_data = M.tab_buffers[tabpage]
         for i, buf in ipairs(tab_data.buffers) do
@@ -144,7 +149,7 @@ return {
 
         -- If this is the only buffer in the tab, create a new empty buffer
         if #tab_buffers <= 1 then
-          vim.cmd('enew')
+          vim.cmd 'enew'
           M.add_buffer_to_tab(vim.api.nvim_get_current_buf(), tabpage)
         else
           -- Switch to next buffer before closing
