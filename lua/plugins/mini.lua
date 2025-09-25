@@ -18,19 +18,19 @@ return {
           use_as_default_explorer = true, -- Keep alongside netrw/telescope
         },
         mappings = {
-          close = '<Esc>',       -- Escape to close (intuitive)
-          go_in = 'l',           -- l to enter/open (vim-like)
-          go_in_plus = 'L',      -- L for advanced entry
-          go_out = 'h',          -- h for parent directory (vim-like)
-          go_out_plus = 'H',     -- H for advanced parent
-          mark_goto = "'",       -- Bookmark navigation
-          mark_set = 'm',        -- Bookmark setting
-          reset = '<BS>',        -- Backspace reset
-          reveal_cwd = '@',      -- Reveal cwd
-          show_help = 'g?',      -- Help
-          synchronize = '=',     -- Sync (ESSENTIAL for saving changes)
-          trim_left = '<',       -- Trim left
-          trim_right = '>',      -- Trim right
+          close = '<Esc>', -- Escape to close (intuitive)
+          go_in = 'l', -- l to enter/open (vim-like)
+          go_in_plus = 'L', -- L for advanced entry
+          go_out = 'h', -- h for parent directory (vim-like)
+          go_out_plus = 'H', -- H for advanced parent
+          mark_goto = "'", -- Bookmark navigation
+          mark_set = 'm', -- Bookmark setting
+          reset = '<BS>', -- Backspace reset
+          reveal_cwd = '@', -- Reveal cwd
+          show_help = 'g?', -- Help
+          synchronize = '=', -- Sync (ESSENTIAL for saving changes)
+          trim_left = '<', -- Trim left
+          trim_right = '>', -- Trim right
         },
       }
 
@@ -43,7 +43,7 @@ return {
           vim.keymap.set('n', '<CR>', 'l', {
             buffer = buf_id,
             remap = true,
-            desc = 'Enter directory/open file'
+            desc = 'Enter directory/open file',
           })
         end,
       })
@@ -65,7 +65,7 @@ return {
       require('mini.bracketed').setup()
 
       -- Indent scope visualization
-      require('mini.indentscope').setup()
+      -- require('mini.indentscope').setup()
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
@@ -95,7 +95,7 @@ return {
       vim.keymap.set('n', '<leader>e', function()
         local current_file = vim.api.nvim_buf_get_name(0)
         -- Check if current buffer has a valid file path
-        if current_file == '' or current_file:match('^%w+://') then
+        if current_file == '' or current_file:match '^%w+://' then
           -- Open at current working directory if no valid file or special buffer
           MiniFiles.open()
         else
