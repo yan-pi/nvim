@@ -37,6 +37,16 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
--- Theme picker - global keymap that works in any buffer
-vim.keymap.set('n', '<leader>th', '<cmd>Telescope colorscheme<cr>', { desc = '[T]heme [H]elper' })
+-- Tab management (native Neovim tabpages - different workspaces/contexts)
+-- Each tab has its own isolated set of buffers (like browser tabs or IDE workspaces)
+vim.keymap.set('n', '<leader>ty', '<cmd>tabnew<cr>', { desc = '[T]ab New workspace ([Y])' })
+vim.keymap.set('n', '<leader>tn', '<cmd>tabnext<cr>', { desc = '[T]ab [N]ext workspace' })
+vim.keymap.set('n', '<leader>tp', '<cmd>tabprevious<cr>', { desc = '[T]ab [P]revious workspace' })
+vim.keymap.set('n', '<leader>tc', '<cmd>tabclose<cr>', { desc = '[T]ab [C]lose workspace' })
+vim.keymap.set('n', '<leader>to', '<cmd>tabonly<cr>', { desc = '[T]ab [O]nly (close other workspaces)' })
+vim.keymap.set('n', '<leader>tm', '<cmd>tabmove<cr>', { desc = '[T]ab [M]ove workspace' })
+
+-- Note: Buffer navigation (Tab/Shift+Tab) and buffer management (<leader>b*)
+-- are handled by nvchad-ui.lua and work within the current tab/workspace only
+
 

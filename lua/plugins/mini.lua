@@ -48,12 +48,6 @@ return {
         end,
       })
 
-      -- Fuzzy picker (lightweight alternative to Telescope)
-      require('mini.pick').setup {
-        options = {
-          use_cache = true, -- Better performance
-        },
-      }
 
       -- Move lines and blocks with Alt+hjkl
       require('mini.move').setup() -- Uses default Alt+hjkl mappings
@@ -108,27 +102,8 @@ return {
         MiniFiles.open()
       end, { desc = 'File [E]xplorer (cwd)' })
 
-      -- Mini.pick - Fuzzy Picker
-      vim.keymap.set('n', '<leader>pf', function()
-        MiniPick.builtin.files()
-      end, { desc = '[P]ick [F]iles' })
-
-      vim.keymap.set('n', '<leader>pb', function()
-        MiniPick.builtin.buffers()
-      end, { desc = '[P]ick [B]uffers' })
-
-      vim.keymap.set('n', '<leader>ph', function()
-        MiniPick.builtin.help()
-      end, { desc = '[P]ick [H]elp' })
-
-      vim.keymap.set('n', '<leader>pg', function()
-        MiniPick.builtin.grep_live()
-      end, { desc = '[P]ick [G]rep Live' })
-
-      -- Quick file picker (common IDE pattern)
-      vim.keymap.set('n', '<C-p>', function()
-        MiniPick.builtin.files()
-      end, { desc = 'Pick Files (Ctrl+P)' })
+      -- Note: Mini.pick removed - using snacks.nvim for all picker functionality
+      -- Mini.files provides excellent file management, complementing snacks pickers
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim

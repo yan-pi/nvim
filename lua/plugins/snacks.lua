@@ -6,7 +6,7 @@ return {
     ---@type snacks.Config
     opts = {
       bigfile = { enabled = true },
-      dashboard = { enabled = true },
+      -- dashboard = { enabled = true },
       explorer = { enabled = true },
       indent = { enabled = true },
       input = { enabled = true },
@@ -22,7 +22,7 @@ return {
       words = { enabled = true },
       styles = {
         notification = {
-          -- wo = { wrap = true } -- Wrap notifications
+          wo = { wrap = true }, -- Wrap notifications
         },
       },
     },
@@ -63,13 +63,7 @@ return {
         end,
         desc = 'Notification History',
       },
-      {
-        '<leader>e',
-        function()
-          Snacks.explorer()
-        end,
-        desc = 'File Explorer',
-      },
+      -- Note: <leader>e and <leader>E handled by mini.files for file exploration
       -- find
       {
         '<leader>fb',
