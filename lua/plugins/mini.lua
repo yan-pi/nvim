@@ -48,7 +48,6 @@ return {
         end,
       })
 
-
       -- Move lines and blocks with Alt+hjkl
       require('mini.move').setup() -- Uses default Alt+hjkl mappings
 
@@ -82,8 +81,6 @@ return {
       statusline.section_location = function()
         return '%2l:%-2v'
       end
-
-      -- === KEYMAPS ===
 
       -- Mini.files - File Explorer
       vim.keymap.set('n', '<leader>e', function()
