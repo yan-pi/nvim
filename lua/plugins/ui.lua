@@ -82,7 +82,7 @@ return {
       -- Gruvbox configuration
       vim.g.gruvbox_contrast_dark = 'medium' -- soft, medium, hard
       vim.g.gruvbox_contrast_light = 'medium'
-      vim.g.gruvbox_italic = 0 -- Disable italics
+      vim.g.gruvbox_italic = 1 -- Disable italics
       vim.g.gruvbox_bold = 1 -- Enable bold
 
       -- Load the colorscheme
@@ -97,8 +97,8 @@ return {
     opts = {
       style = 'night', -- storm, moon, night, day
       styles = {
-        comments = { italic = false },
-        keywords = { italic = false },
+        comments = { italic = true },
+        keywords = { italic = true },
         functions = {},
         variables = {},
       },
@@ -119,9 +119,9 @@ return {
     opts = {
       compile = false,
       undercurl = true,
-      commentStyle = { italic = false },
+      commentStyle = { italic = true },
       functionStyle = {},
-      keywordStyle = { italic = false },
+      keywordStyle = { italic = true },
       statementStyle = { bold = true },
       typeStyle = {},
       transparent = false,
@@ -157,7 +157,7 @@ return {
         shade = 'dark',
         percentage = 0.15,
       },
-      no_italic = true, -- Force no italic
+      no_italic = false, -- Force no italic
       no_bold = false, -- Force no bold
       styles = {
         comments = {},
@@ -196,6 +196,4 @@ return {
     --   vim.cmd.colorscheme 'oxocarbon'
     -- end,
   },
-
-
 }
