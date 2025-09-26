@@ -5,7 +5,7 @@ return {
     lazy = false,
     dependencies = { 'MunifTanjim/nui.nvim' },
     opts = {
-      enabled = true, -- Start with the plugin disabled
+      enabled = false, -- Start with the plugin disabled
     },
   },
 }

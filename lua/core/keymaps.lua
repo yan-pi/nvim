@@ -5,6 +5,9 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Map ; to : in normal mode for faster command entry
+vim.keymap.set('n', ';', ':', { desc = 'Enter command mode' })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
