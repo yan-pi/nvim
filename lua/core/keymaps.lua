@@ -31,6 +31,28 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+vim.keymap.set('n', '<leader>clt', ':ClaudeCode<CR>', { desc = 'Toggle Claude Code terminal', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>clf', ':ClaudeCodeFocus<CR>', { desc = 'Focus Claude Code terminal', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>clo', ':ClaudeCodeOpen<CR>', { desc = 'Open Claude Code terminal', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>clq', ':ClaudeCodeClose<CR>', { desc = 'Close Claude Code terminal', noremap = true, silent = true })
+
+-- File/selection sending
+vim.keymap.set('n', '<leader>cls', ':ClaudeCodeSend<CR>', { desc = 'Send current file/selection to Claude', noremap = true, silent = true })
+vim.keymap.set('v', '<leader>cls', ':ClaudeCodeSend<CR>', { desc = 'Send visual selection to Claude', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>cla', ':ClaudeCodeTreeAdd<CR>', { desc = 'Add file from tree to Claude', noremap = true, silent = true })
+
+-- Diff management
+vim.keymap.set('n', '<leader>clda', ':ClaudeCodeDiffAccept<CR>', { desc = 'Accept Claude diff', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>cldd', ':ClaudeCodeDiffDeny<CR>', { desc = 'Deny Claude diff', noremap = true, silent = true })
+
+-- Server management
+vim.keymap.set('n', '<leader>clss', ':ClaudeCodeStart<CR>', { desc = 'Start Claude Code server', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>clsx', ':ClaudeCodeStop<CR>', { desc = 'Stop Claude Code server', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>clsi', ':ClaudeCodeStatus<CR>', { desc = 'Show Claude Code status', noremap = true, silent = true })
+
+-- Model selection
+vim.keymap.set('n', '<leader>clm', ':ClaudeCodeSelectModel<CR>', { desc = 'Select Claude model', noremap = true, silent = true })
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -88,5 +110,3 @@ vim.keymap.set('n', '<leader>bp', function()
     _G.TabScopedBuffers.prev_buffer()
   end
 end, { desc = '[B]uffer [P]revious (in current tab)' })
-
-

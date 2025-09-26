@@ -6,6 +6,12 @@ return {
     event = 'VimEnter',
     version = '1.*',
     dependencies = {
+      {
+        'Kaiser-Yang/blink-cmp-avante',
+      },
+      {
+        'giuxtaposition/blink-cmp-copilot',
+      },
       -- Snippet Engine
       {
         'L3MON4D3/LuaSnip',
@@ -81,9 +87,29 @@ return {
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'copilot', 'avante', 'buffer', 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
+          copilot = {
+            name = 'copilot',
+            module = 'blink-cmp-copilot',
+            score_offset = 100,
+            async = true,
+            transform_items = function(_, items)
+              local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
+              local kind_idx = #CompletionItemKind + 1
+              CompletionItemKind[kind_idx] = 'Copilot'
+              for _, item in ipairs(items) do
+                item.kind = kind_idx
+              end
+              return items
+            end,
+          },
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          avante = {
+            module = 'blink-cmp-avante',
+            name = 'Avante',
+            opts = {},
+          },
         },
       },
 
@@ -96,7 +122,7 @@ return {
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
