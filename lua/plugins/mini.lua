@@ -32,6 +32,11 @@ return {
           trim_left = '<', -- Trim left
           trim_right = '>', -- Trim right
         },
+        windows = {
+          width_focus = 40, -- Wider focused window for better visibility
+          width_nofocus = 25, -- Narrower unfocused window to save space
+          preview = true, -- Enable file preview (useful for many file types)
+        },
       }
 
       -- Add buffer-local Enter key support for mini.files
