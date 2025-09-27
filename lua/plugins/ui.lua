@@ -75,9 +75,18 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      -- Optionally configure and load the colorscheme
-      -- directly inside the plugin declaration.
+      -- Configure Gruvbox Material for both dark and light backgrounds
       vim.g.gruvbox_material_enable_italic = true
+      vim.g.gruvbox_material_background = vim.o.background
+      if vim.o.background == 'dark' then
+        vim.g.gruvbox_material_foreground = 'material'
+        vim.g.gruvbox_material_ui_contrast = 'high'
+        vim.g.gruvbox_material_statusline_style = 'mix'
+      else
+        vim.g.gruvbox_material_foreground = 'mix'
+        vim.g.gruvbox_material_ui_contrast = 'low'
+        vim.g.gruvbox_material_statusline_style = 'original'
+      end
       vim.cmd.colorscheme 'gruvbox-material'
     end,
   },

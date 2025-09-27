@@ -96,6 +96,13 @@ local colorscheme_file = vim.fn.stdpath('data') .. '/colorscheme.json'
 -- Available colorschemes for validation
 local available_colorschemes = {
   'gruvbox',
+  'gruvbox-material',
+  'gruvbox-material-dark',
+  'gruvbox-material-light',
+  'gruvbox-original-dark',
+  'gruvbox-original-light',
+  'gruvbox-mix-dark',
+  'gruvbox-mix-light',
   'tokyonight-night',
   'tokyonight-storm',
   'tokyonight-moon',
