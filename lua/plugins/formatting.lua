@@ -9,7 +9,7 @@ return {
       {
         '<leader>f',
         function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
+          require('conform').format { async = true, lsp_format = 'never' }
         end,
         mode = '',
         desc = '[F]ormat buffer',
@@ -17,6 +17,12 @@ return {
     },
     opts = {
       notify_on_error = false,
+      formatters = {
+        -- Configure prettier to use project config and ignore ESLint formatting rules
+        prettier = {
+          prepend_args = { '--config-precedence', 'prefer-file' },
+        },
+      },
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -27,7 +33,7 @@ return {
         else
           return {
             timeout_ms = 500,
-            lsp_format = 'fallback',
+            lsp_format = 'never', -- Don't use LSP for formatting, use configured formatters only
           }
         end
       end,
@@ -36,27 +42,27 @@ return {
         lua = { 'stylua' },
 
         -- JavaScript and TypeScript formatting
-        -- Use prettierd for speed, fallback to prettier
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        -- Use prettier directly for better project config support
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
 
         -- Web technologies
-        html = { 'prettierd', 'prettier', stop_after_first = true },
-        css = { 'prettierd', 'prettier', stop_after_first = true },
-        scss = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettier' },
+        css = { 'prettier' },
+        scss = { 'prettier' },
 
         -- JSON formatting
-        json = { 'prettierd', 'prettier', stop_after_first = true },
-        jsonc = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettier' },
+        jsonc = { 'prettier' },
 
         -- Markdown formatting
-        markdown = { 'prettierd', 'prettier', stop_after_first = true },
+        markdown = { 'prettier' },
 
         -- YAML formatting
-        yaml = { 'prettierd', 'prettier', stop_after_first = true },
-        yml = { 'prettierd', 'prettier', stop_after_first = true },
+        yaml = { 'prettier' },
+        yml = { 'prettier' },
 
         -- Python: Use LSP formatting (pylsp) as primary, with lsp_format fallback
         -- python = {}, -- Handled by LSP
