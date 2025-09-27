@@ -70,26 +70,34 @@ return {
     },
   },
 
-  -- === COLORSCHEMES ===
-  -- You can easily switch between colorschemes using <leader>th (Themery)
-  -- or :Themery command. Changes persist across Neovim sessions.
-
-  -- Gruvbox (Currently Active)
   {
-    'morhetz/gruvbox',
+    'sainnhe/gruvbox-material',
+    lazy = false,
     priority = 1000,
     config = function()
-      -- Gruvbox configuration
-      vim.g.gruvbox_contrast_dark = 'medium' -- soft, medium, hard
-      vim.g.gruvbox_contrast_light = 'medium'
-      vim.g.gruvbox_italic = 1 -- Disable italics
-      vim.g.gruvbox_bold = 1 -- Enable bold
-
-      -- Load the colorscheme
-      vim.cmd.colorscheme 'gruvbox'
+      -- Optionally configure and load the colorscheme
+      -- directly inside the plugin declaration.
+      vim.g.gruvbox_material_enable_italic = true
+      vim.cmd.colorscheme 'gruvbox-material'
     end,
   },
+  { 'EdenEast/nightfox.nvim' }, -- lazy
 
+  -- {
+  --   'morhetz/gruvbox',
+  --   priority = 1000,
+  --   config = function()
+  --     -- Gruvbox configuration
+  --     vim.g.gruvbox_contrast_dark = 'medium' -- soft, medium, hard
+  --     vim.g.gruvbox_contrast_light = 'medium'
+  --     vim.g.gruvbox_italic = 1 -- Disable italics
+  --     vim.g.gruvbox_bold = 1 -- Enable bold
+  --
+  --     -- Load the colorscheme
+  --     vim.cmd.colorscheme 'gruvbox'
+  --   end,
+  -- },
+  --
   -- Alternative colorschemes (uncomment to use)
   {
     'folke/tokyonight.nvim',
