@@ -74,6 +74,17 @@ vim.keymap.set('n', '<leader>tc', '<cmd>tabclose<cr>', { desc = '[T]ab [C]lose w
 vim.keymap.set('n', '<leader>to', '<cmd>tabonly<cr>', { desc = '[T]ab [O]nly (close other workspaces)' })
 vim.keymap.set('n', '<leader>tm', '<cmd>tabmove<cr>', { desc = '[T]ab [M]ove workspace' })
 
+vim.keymap.set('n', '<leader>fo', function()
+  local file = vim.fn.expand '%:p'
+  if vim.fn.has 'mac' == 1 then
+    vim.fn.system { 'open', '-R', file }
+  elseif vim.fn.has 'unix' == 1 then
+    vim.fn.system { 'xdg-open', file }
+  elseif vim.fn.has 'win32' == 1 then
+    vim.fn.system { 'explorer', file }
+  end
+end, { desc = 'Reveal current file in Finder/Explorer' })
+
 -- Buffer navigation within current tab/workspace (Tab-scoped)
 -- These work only with buffers opened within the current tab
 vim.keymap.set('n', '<Tab>', function()
