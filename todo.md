@@ -1,0 +1,4 @@
+- fix obsidian.nvim error
+- leader x closes tabs and not only buffers
+- tabs and shift tabs, cicle over buffers but show my toggleterminal ones and it should not
+- raise size of preview in mini.files
