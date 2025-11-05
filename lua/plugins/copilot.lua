@@ -37,7 +37,7 @@ return {
           },
         },
         nes = {
-          enabled = true, -- Set to true if you want NES functionality and have copilot-lsp installed
+          enabled = false, -- Set to true if you want NES functionality and have copilot-lsp installed
         },
         copilot_node_command = 'node', -- Node.js version must be > 20
         server_opts_overrides = {

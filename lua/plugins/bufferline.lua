@@ -26,6 +26,25 @@ return {
         end
       end
 
+      -- Helper to check if buffer is a real file buffer
+      function M.is_real_buffer(bufnr)
+        local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+        local filetype = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
+        -- Exclude terminal, toggleterm, quickfix, help, and other special buffers
+        if buftype == 'terminal' or filetype == 'toggleterm' or filetype == 'terminal' then
+          return false
+        end
+        if buftype ~= '' and buftype ~= 'acwrite' then
+          return false
+        end
+        -- Exclude unnamed buffers
+        local name = vim.api.nvim_buf_get_name(bufnr)
+        if name == '' then
+          return false
+        end
+        return true
+      end
+
       -- Add buffer to current tab if not already present
       function M.add_buffer_to_tab(bufnr, tabpage)
         tabpage = tabpage or vim.api.nvim_get_current_tabpage()
@@ -33,9 +52,7 @@ return {
 
         M.init_tab(tabpage)
 
-        -- Only add real files, not special buffers
-        local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
-        if buftype ~= '' and buftype ~= 'acwrite' then
+        if not M.is_real_buffer(bufnr) then
           return
         end
 

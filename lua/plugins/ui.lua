@@ -155,6 +155,11 @@ return {
     --   vim.cmd.colorscheme 'kanagawa-wave'
     -- end,
   },
+  {
+    'wesleimp/min-theme.nvim',
+    lazy = false,
+    priority = 1000, -- load this before other plugins
+  },
 
   {
     'catppuccin/nvim',
@@ -204,6 +209,8 @@ return {
     --   vim.cmd.colorscheme 'catppuccin'
     -- end,
   },
+
+  { 'projekt0n/github-nvim-theme', name = 'github-theme' },
 
   {
     'nyoom-engineering/oxocarbon.nvim',
