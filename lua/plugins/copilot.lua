@@ -16,7 +16,7 @@ return {
             jump_next = ']]',
             accept = '<CR>',
             refresh = 'gr',
-            open = '<M-CR>',
+            open = '<leader>cp',
           },
           layout = {
             position = 'bottom',
@@ -30,9 +30,9 @@ return {
           debounce = 75,
           trigger_on_accept = true,
           keymap = {
-            accept = '<M-l>',
-            next = '<M-]>',
-            prev = '<M-[>',
+            accept = '<C-y>',
+            next = '<C-n>',
+            prev = '<C-p>',
             dismiss = '<C-]>',
           },
         },

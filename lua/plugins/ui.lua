@@ -70,27 +70,55 @@ return {
     },
   },
 
+  -- {
+  --   'sainnhe/gruvbox-material',
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     -- Configure Gruvbox Material for both dark and light backgrounds
+  --     vim.g.gruvbox_material_enable_italic = true
+  --     vim.g.gruvbox_material_background = vim.o.background
+  --     if vim.o.background == 'dark' then
+  --       vim.g.gruvbox_material_foreground = 'material'
+  --       vim.g.gruvbox_material_ui_contrast = 'high'
+  --       vim.g.gruvbox_material_statusline_style = 'mix'
+  --     else
+  --       vim.g.gruvbox_material_foreground = 'mix'
+  --       vim.g.gruvbox_material_ui_contrast = 'low'
+  --       vim.g.gruvbox_material_statusline_style = 'original'
+  --     end
+  --     vim.cmd.colorscheme 'gruvbox-material'
+  --   end,
+  -- },
+
   {
-    'sainnhe/gruvbox-material',
-    lazy = false,
-    priority = 1000,
+    'RRethy/base16-nvim',
+    lazy = false, -- load on startup so colors are ready
+    priority = 1000, -- load before other UI plugins
     config = function()
-      -- Configure Gruvbox Material for both dark and light backgrounds
-      vim.g.gruvbox_material_enable_italic = true
-      vim.g.gruvbox_material_background = vim.o.background
-      if vim.o.background == 'dark' then
-        vim.g.gruvbox_material_foreground = 'material'
-        vim.g.gruvbox_material_ui_contrast = 'high'
-        vim.g.gruvbox_material_statusline_style = 'mix'
-      else
-        vim.g.gruvbox_material_foreground = 'mix'
-        vim.g.gruvbox_material_ui_contrast = 'low'
-        vim.g.gruvbox_material_statusline_style = 'original'
-      end
-      vim.cmd.colorscheme 'gruvbox-material'
+      vim.opt.termguicolors = true
+      -- Pick any from the README list, e.g. "base16-gruvbox-dark-soft"
+      vim.cmd 'colorscheme base16-gruvbox-dark-soft'
+      -- Optional: tweak plugin integrations before setting colorscheme
+      require('base16-colorscheme').with_config {
+        telescope = true,
+        indentblankline = true,
+        notify = true,
+        ts_rainbow = true,
+        cmp = true,
+        illuminate = true,
+        dapui = true,
+      }
     end,
   },
-  { 'EdenEast/nightfox.nvim' }, -- lazy
+  -- {
+  --   'snelling-a/base16.nvim',
+  --   config = function()
+  --     -- Configuration goes here (see Usage section below)
+  --   end,
+  -- },
+  { 'savq/melange-nvim' },
+  -- { 'edeneast/nightfox.nvim' }, -- lazy
 
   -- {
   --   'morhetz/gruvbox',
@@ -108,109 +136,109 @@ return {
   -- },
   --
   -- Alternative colorschemes (uncomment to use)
-  {
-    'folke/tokyonight.nvim',
-    priority = 1000,
-    opts = {
-      style = 'night', -- storm, moon, night, day
-      styles = {
-        comments = { italic = true },
-        keywords = { italic = true },
-        functions = {},
-        variables = {},
-      },
-      on_colors = function(colors)
-        -- Customize colors if needed
-      end,
-    },
-    -- Uncomment to activate:
-    -- config = function()
-    --   require('tokyonight').setup(require('tokyonight').opts or {})
-    --   vim.cmd.colorscheme 'tokyonight-night'
-    -- end,
-  },
+  -- {
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000,
+  --   opts = {
+  --     style = 'night', -- storm, moon, night, day
+  --     styles = {
+  --       comments = { italic = true },
+  --       keywords = { italic = true },
+  --       functions = {},
+  --       variables = {},
+  --     },
+  --     on_colors = function(colors)
+  --       -- Customize colors if needed
+  --     end,
+  --   },
+  --   -- Uncomment to activate:
+  --   -- config = function()
+  --   --   require('tokyonight').setup(require('tokyonight').opts or {})
+  --   --   vim.cmd.colorscheme 'tokyonight-night'
+  --   -- end,
+  -- },
 
-  {
-    'rebelot/kanagawa.nvim',
-    priority = 1000,
-    opts = {
-      compile = false,
-      undercurl = true,
-      commentStyle = { italic = true },
-      functionStyle = {},
-      keywordStyle = { italic = true },
-      statementStyle = { bold = true },
-      typeStyle = {},
-      transparent = false,
-      dimInactive = false,
-      terminalColors = true,
-      colors = {
-        palette = {},
-        theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-      },
-    },
-    -- Uncomment to activate:
-    -- config = function(_, opts)
-    --   require('kanagawa').setup(opts)
-    --   vim.cmd.colorscheme 'kanagawa-wave'
-    -- end,
-  },
+  -- {
+  --   'rebelot/kanagawa.nvim',
+  --   priority = 1000,
+  --   opts = {
+  --     compile = false,
+  --     undercurl = true,
+  --     commentStyle = { italic = true },
+  --     functionStyle = {},
+  --     keywordStyle = { italic = true },
+  --     statementStyle = { bold = true },
+  --     typeStyle = {},
+  --     transparent = false,
+  --     dimInactive = false,
+  --     terminalColors = true,
+  --     colors = {
+  --       palette = {},
+  --       theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
+  --     },
+  --   },
+  --   -- Uncomment to activate:
+  --   -- config = function(_, opts)
+  --   --   require('kanagawa').setup(opts)
+  --   --   vim.cmd.colorscheme 'kanagawa-wave'
+  --   -- end,
+  -- },
   {
     'wesleimp/min-theme.nvim',
     lazy = false,
     priority = 1000, -- load this before other plugins
   },
 
-  {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    priority = 1000,
-    opts = {
-      flavour = 'mocha', -- latte, frappe, macchiato, mocha
-      background = {
-        light = 'latte',
-        dark = 'mocha',
-      },
-      transparent_background = false,
-      show_end_of_buffer = false,
-      term_colors = false,
-      dim_inactive = {
-        enabled = false,
-        shade = 'dark',
-        percentage = 0.15,
-      },
-      no_italic = false, -- Force no italic
-      no_bold = false, -- Force no bold
-      styles = {
-        comments = {},
-        conditionals = {},
-        loops = {},
-        functions = {},
-        keywords = {},
-        strings = {},
-        variables = {},
-        numbers = {},
-        booleans = {},
-        properties = {},
-        types = {},
-        operators = {},
-      },
-      integrations = {
-        cmp = true,
-        gitsigns = true,
-        nvimtree = true,
-        telescope = true,
-        mini = true,
-      },
-    },
-    -- Uncomment to activate:
-    -- config = function(_, opts)
-    --   require('catppuccin').setup(opts)
-    --   vim.cmd.colorscheme 'catppuccin'
-    -- end,
-  },
+  -- {
+  --   'catppuccin/nvim',
+  --   name = 'catppuccin',
+  --   priority = 1000,
+  --   opts = {
+  --     flavour = 'mocha', -- latte, frappe, macchiato, mocha
+  --     background = {
+  --       light = 'latte',
+  --       dark = 'mocha',
+  --     },
+  --     transparent_background = false,
+  --     show_end_of_buffer = false,
+  --     term_colors = false,
+  --     dim_inactive = {
+  --       enabled = false,
+  --       shade = 'dark',
+  --       percentage = 0.15,
+  --     },
+  --     no_italic = false, -- Force no italic
+  --     no_bold = false, -- Force no bold
+  --     styles = {
+  --       comments = {},
+  --       conditionals = {},
+  --       loops = {},
+  --       functions = {},
+  --       keywords = {},
+  --       strings = {},
+  --       variables = {},
+  --       numbers = {},
+  --       booleans = {},
+  --       properties = {},
+  --       types = {},
+  --       operators = {},
+  --     },
+  --     integrations = {
+  --       cmp = true,
+  --       gitsigns = true,
+  --       nvimtree = true,
+  --       telescope = true,
+  --       mini = true,
+  --     },
+  --   },
+  --   -- Uncomment to activate:
+  --   -- config = function(_, opts)
+  --   --   require('catppuccin').setup(opts)
+  --   --   vim.cmd.colorscheme 'catppuccin'
+  --   -- end,
+  -- },
 
-  { 'projekt0n/github-nvim-theme', name = 'github-theme' },
+  -- { 'projekt0n/github-nvim-theme', name = 'github-theme' },
 
   {
     'nyoom-engineering/oxocarbon.nvim',

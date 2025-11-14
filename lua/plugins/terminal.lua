@@ -124,47 +124,37 @@ return {
         smart_toggle(float_term)
       end
 
-      -- Set up Alt key combinations for quick terminal access (conflict-free)
+      -- Set up leader key combinations for quick terminal access
       -- Normal mode
-      vim.keymap.set('n', '<M-h>', function()
+      vim.keymap.set('n', '<leader>th', function()
         _horizontal_toggle()
-      end, { desc = 'Toggle horizontal terminal', noremap = true, silent = true })
+      end, { desc = '[T]erminal [H]orizontal toggle', noremap = true, silent = true })
 
-      vim.keymap.set('n', '<M-v>', function()
+      vim.keymap.set('n', '<leader>tv', function()
         _vertical_toggle()
-      end, { desc = 'Toggle vertical terminal', noremap = true, silent = true })
+      end, { desc = '[T]erminal [V]ertical toggle', noremap = true, silent = true })
 
-      vim.keymap.set('n', '<M-i>', function()
+      vim.keymap.set('n', '<leader>ti', function()
         _float_toggle()
-      end, { desc = 'Toggle floating terminal', noremap = true, silent = true })
-
-      -- Insert mode - seamless toggle without exiting insert mode
-      vim.keymap.set('i', '<M-h>', '<C-o>:lua _horizontal_toggle()<CR>', { desc = 'Toggle horizontal from insert', noremap = true, silent = true })
-      vim.keymap.set('i', '<M-v>', '<C-o>:lua _vertical_toggle()<CR>', { desc = 'Toggle vertical from insert', noremap = true, silent = true })
-      vim.keymap.set('i', '<M-i>', '<C-o>:lua _float_toggle()<CR>', { desc = 'Toggle float from insert', noremap = true, silent = true })
-
-      -- Visual and Select modes
-      vim.keymap.set('v', '<M-h>', '<Esc>:lua _horizontal_toggle()<CR>', { desc = 'Toggle horizontal from visual', noremap = true, silent = true })
-      vim.keymap.set('v', '<M-v>', '<Esc>:lua _vertical_toggle()<CR>', { desc = 'Toggle vertical from visual', noremap = true, silent = true })
-      vim.keymap.set('v', '<M-i>', '<Esc>:lua _float_toggle()<CR>', { desc = 'Toggle float from visual', noremap = true, silent = true })
+      end, { desc = '[T]erminal [I] Float toggle', noremap = true, silent = true })
 
       -- Terminal mode keybindings for easy escape and toggle
       vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit to normal mode' })
       vim.keymap.set('t', '<C-q>', '<C-\\><C-n>:close<CR>', { desc = 'Close terminal from terminal mode' })
 
-      -- Alt key combinations work from terminal mode too (improved reliability)
-      vim.keymap.set('t', '<M-h>', function()
-        vim.cmd('stopinsert')
-        _horizontal_toggle()
-      end, { desc = 'Toggle horizontal from terminal' })
-      vim.keymap.set('t', '<M-v>', function()
-        vim.cmd('stopinsert')
-        _vertical_toggle()
-      end, { desc = 'Toggle vertical from terminal' })
-      vim.keymap.set('t', '<M-i>', function()
-        vim.cmd('stopinsert')
-        _float_toggle()
-      end, { desc = 'Toggle floating from terminal' })
+      -- Leader combinations work from terminal mode too
+      -- vim.keymap.set('t', '<leader>th', function()
+      --   vim.cmd('stopinsert')
+      --   _horizontal_toggle()
+      -- end, { desc = '[T]erminal [H]orizontal from terminal' })
+      -- vim.keymap.set('t', '<leader>tv', function()
+      --   vim.cmd('stopinsert')
+      --   _vertical_toggle()
+      -- end, { desc = '[T]erminal [V]ertical from terminal' })
+      -- vim.keymap.set('t', '<leader>ti', function()
+      --   vim.cmd('stopinsert')
+      --   _float_toggle()
+      -- end, { desc = '[T]erminal [I] Float from terminal' })
 
       -- Terminal mode keymaps for easier navigation
       vim.keymap.set('t', '<C-h>', function()
@@ -189,3 +179,4 @@ return {
     end,
   },
 }
+
