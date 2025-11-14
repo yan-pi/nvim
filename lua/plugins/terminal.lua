@@ -4,7 +4,21 @@ return {
   {
     'akinsho/toggleterm.nvim',
     version = '*',
-    event = 'VeryLazy',
+    keys = {
+      { '<leader>th', desc = '[T]erminal [H]orizontal toggle' },
+      { '<leader>tv', desc = '[T]erminal [V]ertical toggle' },
+      { '<leader>ti', desc = '[T]erminal Float toggle' },
+      { '<leader>ta', desc = '[T]erminal toggle [A]ll' },
+      { '<leader>ts', desc = '[T]erminal [S]elect' },
+    },
+    cmd = {
+      'ToggleTerm',
+      'ToggleTermToggleAll',
+      'TermSelect',
+      'ToggleTermSendCurrentLine',
+      'ToggleTermSendVisualLines',
+      'ToggleTermSendVisualSelection',
+    },
     config = function()
       require('toggleterm').setup {
         -- Basic configuration
