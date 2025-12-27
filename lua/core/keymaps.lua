@@ -18,8 +18,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\\\><C-n>', { desc = 'Exit terminal mode' })
--- Removed <leader>x to avoid conflict with trouble.nvim (<leader>x* prefix)
--- Use <leader>bc instead for closing buffers (defined below)
+
+-- Buffer management - Quick close buffer keybind
+-- Note: <leader>x removed to avoid conflict with trouble.nvim (<leader>x* prefix)
+-- Using <leader>d for "delete buffer" instead (common alternative)
+vim.keymap.set('n', '<leader>d', ':bd<CR>', { desc = '[D]elete/close current buffer', noremap = true, silent = true })
 vim.keymap.set('n', '<leader>b', ':enew<CR>', { desc = 'Create new empty buffer', noremap = true, silent = true })
 vim.keymap.set('t', '<C-n>', '<C-\\><C-n>', { desc = 'Enter normal mode in terminal' })
 
