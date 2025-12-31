@@ -418,6 +418,21 @@ return {
         end,
         desc = 'LSP Workspace Symbols',
       },
+      -- Aerial replacements (symbol navigation)
+      {
+        '<leader>a',
+        function()
+          Snacks.picker.lsp_symbols()
+        end,
+        desc = 'Document Symbols (replaces Aerial)',
+      },
+      {
+        '<leader>A',
+        function()
+          Snacks.picker.lsp_workspace_symbols()
+        end,
+        desc = 'Workspace Symbols (replaces Aerial Nav)',
+      },
       -- Other
       {
         '<leader>z',

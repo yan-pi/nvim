@@ -104,7 +104,6 @@ return {
       vim.cmd 'colorscheme base16-gruvbox-dark-soft'
       -- Optional: tweak plugin integrations before setting colorscheme
       require('base16-colorscheme').with_config {
-        telescope = true,
         indentblankline = true,
         notify = true,
         ts_rainbow = true,
@@ -230,7 +229,6 @@ return {
   --       cmp = true,
   --       gitsigns = true,
   --       nvimtree = true,
-  --       telescope = true,
   --       mini = true,
   --     },
   --   },

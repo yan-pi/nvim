@@ -5,12 +5,16 @@ return {
   'linux-cultist/venv-selector.nvim',
   dependencies = {
     'neovim/nvim-lspconfig',
-    'nvim-telescope/telescope.nvim',
     'mfussenegger/nvim-dap-python',
   },
   branch = 'regexp',
   ft = 'python',
   opts = {
+    -- Use Snacks picker instead of Telescope
+    options = {
+      picker = 'snacks',
+    },
+    
     -- Auto select single venv if found
     auto_refresh = true,
     search_venv_managers = true,

@@ -59,7 +59,8 @@ return {
 
       -- 6) completion & picker
       completion = { nvim_cmp = true, blink_cmp = true, min_chars = 2 },
-      picker = { name = 'telescope.nvim' },
+      -- Use auto-detection for picker (will find snacks.nvim)
+      -- picker = { name = 'snacks' },  -- Obsidian.nvim auto-detects available pickers
 
       -- 7) tipos de notas personalizadas
       note_map = {

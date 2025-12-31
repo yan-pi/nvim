@@ -15,7 +15,7 @@ return {
       -- File explorer with column view
       require('mini.files').setup {
         options = {
-          use_as_default_explorer = true, -- Keep alongside netrw/telescope
+          use_as_default_explorer = true, -- Modern file explorer (replaces netrw)
         },
         mappings = {
           close = '<Esc>', -- Escape to close (intuitive)

@@ -26,12 +26,13 @@ Each plugin category has its own file in `lua/plugins/`:
 - **`javascript.lua`** - Node.js debugging configuration (vscode-js-debug)
 - **`rust.lua`** - Rust development with rust-analyzer and debugging
 - **`testing.lua`** - Neotest integration for Go, Rust, Python, JS/TS tests
-- **`telescope.lua`** - Fuzzy finder with custom keymaps for search operations
+- **`snacks.lua`** - Snacks.nvim picker for all fuzzy finding (files, grep, LSP symbols, git, etc.)
 - **`treesitter.lua`** - Syntax highlighting and parsing
 - **`ui.lua`** - Appearance (themes, which-key)
 - **`git.lua`** - Git integration via Gitsigns
 - **`editor.lua`** - Editor enhancements (todo-comments, guess-indent)
-- **`mini.lua`** - Mini.nvim modules (files, pick, move, starter, bracketed, indentscope, surround)
+- **`mini.lua`** - Mini.nvim modules (files, move, starter, bracketed, indentscope, surround)
+- **`bufferline.lua`** - Tab-scoped buffer management with visual tabline
 
 ## Language Support
 
@@ -74,13 +75,48 @@ Custom keymaps configured for intuitive completion:
 ### File Management
 Mini.files integration provides a modern file explorer experience, replacing traditional netrw.
 
-### Search and Navigation
-Telescope configured with comprehensive search capabilities:
-- `<leader>sf` - Search files
-- `<leader>sg` - Live grep
+### Navigation & Search
+All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope):
+
+**Files & Buffers:**
+- `<leader><space>` - Smart file finder (git-aware)
+- `<leader>ff` - Find files
+- `<leader>fr` - Recent files
+- `<leader>,` - Buffer switcher
+- `<leader>bt` - Tab-scoped buffers
+- `<leader>fp` - Project switcher
+
+**Symbol Navigation:**
+- `<leader>a` - Document symbols (LSP, replaces Aerial)
+- `<leader>A` - Workspace symbols (LSP)
+- `<leader>ss` - LSP symbols
+- `<leader>sS` - LSP workspace symbols
+- `gd` - Go to definition
+- `gr` - Find references
+- `gI` - Go to implementation
+- `gy` - Go to type definition
+
+**Search:**
+- `<leader>/` - Live grep
+- `<leader>sg` - Grep files
+- `<leader>sw` - Search word under cursor
+- `<leader>sb` - Search buffer lines
+- `<leader>sB` - Grep open buffers
+
+**Git:**
+- `<leader>gb` - Git branches
+- `<leader>gl` - Git log
+- `<leader>gs` - Git status
+- `<leader>gd` - Git diff
+- `<leader>gc` - Git commits
+
+**Vim Internals:**
+- `<leader>sc` - Commands
+- `<leader>sk` - Keymaps
 - `<leader>sh` - Help tags
-- `<leader>sw` - Search current word
-- `<leader>sr` - Resume last search
+- `<leader>sm` - Man pages
+- `<leader>s"` - Registers
+- `<leader>s/` - Search history
 
 ### Debugging (DAP)
 Full debugging support with visual interface:

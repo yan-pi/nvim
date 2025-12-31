@@ -120,7 +120,7 @@ return {
       end,
       desc = 'Debug Cleanup',
     },
-    -- Refactor menu (with telescope if available)
+    -- Refactor menu (uses vim.ui.select which auto-detects available pickers)
     {
       '<leader>rr',
       function()

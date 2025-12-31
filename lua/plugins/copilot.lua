@@ -221,10 +221,30 @@ return {
       {
         '<leader>ccp',
         function()
-          local actions = require 'CopilotChat.actions'
-          require('CopilotChat.integrations.telescope').pick(actions.prompt_actions())
+          local actions = require('CopilotChat.actions').prompt_actions()
+          
+          -- Convert actions table to picker items
+          local items = {}
+          for name, action in pairs(actions) do
+            table.insert(items, {
+              text = name,
+              action = action,
+            })
+          end
+          
+          -- Use Snacks picker instead of Telescope
+          Snacks.picker.pick({
+            items = items,
+            format = function(item)
+              return item.text
+            end,
+            confirm = function(item)
+              -- Execute the selected action
+              vim.cmd(item.action)
+            end,
+          })
         end,
-        desc = 'Prompt Actions',
+        desc = 'CopilotChat Prompt Actions',
         mode = { 'n', 'x' },
       },
 
