@@ -1,4 +1,30 @@
--- Autoformat
+-- Autoformat with project-aware formatter detection
+-- Automatically detects project preferences (biome vs prettier) based on config files
+
+-- Helper function for project-aware formatter detection
+-- Searches upward from buffer location for formatter config files
+-- Returns appropriate formatter(s) based on project configuration
+--
+-- @param bufnr number: Buffer number to detect formatter for
+-- @param config_files table: List of config file patterns and their formatters
+--   Format: { { files = {...}, formatters = {...} }, ... }
+-- @param formatters table: Fallback formatters if no config found
+--   Format: { default = {...} }
+-- @return table: Formatter configuration for conform.nvim
+local function detect_formatter(bufnr, config_files, formatters)
+  -- Get the directory of the current buffer
+  local root = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
+
+  -- Search for config files in project root (upward search)
+  for _, config in ipairs(config_files) do
+    if vim.fs.find(config.files, { upward = true, path = root })[1] then
+      return config.formatters
+    end
+  end
+
+  -- Return default formatters if no config found
+  return formatters.default
+end
 
 return {
   {
@@ -36,6 +62,10 @@ return {
         prettier = {
           prepend_args = { '--config-precedence', 'prefer-file' },
         },
+        -- Configure prettierd (faster prettier daemon) similarly
+        prettierd = {
+          prepend_args = { '--config-precedence', 'prefer-file' },
+        },
       },
       format_on_save = function(bufnr)
         -- Check global toggle
@@ -61,27 +91,148 @@ return {
         lua = { 'stylua' },
 
         -- JavaScript and TypeScript formatting
-        -- Use prettier directly for better project config support
-        javascript = { 'prettier' },
-        javascriptreact = { 'prettier' },
-        typescript = { 'prettier' },
-        typescriptreact = { 'prettier' },
+        -- Project-aware: biome → prettierd → prettier (with fallback chain)
+        -- Detects biome.json or .prettierrc in project root
+        javascript = function(bufnr)
+          return detect_formatter(bufnr, {
+            -- Priority order: check biome first, then prettier
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            -- Default: use prettierd with prettier fallback (faster than prettier alone)
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
+        javascriptreact = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
+        typescript = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
+        typescriptreact = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
 
-        -- Web technologies
-        html = { 'prettier' },
-        css = { 'prettier' },
-        scss = { 'prettier' },
+        -- Web technologies - project-aware
+        html = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
+        css = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
+        scss = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
 
-        -- JSON formatting
-        json = { 'prettier' },
-        jsonc = { 'prettier' },
+        -- JSON formatting - project-aware
+        json = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
+        jsonc = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
 
-        -- Markdown formatting
-        markdown = { 'prettier' },
+        -- Markdown formatting - project-aware
+        markdown = function(bufnr)
+          return detect_formatter(bufnr, {
+            { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
 
-        -- YAML formatting
-        yaml = { 'prettier' },
-        yml = { 'prettier' },
+        -- YAML formatting - project-aware
+        yaml = function(bufnr)
+          return detect_formatter(bufnr, {
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
+        yml = function(bufnr)
+          return detect_formatter(bufnr, {
+            {
+              files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+              formatters = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+          }, {
+            default = { 'prettierd', 'prettier', stop_after_first = true },
+          })
+        end,
 
         -- Python: Use Ruff for formatting (extremely fast, replaces black/isort)
         python = { 'ruff_format', 'ruff_organize_imports' },

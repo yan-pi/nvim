@@ -206,4 +206,16 @@ return {
       vim.g.rustaceanvim = vim.tbl_deep_extend('keep', vim.g.rustaceanvim or {}, opts or {})
     end,
   },
+
+  -- Ensure Rust tools are installed via Mason
+  {
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, {
+        'bacon', -- Background Rust compiler/checker for real-time feedback
+        'codelldb', -- Rust debugger (also in dap.lua, but listed here for clarity)
+      })
+    end,
+  },
 }

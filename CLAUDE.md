@@ -20,7 +20,12 @@ Each plugin category has its own file in `lua/plugins/`:
 
 - **`lsp.lua`** - Language Server Protocol configuration with 8 language servers
 - **`completion.lua`** - Blink.cmp autocompletion with custom Tab/Enter keymaps
-- **`formatting.lua`** - Conform.nvim with multi-language formatting support
+- **`formatting.lua`** - Conform.nvim with project-aware formatter detection (biome vs prettier)
+- **`dap.lua`** - Debug Adapter Protocol with UI, virtual text, and keybindings
+- **`go.lua`** - Go language server (gopls) and debugging (Delve)
+- **`javascript.lua`** - Node.js debugging configuration (vscode-js-debug)
+- **`rust.lua`** - Rust development with rust-analyzer and debugging
+- **`testing.lua`** - Neotest integration for Go, Rust, Python, JS/TS tests
 - **`telescope.lua`** - Fuzzy finder with custom keymaps for search operations
 - **`treesitter.lua`** - Syntax highlighting and parsing
 - **`ui.lua`** - Appearance (themes, which-key)
@@ -41,12 +46,17 @@ Each plugin category has its own file in `lua/plugins/`:
 - **`eslint`** - JavaScript/TypeScript linting as LSP
 
 ### Formatting Configuration
-Uses Conform.nvim with language-specific formatters:
-- **JS/TS/HTML/CSS/JSON/YAML/Markdown**: `prettierd` → `prettier` (fallback chain)
+Uses Conform.nvim with **project-aware formatter detection**:
+- **JS/TS/HTML/CSS/JSON/YAML/Markdown**: Detects `biome.json` or `.prettierrc` in project root
+  - If `biome.json` found → uses `biome`
+  - If `.prettierrc*` found → uses `prettierd` → `prettier` (fallback chain)
+  - Otherwise → uses `prettierd` → `prettier` (default)
 - **Lua**: `stylua`
-- **Python**: LSP formatting via `pylsp`
+- **Python**: `ruff_format` + `ruff_organize_imports`
 - **Rust**: LSP formatting via `rust_analyzer`
-- **Shell**: `shfmt` (configurable)
+- **Shell**: `shfmt`
+
+**Extensibility**: The `detect_formatter()` helper in `lua/plugins/formatting.lua` makes it easy to add new project-aware formatters.
 
 ### Tool Management
 All language tools are managed through Mason.nvim with automatic installation via `ensure_installed` lists in `lua/plugins/lsp.lua`.
@@ -72,6 +82,30 @@ Telescope configured with comprehensive search capabilities:
 - `<leader>sw` - Search current word
 - `<leader>sr` - Resume last search
 
+### Debugging (DAP)
+Full debugging support with visual interface:
+- **Go**: Delve debugger via nvim-dap-go
+- **JavaScript/TypeScript**: Node.js debugging via vscode-js-debug
+- **Rust**: CodeLLDB via rustaceanvim
+- **Python**: debugpy via nvim-dap-python
+
+**DAP UI**: Bottom panel layout (customizable) with auto-open/close  
+**Virtual Text**: Inline variable values during debugging
+
+#### Debug Keybindings (all under `<leader>d`)
+- `<leader>dc` - Continue/Start debugging
+- `<leader>ds` - Step over
+- `<leader>di` - Step into
+- `<leader>do` - Step out
+- `<leader>dx` - Terminate session
+- `<leader>db` - Toggle breakpoint
+- `<leader>dB` - Conditional breakpoint
+- `<leader>dl` - Log point
+- `<leader>du` - Toggle DAP UI
+- `<leader>dr` - Toggle REPL
+- `<leader>dk` - Hover/eval expression
+- `<leader>dp` - Preview value
+
 ## Development Commands
 
 ### Plugin Management
@@ -92,7 +126,19 @@ Telescope configured with comprehensive search capabilities:
 ### Formatting
 ```vim
 <leader>f           " Format current buffer
+<leader>uf          " Toggle auto-format on save
 :ConformInfo        " View available formatters
+```
+
+### Debugging
+```vim
+<leader>dc          " Continue/Start debugging
+<leader>ds          " Step over
+<leader>di          " Step into
+<leader>do          " Step out
+<leader>dx          " Terminate session
+<leader>db          " Toggle breakpoint
+<leader>du          " Toggle DAP UI
 ```
 
 ### Health Checks

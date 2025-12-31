@@ -469,35 +469,45 @@ return {
             workingDirectory = { mode = 'location' },
           },
         },
+
+        -- Bacon language server for Rust background compilation
+        -- Provides real-time compilation feedback and diagnostics
+        bacon_ls = {
+          settings = {
+            bacon = {
+              -- Path to bacon executable (auto-detected if installed via Mason)
+              path = nil,
+              -- When to run bacon: 'on_save' or 'on_change'
+              trigger = 'on_save',
+            },
+          },
+        },
+
+        -- GitHub Actions YAML language server
+        -- Provides validation and completion for GitHub workflow files
+        gh_actions_ls = {
+          filetypes = { 'yaml.github' }, -- Only for .github/workflows/*.yml
+          settings = {},
+        },
+
+        -- Justfile language server (similar to Makefiles)
+        -- Provides syntax highlighting and validation for Justfiles
+        just = {
+          filetypes = { 'just', 'justfile' },
+          settings = {},
+        },
+
+        -- MDX language server (Markdown + JSX)
+        -- Provides LSP features for MDX files used in documentation sites
+        mdx_analyzer = {
+          filetypes = { 'mdx' },
+          settings = {},
+        },
       }
 
-      -- Ensure the servers and tools above are installed
-      --
-      -- To check the current status of installed tools and/or manually install
-      -- other tools, you can run
-      --    :Mason
-      --
-      -- You can press `g?` for help in this menu.
-      --
-      -- `mason` had to be setup earlier: to configure its options see the
-      -- `dependencies` table for `nvim-lspconfig` above.
-      --
-      -- You can add other tools here that you want Mason to install
-      -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        -- Lua
-        'stylua', -- Lua formatter
-        -- JavaScript/TypeScript
-        'prettier', -- Multi-language formatter
-        'prettierd', -- Faster prettier daemon
-        'biome', -- Fast JS/TS/JSON formatter and linter
-        -- Python (Ruff is extremely fast, replaces black/isort/flake8/pylint)
-        'ruff', -- Python linter & formatter (Rust-based, very fast)
-        -- Shell
-        'shfmt', -- Shell script formatter
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      -- Note: Tool installation is now handled by mason-tool-installer
+      -- configured below. LSP servers from the 'servers' table above
+      -- will be automatically added to ensure_installed.
 
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
@@ -512,6 +522,76 @@ return {
             require('lspconfig')[server_name].setup(server)
           end,
         },
+      }
+    end,
+  },
+
+  -- Mason Tool Installer - Declarative tool installation
+  -- This plugin entry collects ensure_installed from all plugin files
+  -- (lsp.lua, go.lua, dap.lua, rust.lua) via Lazy.nvim's opts merging
+  {
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      
+      -- Add formatters and other core tools from lsp.lua
+      vim.list_extend(opts.ensure_installed, {
+        -- === LSP SERVERS (from servers table above) ===
+        'lua_ls',
+        'bashls',
+        'jsonls',
+        'ruff',
+        'basedpyright',
+        'rust_analyzer',
+        'tailwindcss',
+        'ts_ls',
+        'eslint',
+        'bacon_ls',
+        'gh_actions_ls',
+        'just',
+        'mdx_analyzer',
+        
+        -- === FORMATTERS ===
+        -- Lua
+        'stylua',
+
+        -- JavaScript/TypeScript
+        'prettier',
+        'prettierd',
+        'biome',
+
+        -- Python
+        'ruff',
+
+        -- Shell
+        'shfmt',
+      })
+      
+      return opts
+    end,
+    config = function(_, opts)
+      -- Remove deprecated tools before setup
+      -- pylsp is replaced by ruff + basedpyright for Python support
+      opts.ensure_installed = vim.tbl_filter(function(tool)
+        return tool ~= 'pylsp'
+      end, opts.ensure_installed)
+      
+      -- Remove duplicates (ruff appears twice)
+      local seen = {}
+      local unique = {}
+      for _, tool in ipairs(opts.ensure_installed) do
+        if not seen[tool] then
+          seen[tool] = true
+          table.insert(unique, tool)
+        end
+      end
+      
+      -- Setup mason-tool-installer with merged configuration from all files
+      require('mason-tool-installer').setup {
+        ensure_installed = unique,
+        auto_update = false, -- Manual updates via :MasonToolsUpdate
+        run_on_start = true, -- Install missing tools automatically
+        start_delay = 0, -- Install immediately (transparent, no hidden delays)
       }
     end,
   },
