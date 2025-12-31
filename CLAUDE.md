@@ -75,6 +75,16 @@ Custom keymaps configured for intuitive completion:
 ### File Management
 Mini.files integration provides a modern file explorer experience, replacing traditional netrw.
 
+### Image Viewer
+Snacks.nvim image viewer is enabled, supporting inline image rendering using Kitty Graphics Protocol (compatible with Ghostty terminal).
+
+**Supported formats:**
+- Images: PNG, JPG, GIF, WebP, BMP
+- Videos: MP4, MOV (limited support)
+- Documents: PDF (converted to images)
+
+**Usage:** Open any image file in Neovim: `nvim screenshot.png`
+
 ### Navigation & Search
 All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope):
 
@@ -108,7 +118,15 @@ All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope
 - `<leader>gl` - Git log
 - `<leader>gs` - Git status
 - `<leader>gd` - Git diff
-- `<leader>gc` - Git commits
+- `<leader>gf` - Git log file
+
+**GitHub CLI:**
+- `<leader>gi` - GitHub issues (open)
+- `<leader>gI` - GitHub issues (all)
+- `<leader>gp` - GitHub pull requests (open)
+- `<leader>gP` - GitHub pull requests (all)
+
+**Note:** Requires `gh` CLI installed and authenticated (`gh auth login`)
 
 **Vim Internals:**
 - `<leader>sc` - Commands
