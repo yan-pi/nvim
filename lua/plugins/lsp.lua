@@ -1,5 +1,10 @@
 -- LSP Configuration
 
+--- Constants for LSP UI and behavior configuration
+local FIDGET_MAX_PROGRESS_ITEMS = 5 -- Max concurrent progress notifications to display
+local FIDGET_DONE_MESSAGE_TTL_SEC = 2 -- How long to keep "done" messages visible (seconds)
+local FIDGET_PROGRESS_ANIMATION_PERIOD = 1 -- Animation speed for progress indicator
+
 return {
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -24,8 +29,29 @@ return {
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-      -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      -- Useful status updates for LSP progress
+      {
+        'j-hui/fidget.nvim',
+        opts = {
+          notification = {
+            window = {
+              winblend = 0,
+              border = 'none',
+              align = 'bottom',
+            },
+          },
+          progress = {
+            display = {
+              render_limit = FIDGET_MAX_PROGRESS_ITEMS, -- Max concurrent progress notifications
+              done_ttl = FIDGET_DONE_MESSAGE_TTL_SEC, -- How long to keep "done" messages (seconds)
+              progress_icon = {
+                pattern = 'dots',
+                period = FIDGET_PROGRESS_ANIMATION_PERIOD,
+              },
+            },
+          },
+        },
+      },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -34,6 +60,10 @@ return {
       'b0o/schemastore.nvim',
     },
     config = function()
+      -- === LSP PERFORMANCE & RELIABILITY CONFIGURATION ===
+      -- Reduce LSP log noise (only show warnings and errors)
+      vim.lsp.set_log_level('WARN')
+
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -71,6 +101,12 @@ return {
           --
           -- In this case, we create a function that lets us more easily define mappings specific
           -- for LSP related items. It sets the mode, buffer and description for us each time.
+          
+          --- Helper to create LSP-specific keymaps with automatic buffer scoping
+          --- @param keys string Key sequence to map
+          --- @param func function|string Function to execute or command string
+          --- @param desc string Description for which-key
+          --- @param mode? string|string[] Vim mode(s) to apply mapping (defaults to 'n')
           local map = function(keys, func, desc, mode)
             mode = mode or 'n'
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
@@ -126,10 +162,11 @@ return {
           end, '[G]oto [T]ype Definition')
 
           -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-          ---@param client vim.lsp.Client
-          ---@param method vim.lsp.protocol.Method
-          ---@param bufnr? integer some lsp support methods only in specific files
-          ---@return boolean
+          --- Check if LSP client supports a specific method (version-compatible)
+          --- @param client vim.lsp.Client LSP client instance
+          --- @param method vim.lsp.protocol.Method Method to check (e.g., textDocument_documentHighlight)
+          --- @param bufnr? integer Buffer number (some methods are buffer-specific)
+          --- @return boolean True if client supports the method
           local function client_supports_method(client, method, bufnr)
             if vim.fn.has 'nvim-0.11' == 1 then
               return client:supports_method(method, bufnr)
@@ -252,19 +289,32 @@ return {
           },
         },
 
-        -- Python language server
-        pylsp = {
+        -- Python language servers - Modern setup with Ruff (fast) + Basedpyright (types)
+        -- Ruff: Lightning-fast linter/formatter written in Rust
+        -- Note: Using new unified 'ruff' LSP server (ruff >= 0.4.0)
+        --       The old 'ruff-lsp' package is deprecated
+        ruff = {
+          on_attach = function(client, bufnr)
+            -- Disable hover in favor of Basedpyright
+            client.server_capabilities.hoverProvider = false
+          end,
+          init_options = {
+            settings = {
+              -- Ruff-specific settings
+              args = {},
+            },
+          },
+        },
+
+        -- Basedpyright: Community fork of Pyright with better defaults
+        basedpyright = {
           settings = {
-            pylsp = {
-              plugins = {
-                pycodestyle = {
-                  ignore = { 'W391' },
-                  maxLineLength = 100,
-                },
-                pylint = { enabled = true, args = { '--max-line-length=100' } },
-                pyflakes = { enabled = true },
-                rope_completion = { enabled = true },
-                rope_autoimport = { enabled = true },
+            basedpyright = {
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = 'workspace',
+                useLibraryCodeForTypes = true,
+                typeCheckingMode = 'basic', -- off, basic, standard, strict
               },
             },
           },
@@ -274,6 +324,11 @@ return {
         rust_analyzer = {
           settings = {
             ['rust-analyzer'] = {
+              -- Performance optimizations
+              cachePriming = {
+                enable = true,
+                numThreads = 4, -- Adjust based on your CPU
+              },
               cargo = {
                 allFeatures = true,
                 loadOutDirsFromCheck = true,
@@ -291,6 +346,11 @@ return {
                   ['napi-derive'] = { 'napi' },
                   ['async-recursion'] = { 'async_recursion' },
                 },
+              },
+              -- Enhanced completion
+              completion = {
+                postfix = { enable = true },
+                privateEditable = { enable = true },
               },
               inlayHints = {
                 bindingModeHints = {
@@ -426,10 +486,16 @@ return {
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        -- Lua
+        'stylua', -- Lua formatter
+        -- JavaScript/TypeScript
         'prettier', -- Multi-language formatter
         'prettierd', -- Faster prettier daemon
         'biome', -- Fast JS/TS/JSON formatter and linter
+        -- Python (Ruff is extremely fast, replaces black/isort/flake8/pylint)
+        'ruff', -- Python linter & formatter (Rust-based, very fast)
+        -- Shell
+        'shfmt', -- Shell script formatter
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

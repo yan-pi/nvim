@@ -7,7 +7,45 @@ return {
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      -- Comprehensive parser list to prevent runtime downloads
+      -- Includes all languages from LSP config + common web/config formats
+      ensure_installed = {
+        -- Core/Required parsers
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        -- Programming languages (from LSP config)
+        'rust',
+        'javascript',
+        'typescript',
+        'tsx',
+        'python',
+        'json',
+        -- Note: jsonc removed due to archive corruption (json parser handles .jsonc files)
+        -- Web development
+        'css',
+        'scss',
+        -- Note: tailwindcss parser doesn't exist (Tailwind uses CSS/HTML syntax)
+        --       Use tailwindcss-language-server for autocomplete instead
+        -- Config/Data formats
+        'yaml',
+        'toml',
+        'xml',
+        -- Additional useful parsers
+        'regex',
+        'gitignore',
+        'gitcommit',
+        'git_rebase',
+        'comment',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

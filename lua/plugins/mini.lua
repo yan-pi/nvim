@@ -57,9 +57,12 @@ return {
       local nsMiniFiles = vim.api.nvim_create_namespace 'mini_files_git'
       local autocmd = vim.api.nvim_create_autocmd
 
+      --- Constants for Git status caching
+      local GIT_STATUS_CACHE_TIMEOUT_MS = 2000 -- Time before cache is considered stale
+
       -- Cache for git status
       local gitStatusCache = {}
-      local cacheTimeout = 2000 -- in milliseconds
+      local cacheTimeout = GIT_STATUS_CACHE_TIMEOUT_MS -- in milliseconds
       local uv = vim.uv or vim.loop
 
       local function isSymlink(path)

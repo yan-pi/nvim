@@ -62,7 +62,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Hide end-of-buffer tilde characters (~) by replacing them with spaces
 -- See `:help 'fillchars'`
-vim.opt.fillchars:append({ eob = ' ' })
+vim.opt.fillchars:append { eob = ' ' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
@@ -94,7 +94,13 @@ vim.o.autoindent = true
 
 -- === COLORSCHEME PERSISTENCE ===
 -- Enhanced theme persistence with validation and better error handling
-local colorscheme_file = vim.fn.stdpath('data') .. '/colorscheme.json'
+
+--- Constants for colorscheme management
+local COLORSCHEME_SAVE_DEBOUNCE_MS = 500 -- Delay before saving colorscheme changes
+local COLORSCHEME_LOAD_DELAY_MS = 50 -- Reduced delay (was 150ms) - theme plugins load fast enough
+local DEFAULT_FALLBACK_THEME = 'habamax' -- Final fallback if all else fails
+
+local colorscheme_file = vim.fn.stdpath 'data' .. '/colorscheme.json'
 
 -- Available colorschemes for validation
 local available_colorschemes = {
@@ -121,21 +127,28 @@ local available_colorschemes = {
   'habamax', -- Default fallback
 }
 
--- Function to validate if colorscheme exists
+--- Validate if a colorscheme exists without loading it
+--- @param name string The colorscheme name to validate
+--- @return boolean True if the colorscheme exists
 local function is_colorscheme_available(name)
-  if not name or name == '' then return false end
-
-  -- Check if it's in our known list
-  for _, scheme in ipairs(available_colorschemes) do
-    if scheme == name then return true end
+  if not name or name == '' then
+    return false
   end
 
-  -- Try to load it to see if it exists
-  local success = pcall(vim.cmd.colorscheme, name)
-  return success
+  -- Check if it's in our known list (fast path)
+  for _, scheme in ipairs(available_colorschemes) do
+    if scheme == name then
+      return true
+    end
+  end
+
+  -- Check if colorscheme exists via completion system (doesn't load it)
+  local colors = vim.fn.getcompletion(name, 'color')
+  return vim.tbl_contains(colors, name)
 end
 
--- Function to save current colorscheme with metadata
+--- Save current colorscheme to persistent storage with metadata
+--- Writes colorscheme name, timestamp, and background setting to JSON file
 local function save_colorscheme()
   local colorscheme = vim.g.colors_name
   if colorscheme and colorscheme ~= '' then
@@ -160,11 +173,12 @@ local function save_colorscheme()
   end
 end
 
--- Function to load saved colorscheme with fallback chain
+--- Load saved colorscheme from persistent storage with fallback chain
+--- Attempts to load saved theme, falls back to gruvbox -> habamax -> default
 local function load_colorscheme()
   local file = io.open(colorscheme_file, 'r')
   if file then
-    local content = file:read('*all')
+    local content = file:read '*all'
     file:close()
 
     if content and content ~= '' then
@@ -188,7 +202,7 @@ local function load_colorscheme()
   end
 
   -- Fallback chain: gruvbox -> habamax -> default
-  local fallbacks = { 'gruvbox', 'habamax', 'default' }
+  local fallbacks = { 'gruvbox', DEFAULT_FALLBACK_THEME, 'default' }
   for _, fallback in ipairs(fallbacks) do
     local success = pcall(vim.cmd.colorscheme, fallback)
     if success then
@@ -198,7 +212,7 @@ local function load_colorscheme()
   end
 end
 
--- Save colorscheme when it changes (with debouncing)
+--- Save colorscheme when it changes (debounced to avoid rapid writes)
 local save_timer = nil
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = '*',
@@ -207,7 +221,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
     if save_timer then
       vim.fn.timer_stop(save_timer)
     end
-    save_timer = vim.fn.timer_start(500, function()
+    save_timer = vim.fn.timer_start(COLORSCHEME_SAVE_DEBOUNCE_MS, function()
       save_colorscheme()
       save_timer = nil
     end)
@@ -215,5 +229,5 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   desc = 'Save colorscheme to file when changed',
 })
 
--- Load saved colorscheme on startup (with delay to ensure themes are loaded)
-vim.defer_fn(load_colorscheme, 150)
+--- Load saved colorscheme on startup (delayed to ensure theme plugins are loaded)
+vim.defer_fn(load_colorscheme, COLORSCHEME_LOAD_DELAY_MS)

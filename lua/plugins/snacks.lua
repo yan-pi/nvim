@@ -56,13 +56,7 @@ return {
         end,
         desc = 'Command History',
       },
-      {
-        '<leader>n',
-        function()
-          Snacks.picker.notifications()
-        end,
-        desc = 'Notification History',
-      },
+      -- Note: <leader>n mapped to notifier.show_history below (line ~457)
       -- Note: <leader>e and <leader>E handled by mini.files for file exploration
       -- find
       {

@@ -14,7 +14,21 @@ return {
         mode = '',
         desc = '[F]ormat buffer',
       },
+      -- Toggle auto-format on save
+      {
+        '<leader>uf',
+        function()
+          vim.g.autoformat_enabled = not vim.g.autoformat_enabled
+          local status = vim.g.autoformat_enabled and 'enabled' or 'disabled'
+          vim.notify('Auto-format on save: ' .. status, vim.log.levels.INFO)
+        end,
+        desc = 'Toggle auto-format on save',
+      },
     },
+    init = function()
+      -- Enable auto-format by default
+      vim.g.autoformat_enabled = true
+    end,
     opts = {
       notify_on_error = false,
       formatters = {
@@ -24,6 +38,11 @@ return {
         },
       },
       format_on_save = function(bufnr)
+        -- Check global toggle
+        if not vim.g.autoformat_enabled then
+          return nil
+        end
+
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
@@ -64,8 +83,8 @@ return {
         yaml = { 'prettier' },
         yml = { 'prettier' },
 
-        -- Python: Use LSP formatting (pylsp) as primary, with lsp_format fallback
-        -- python = {}, -- Handled by LSP
+        -- Python: Use Ruff for formatting (extremely fast, replaces black/isort)
+        python = { 'ruff_format', 'ruff_organize_imports' },
 
         -- Rust: Use LSP formatting (rust_analyzer) as primary
         -- rust = {}, -- Handled by LSP

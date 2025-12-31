@@ -1,9 +1,18 @@
 -- Autocompletion
 
+--- Constants for completion behavior tuning
+local DOC_AUTO_SHOW_DELAY_MS = 200 -- Delay before showing docs (prevents UI jank)
+local DOC_UPDATE_DELAY_MS = 100 -- Delay between doc updates
+local DOC_MAX_HEIGHT_RATIO = 0.5 -- Documentation window max height (50% of screen)
+local DOC_MAX_WIDTH_RATIO = 0.4 -- Documentation window max width (40% of screen)
+local COPILOT_PRIORITY_BOOST = 100 -- Score offset for Copilot completions
+local LAZYDEV_PRIORITY_BOOST = 100 -- Score offset for LazyDev completions
+
 return {
   {
     'saghen/blink.cmp',
-    event = 'VimEnter',
+    -- Load only when entering insert mode (saves ~30-50ms on startup)
+    event = 'InsertEnter',
     version = '1.*',
     dependencies = {
       {
@@ -97,12 +106,13 @@ return {
         --
         documentation = {
           auto_show = true,
-          auto_show_delay_ms = 0,
-          update_delay_ms = 50,
+          auto_show_delay_ms = DOC_AUTO_SHOW_DELAY_MS, -- Small delay prevents UI jank during rapid typing
+          update_delay_ms = DOC_UPDATE_DELAY_MS, -- Balanced update frequency
+          treesitter_highlighting = true, -- Better syntax highlighting in docs
           window = {
             border = 'single',
-            max_height = math.floor(vim.o.lines * 0.5),
-            max_width = math.floor(vim.o.columns * 0.4),
+            max_height = math.floor(vim.o.lines * DOC_MAX_HEIGHT_RATIO),
+            max_width = math.floor(vim.o.columns * DOC_MAX_WIDTH_RATIO),
           },
         },
         ghost_text = {
@@ -119,11 +129,15 @@ return {
       sources = {
         default = { 'copilot', 'avante', 'buffer', 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
+          --- Copilot AI completion provider (prioritized with score boost)
           copilot = {
             name = 'copilot',
             module = 'blink-cmp-copilot',
-            score_offset = 100,
+            score_offset = COPILOT_PRIORITY_BOOST,
             async = true,
+            --- Transform Copilot items to use custom icon kind
+            --- @param items table[] List of completion items from Copilot
+            --- @return table[] Transformed items with Copilot kind
             transform_items = function(_, items)
               local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
               local kind_idx = #CompletionItemKind + 1
@@ -134,7 +148,9 @@ return {
               return items
             end,
           },
-          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          --- LazyDev completion provider for Neovim Lua API (prioritized)
+          lazydev = { module = 'lazydev.integrations.blink', score_offset = LAZYDEV_PRIORITY_BOOST },
+          --- Avante AI completion provider
           avante = {
             module = 'blink-cmp-avante',
             name = 'Avante',

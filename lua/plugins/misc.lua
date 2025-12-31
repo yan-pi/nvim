@@ -1,5 +1,6 @@
 return {
-  { 'wakatime/vim-wakatime', lazy = false },
+  -- Load WakaTime after UI is ready (time tracking doesn't need to be immediate)
+  { 'wakatime/vim-wakatime', event = 'VeryLazy' },
   {
     'm4xshen/hardtime.nvim',
     lazy = false,
