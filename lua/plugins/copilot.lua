@@ -27,7 +27,7 @@ return {
           enabled = true, -- Disabled for blink-cmp-copilot integration
           auto_trigger = true,
           hide_during_completion = true,
-          debounce = 75,
+          debounce = 75, -- Balanced for stable suggestions without flickering
           trigger_on_accept = true,
           keymap = {
             accept = '<C-y>',

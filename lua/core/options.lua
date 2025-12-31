@@ -45,7 +45,10 @@ vim.o.signcolumn = 'yes'
 vim.o.updatetime = 250
 
 -- Decrease mapped sequence wait time
-vim.o.timeoutlen = 300
+-- Optimized to 75ms for ultra-responsive input with <Space> (leader key)
+-- This provides near-zero delay when typing while still allowing fast leader key sequences
+-- Note: Requires fast typing of leader key combinations (e.g., <Space>ff in <75ms)
+vim.o.timeoutlen = 75
 
 -- Configure how new splits should be opened
 vim.o.splitright = true
