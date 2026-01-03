@@ -50,6 +50,26 @@ return {
       auto_install = true,
       highlight = {
         enable = true,
+        -- Disable highlighting in large files for better performance
+        disable = function(lang, buf)
+          local max_filesize = 100 * 1024 -- 100KB
+          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > max_filesize then
+            return true
+          end
+          -- Also disable in minified files (very long lines)
+          local max_line_length = 500
+          local line_count = vim.api.nvim_buf_line_count(buf)
+          -- Check first 100 lines for performance
+          local lines_to_check = math.min(100, line_count)
+          local lines = vim.api.nvim_buf_get_lines(buf, 0, lines_to_check, false)
+          for _, line in ipairs(lines) do
+            if #line > max_line_length then
+              return true
+            end
+          end
+          return false
+        end,
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.

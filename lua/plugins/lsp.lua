@@ -233,16 +233,20 @@ return {
         virtual_text = {
           source = 'if_many',
           spacing = 2,
+          -- Performance optimizations
+          update_in_insert = false, -- Don't update in insert mode
           format = function(diagnostic)
-            local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
+            -- Truncate long messages for better scroll performance
+            local max_width = 80
+            local message = diagnostic.message
+            if #message > max_width then
+              message = message:sub(1, max_width) .. '...'
+            end
+            return message
           end,
         },
+        -- Reduce diagnostic update frequency
+        update_in_insert = false,
       }
 
       -- LSP servers and clients are able to communicate to each other what features they support.

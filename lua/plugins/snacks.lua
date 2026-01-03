@@ -5,7 +5,36 @@ return {
     lazy = false,
     ---@type snacks.Config
     opts = {
-      bigfile = { enabled = true },
+      -- Optimized bigfile detection for better performance in large files
+      bigfile = {
+        enabled = true,
+        notify = true,
+        size = 100 * 1024, -- 100KB (reduced from 1.5MB for more aggressive optimization)
+        line_length = 500, -- Detect minified files (reduced from 1000)
+        setup = function(ctx)
+          -- Disable heavy features in big files
+          vim.b[ctx.buf].snacks_scroll = false -- Disable smooth scroll
+          vim.b[ctx.buf].git_blame_enabled = false -- Disable git-blame
+          vim.schedule(function()
+            if not vim.api.nvim_buf_is_valid(ctx.buf) then
+              return
+            end
+
+            -- Disable expensive plugins
+            vim.b[ctx.buf].copilot_enabled = false
+            vim.b[ctx.buf].completion = false
+
+            -- Optimize window options for performance
+            vim.wo.foldmethod = 'manual'
+            vim.wo.statuscolumn = ''
+            vim.wo.conceallevel = 0
+            vim.wo.cursorline = false -- Disable cursorline in big files
+
+            -- Use syntax highlighting instead of Treesitter
+            vim.bo[ctx.buf].syntax = ctx.ft
+          end)
+        end,
+      },
       -- dashboard = { enabled = true },
       explorer = { enabled = true },
       image = { enabled = true },
@@ -18,7 +47,27 @@ return {
       picker = { enabled = true },
       quickfile = { enabled = true },
       scope = { enabled = true },
-      scroll = { enabled = true },
+      -- Optimized smooth scroll configuration
+      scroll = {
+        enabled = true,
+        animate = {
+          duration = { step = 5, total = 100 }, -- Faster: 100ms (was 200ms)
+          easing = 'linear',
+        },
+        animate_repeat = {
+          delay = 50, -- Faster repeat trigger (was 100ms)
+          duration = { step = 3, total = 30 }, -- Much faster for rapid scrolling
+          easing = 'linear',
+        },
+        -- Disable smooth scroll in large files for better performance
+        filter = function(buf)
+          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > 100 * 1024 then -- 100KB
+            return false -- Disable smooth scroll in large files
+          end
+          return vim.g.snacks_scroll ~= false and vim.b[buf].snacks_scroll ~= false and vim.bo[buf].buftype ~= 'terminal'
+        end,
+      },
       statuscolumn = { enabled = true },
       words = { enabled = true },
       styles = {

@@ -41,8 +41,8 @@ vim.o.smartcase = true
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
 
--- Decrease update time
-vim.o.updatetime = 250
+-- Decrease update time (increased slightly for better performance)
+vim.o.updatetime = 300 -- Increased from 250ms for less frequent LSP/autocmd updates
 
 -- Decrease mapped sequence wait time
 -- Optimized to 75ms for ultra-responsive input with <Space> (leader key)
