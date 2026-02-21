@@ -43,7 +43,7 @@ return {
         server_opts_overrides = {
           settings = {
             advanced = {
-              model = 'claude-4',
+              model = 'claude-sonnet-4.5',
               temperature = 0.1,
               listCount = 10, -- completions for panel
               inlineSuggestCount = 3, -- completions for getCompletions

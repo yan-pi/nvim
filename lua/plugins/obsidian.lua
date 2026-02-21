@@ -1,30 +1,26 @@
 -- lua/plugins/obsidian.lua
 return {
   {
-    'epwalsh/obsidian.nvim',
+    'obsidian-nvim/obsidian.nvim', -- actively maintained fork
     version = '*',
     ft = { 'markdown' },
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {
-      -- 1) único workspace na raiz
       workspaces = {
         { name = 'Vault', path = '~/www/vault' },
       },
 
-      -- 2) sem notes_subdir fixo
       notes_subdir = nil,
+      new_notes_location = 'current_dir',
+      legacy_commands = false,
 
-      -- 3) ID Folgezettel (DDSSNN)
-      note_id_func = function(title, _filename, path)
+      -- Folgezettel ID function (DDSSNN)
+      note_id_func = function(title, path)
         local scandir = require 'plenary.scandir'
-        -- extrai DD
         local dir = vim.fn.fnamemodify(path, ':t')
         local dd = dir:match '^(%d%d)' or '10'
-        -- extrai SS
         local parent = vim.fn.fnamemodify(path, ':h:t')
         local ss = parent:match '^%d%d(%d%d)' or '01'
-
-        -- achar maior NN
         local max_nn = 0
         for _, f in ipairs(scandir.scan_dir(path, { depth = 1 })) do
           local base = vim.fn.fnamemodify(f, ':t')
@@ -38,43 +34,39 @@ return {
         return dd .. ss .. next_nn .. slug
       end,
 
-      -- 4) frontmatter
-      note_frontmatter_func = function(note)
-        return {
-          id = note.id,
-          title = note.title or '',
-          tags = note.tags or {},
-          aliases = note.aliases or {},
-          created = os.date '%Y-%m-%d',
-          modified = os.date '%Y-%m-%d',
-        }
-      end,
+      -- Frontmatter (new API)
+      frontmatter = {
+        enabled = true,
+        func = function(note)
+          return {
+            id = note.id,
+            title = note.title or '',
+            tags = note.tags or {},
+            aliases = note.aliases or {},
+            created = os.date '%Y-%m-%d',
+            modified = os.date '%Y-%m-%d',
+          }
+        end,
+        sort = { 'id', 'title', 'tags', 'aliases', 'created', 'modified' },
+      },
 
-      -- 5) templates
+      -- Daily notes
+      daily_notes = {
+        folder = '40-Logbook/4001-Daily',
+        date_format = '%Y-%m-%d',
+      },
+
       templates = {
         folder = '_Templates',
         date_format = '%Y-%m-%d',
         time_format = '%H:%M',
       },
 
-      -- 6) completion & picker
-      completion = { nvim_cmp = true, blink_cmp = true, min_chars = 2 },
-      -- Use auto-detection for picker (will find snacks.nvim)
-      -- picker = { name = 'snacks' },  -- Obsidian.nvim auto-detects available pickers
-
-      -- 7) tipos de notas personalizadas
-      note_map = {
-        Index = { subdir = '00-Index', template = '[YYYY-MM-DD]' },
-        Theme = { subdir = '10-Themes', template = '[YYYY-MM-DD]' },
-        Project = { subdir = '20-Projects', template = '[YYYY-MM-DD]' },
-        Resource = { subdir = '30-Resources', template = '[YYYY-MM-DD]' },
-        Daily = { subdir = '40-Logbook/4001-Daily', template = '[YYYY-MM-DD]' },
-        Weekly = { subdir = '40-Logbook/4002-Weekly', template = '[YYYY-MM-DD]' },
-        Monthly = { subdir = '40-Logbook/4003-Monthy', template = '[YYYY-MM-DD]' },
+      -- Completion auto-detects blink vs nvim-cmp
+      completion = {
+        min_chars = 2,
       },
 
-      -- Adicionar configurações necessárias para links
-      new_notes_location = 'current_dir',
       wiki_link_func = function(opts)
         if opts.id == nil then
           return string.format('[[%s]]', opts.label)
@@ -85,51 +77,37 @@ return {
         end
       end,
 
-      -- 8) mapeamentos
-      mappings = {
-        ['<leader>zi'] = {
-          action = function()
-            require('obsidian').new_note 'Index'
-          end,
-          opts = { noremap = true, silent = true },
-        },
-        ['<leader>zt'] = {
-          action = function()
-            require('obsidian').new_note 'Theme'
-          end,
-          opts = { noremap = true, silent = true },
-        },
-        ['<leader>zp'] = {
-          action = function()
-            require('obsidian').new_note 'Project'
-          end,
-          opts = { noremap = true, silent = true },
-        },
-        ['<leader>zr'] = {
-          action = function()
-            require('obsidian').new_note 'Resource'
-          end,
-          opts = { noremap = true, silent = true },
-        },
-        ['<leader>zd'] = {
-          action = function()
-            require('obsidian').new_note 'Daily'
-          end,
-          opts = { noremap = true, silent = true },
-        },
-        ['<leader>zw'] = {
-          action = function()
-            require('obsidian').new_note 'Weekly'
-          end,
-          opts = { noremap = true, silent = true },
-        },
-        ['<leader>zm'] = {
-          action = function()
-            require('obsidian').new_note 'Monthly'
-          end,
-          opts = { noremap = true, silent = true },
-        },
+      -- Disable UI features (avoids conceallevel warning)
+      ui = {
+        enable = false,
       },
     },
+
+    -- Set up keymaps after plugin loads
+    config = function(_, opts)
+      require('obsidian').setup(opts)
+
+      -- Keymaps for finding notes
+      vim.keymap.set('n', '<leader>zf', '<cmd>Obsidian quick_switch<cr>', { desc = 'Find note' })
+      vim.keymap.set('n', '<leader>zs', '<cmd>Obsidian search<cr>', { desc = 'Search notes' })
+      vim.keymap.set('n', '<leader>zb', '<cmd>Obsidian backlinks<cr>', { desc = 'Show backlinks' })
+      vim.keymap.set('n', '<leader>zl', '<cmd>Obsidian links<cr>', { desc = 'Show links' })
+      vim.keymap.set('n', '<leader>zg', '<cmd>Obsidian tags<cr>', { desc = 'Browse tags' })
+
+      -- Keymaps for creating notes
+      vim.keymap.set('n', '<leader>zn', '<cmd>Obsidian new<cr>', { desc = 'New note' })
+      vim.keymap.set('n', '<leader>zd', '<cmd>Obsidian today<cr>', { desc = 'Today daily note' })
+      vim.keymap.set('n', '<leader>zy', '<cmd>Obsidian yesterday<cr>', { desc = 'Yesterday daily note' })
+      vim.keymap.set('n', '<leader>zo', '<cmd>Obsidian open<cr>', { desc = 'Open in Obsidian app' })
+
+      -- Follow link under cursor
+      vim.keymap.set('n', 'gf', function()
+        if require('obsidian').util.cursor_on_markdown_link() then
+          return '<cmd>Obsidian follow_link<cr>'
+        else
+          return 'gf'
+        end
+      end, { expr = true, desc = 'Follow link' })
+    end,
   },
 }
