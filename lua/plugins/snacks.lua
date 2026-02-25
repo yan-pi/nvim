@@ -110,6 +110,13 @@ return {
       -- Note: <leader>e and <leader>E handled by mini.files for file exploration
       -- find
       {
+        '<leader>fm',
+        function()
+          Snacks.picker.marks()
+        end,
+        desc = 'Marks',
+      },
+      {
         '<leader>fb',
         function()
           Snacks.picker.buffers()
