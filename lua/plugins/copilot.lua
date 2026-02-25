@@ -24,15 +24,17 @@ return {
           },
         },
         suggestion = {
-          enabled = true, -- Disabled for blink-cmp-copilot integration
+          enabled = true,
           auto_trigger = true,
-          hide_during_completion = true,
-          debounce = 100, -- Increased from 75ms for better performance during rapid scrolling
+          hide_during_completion = false,
+          debounce = 75,
           trigger_on_accept = true,
           keymap = {
-            accept = '<C-y>',
-            next = '<C-n>',
-            prev = '<C-p>',
+            accept = false, -- handled by blink.cmp <C-y>
+            accept_word = false,
+            accept_line = false,
+            next = '<M-]>',
+            prev = '<M-[>',
             dismiss = '<C-]>',
           },
         },
@@ -44,9 +46,11 @@ return {
           settings = {
             advanced = {
               model = 'claude-sonnet-4.5',
-              temperature = 0.1,
-              listCount = 10, -- completions for panel
-              inlineSuggestCount = 3, -- completions for getCompletions
+              temperature = 0.15,
+              top_p = 0.95,
+              listCount = 10,
+              inlineSuggestCount = 5,
+              length = 500,
             },
           },
           offset_encoding = 'utf-16',
@@ -58,19 +62,6 @@ return {
           ['*'] = true,
         },
       }
-      -- Hide Copilot suggestion when BlinkCmp menu is open
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'BlinkCmpMenuOpen',
-        callback = function()
-          vim.b.copilot_suggestion_hidden = true
-        end,
-      })
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'BlinkCmpMenuClose',
-        callback = function()
-          vim.b.copilot_suggestion_hidden = false
-        end,
-      })
     end,
   },
   {

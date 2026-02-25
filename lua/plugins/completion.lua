@@ -65,6 +65,19 @@ return {
         -- Enter to accept completion
         ['<CR>'] = { 'accept', 'fallback' },
 
+        -- Quick Copilot accept: ghost text first, then first menu item
+        ['<C-y>'] = {
+          function(cmp)
+            local ok, suggestion = pcall(require, 'copilot.suggestion')
+            if ok and suggestion.is_visible() then
+              suggestion.accept()
+              return true
+            end
+            return cmp.accept { index = 1 }
+          end,
+          'fallback',
+        },
+
         -- Useful keymaps from default preset
         ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ['<C-e>'] = { 'hide' },
@@ -116,7 +129,7 @@ return {
           },
         },
         ghost_text = {
-          enabled = true,
+          enabled = false,
         },
       },
 
