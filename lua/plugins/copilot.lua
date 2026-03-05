@@ -23,21 +23,7 @@ return {
             ratio = 0.4,
           },
         },
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          hide_during_completion = false,
-          debounce = 75,
-          trigger_on_accept = true,
-          keymap = {
-            accept = false, -- handled by blink.cmp <C-y>
-            accept_word = false,
-            accept_line = false,
-            next = '<M-]>',
-            prev = '<M-[>',
-            dismiss = '<C-]>',
-          },
-        },
+        suggestion = { enabled = false },
         nes = {
           enabled = false, -- Set to true if you want NES functionality and have copilot-lsp installed
         },
