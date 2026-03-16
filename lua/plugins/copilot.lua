@@ -31,7 +31,7 @@ return {
         server_opts_overrides = {
           settings = {
             advanced = {
-              model = 'claude-opus-4.6',
+              model = 'gpt-5.3-codex',
               temperature = 0.15,
               top_p = 0.95,
               listCount = 10,
@@ -61,7 +61,7 @@ return {
       local user = vim.env.USER or 'User'
       user = user:sub(1, 1):upper() .. user:sub(2)
       return {
-        model = 'claude-opus-4.6',
+        model = 'gpt-5.3-codex',
         auto_insert_mode = true,
         show_help = true,
         question_header = '  ' .. user .. ' ',
