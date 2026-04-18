@@ -113,6 +113,7 @@ return {
       }
     end,
   },
+  { 'ThorstenRhau/token' },
   -- {
   --   'snelling-a/base16.nvim',
   --   config = function()

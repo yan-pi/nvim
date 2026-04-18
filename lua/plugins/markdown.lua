@@ -27,6 +27,20 @@ return {
       end, { desc = 'Toggle render-markdown' })
     end,
   },
+  {
+    'Thiago4532/mdmath.nvim',
+    ft = 'markdown',
+    build = function()
+      require('mdmath.build').build_lazy()
+    end,
+    config = function()
+      require('mdmath').setup {
+        filetypes = { 'markdown' },
+        preview = { auto = true },
+      }
+      vim.keymap.set('n', '<leader>mm', '<cmd>MdMathToggle<cr>', { desc = 'Toggle mdmath' })
+    end,
+  },
   -- {
   --   "OXY2DEV/markview.nvim",
   --   lazy = false,

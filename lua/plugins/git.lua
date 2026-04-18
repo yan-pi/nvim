@@ -31,10 +31,10 @@ return {
     'f-person/git-blame.nvim',
     event = 'VeryLazy',
     opts = {
-      enabled = false, -- Disabled by default for better scroll performance
+      enabled = true, -- Disabled by default for better scroll performance
       message_template = ' <author> • <summary> • <date> • <<sha>>',
       virtual_text_column = 1,
-      max_file_size = 100 * 1024, -- 100KB - don't run on large files
+      -- max_file_size = 100 * 1024, -- 100KB - don't run on large files
     },
     keys = {
       {

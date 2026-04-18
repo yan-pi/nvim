@@ -54,6 +54,7 @@ return {
       daily_notes = {
         folder = '40-Logbook/4001-Daily',
         date_format = '%Y-%m-%d',
+        template = '[YYYY-MM-DD].md',
       },
 
       templates = {

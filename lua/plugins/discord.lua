@@ -17,12 +17,11 @@ return {
       show_status = true,
     },
     text = {
-      viewing = 'Viewing ${filename}',
-      editing = 'Editing ${filename}',
-      file_browser = 'Browsing files',
-      plugin_manager = 'Managing plugins',
-      workspace = 'In ${workspace}',
+      viewing = function(opts) return 'Viewing ' .. opts.filename end,
+      editing = function(opts) return 'Editing ' .. opts.filename end,
+      file_browser = function(opts) return 'Browsing files in ' .. opts.name end,
+      plugin_manager = function(opts) return 'Managing plugins in ' .. opts.name end,
+      workspace = function(opts) return 'In ' .. opts.workspace end,
     },
-    variables = true, -- Enable template variable interpolation
   },
 }
