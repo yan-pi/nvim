@@ -78,6 +78,15 @@ vim.keymap.set('n', '<leader>tc', '<cmd>tabclose<cr>', { desc = '[T]ab [C]lose w
 vim.keymap.set('n', '<leader>to', '<cmd>tabonly<cr>', { desc = '[T]ab [O]nly (close other workspaces)' })
 vim.keymap.set('n', '<leader>tm', '<cmd>tabmove<cr>', { desc = '[T]ab [M]ove workspace' })
 
+vim.keymap.set('n', '<leader>sG', function()
+  vim.ui.input({ prompt = 'Glob: ', default = '*' }, function(glob)
+    if not glob or glob == '' then
+      return
+    end
+    Snacks.picker.grep { glob = glob }
+  end)
+end, { desc = 'Grep (glob)' })
+
 vim.keymap.set('n', '<leader>fo', function()
   local file = vim.fn.expand '%:p'
   if vim.fn.has 'mac' == 1 then
