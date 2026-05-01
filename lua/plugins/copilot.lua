@@ -23,7 +23,7 @@ return {
             ratio = 0.4,
           },
         },
-        suggestion = { enabled = false },
+        suggestion = { enabled = true },
         nes = {
           enabled = false, -- Set to true if you want NES functionality and have copilot-lsp installed
         },
@@ -31,7 +31,7 @@ return {
         server_opts_overrides = {
           settings = {
             advanced = {
-              model = 'gpt-5.3-codex',
+              model = 'gpt-5.4-mini',
               temperature = 0.15,
               top_p = 0.95,
               listCount = 10,
@@ -61,7 +61,7 @@ return {
       local user = vim.env.USER or 'User'
       user = user:sub(1, 1):upper() .. user:sub(2)
       return {
-        model = 'gpt-5.3-codex',
+        model = 'gpt-5.4-mini',
         auto_insert_mode = true,
         show_help = true,
         question_header = '  ' .. user .. ' ',
