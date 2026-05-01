@@ -39,21 +39,19 @@ return {
 
       -- Set up r_language_server here so we don't fight the main lsp.lua spec.
       -- Requires: R -e 'install.packages("languageserver")'
-      local ok_lsp, lspconfig = pcall(require, 'lspconfig')
-      if ok_lsp then
-        local capabilities = require('blink.cmp').get_lsp_capabilities()
-        lspconfig.r_language_server.setup {
-          capabilities = capabilities,
-          settings = {
-            r = {
-              lsp = {
-                rich_documentation = true,
-                diagnostics = true,
-              },
+      local ok_blink, blink = pcall(require, 'blink.cmp')
+      vim.lsp.config('r_language_server', {
+        capabilities = ok_blink and blink.get_lsp_capabilities() or nil,
+        settings = {
+          r = {
+            lsp = {
+              rich_documentation = true,
+              diagnostics = true,
             },
           },
-        }
-      end
+        },
+      })
+      vim.lsp.enable('r_language_server')
     end,
   },
 

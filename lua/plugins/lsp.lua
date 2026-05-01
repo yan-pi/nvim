@@ -507,26 +507,53 @@ return {
           filetypes = { 'mdx' },
           settings = {},
         },
+
+        -- LaTeX language server: chktex diagnostics, label/citation completion,
+        -- forward search via Skim. Build is delegated to VimTeX (latexmk -pvc).
+        texlab = {
+          settings = {
+            texlab = {
+              build = {
+                onSave = false, -- VimTeX drives compilation, not texlab
+                forwardSearchAfter = false,
+              },
+              forwardSearch = {
+                executable = '/Applications/Skim.app/Contents/SharedSupport/displayline',
+                args = { '-r', '%l', '%p', '%f' },
+              },
+              chktex = {
+                onOpenAndSave = true,
+                onEdit = false,
+              },
+              diagnosticsDelay = 300,
+              latexindent = {
+                modifyLineBreaks = false,
+              },
+            },
+          },
+        },
       }
 
       -- Note: Tool installation is now handled by mason-tool-installer
       -- configured below. LSP servers from the 'servers' table above
       -- will be automatically added to ensure_installed.
 
+      -- Register each server's config with the new vim.lsp.config API (nvim 0.11+).
+      -- Default settings (cmd, root_markers, filetypes) come from nvim-lspconfig's
+      -- bundled configs; the table here merges capabilities and overrides on top.
+      for name, cfg in pairs(servers) do
+        cfg.capabilities = vim.tbl_deep_extend('force', {}, capabilities, cfg.capabilities or {})
+        vim.lsp.config(name, cfg)
+      end
+
       require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        ensure_installed = {}, -- installs are populated via mason-tool-installer
         automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+        -- mason-lspconfig 2.x auto-enables installed servers; we still call
+        -- vim.lsp.enable below to cover servers installed outside Mason.
       }
+
+      vim.lsp.enable(vim.tbl_keys(servers))
     end,
   },
 
@@ -554,7 +581,8 @@ return {
         'gh_actions_ls',
         'just',
         'mdx_analyzer',
-        
+        'texlab',
+
         -- === FORMATTERS ===
         -- Lua
         'stylua',
