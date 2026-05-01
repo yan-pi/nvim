@@ -243,6 +243,10 @@ return {
         -- Shell scripts
         sh = { 'shfmt' }, -- Can be installed via Mason if needed
         bash = { 'shfmt' },
+
+        -- LaTeX: latexindent (provided by texliveFull via nix)
+        tex = { 'latexindent' },
+        plaintex = { 'latexindent' },
       },
     },
   },

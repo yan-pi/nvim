@@ -45,6 +45,9 @@ return {
         'gitcommit',
         'git_rebase',
         'comment',
+        -- LaTeX
+        'latex',
+        'bibtex',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
