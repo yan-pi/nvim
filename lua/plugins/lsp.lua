@@ -592,8 +592,7 @@ return {
         'prettierd',
         'biome',
 
-        -- Python
-        'ruff',
+        -- Python: ruff already declared above as LSP server (also provides formatting)
 
         -- Shell
         'shfmt',
