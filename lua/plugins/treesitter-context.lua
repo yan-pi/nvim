@@ -15,11 +15,11 @@ return {
     },
     keys = {
       {
-        '<leader>uC',
+        '<leader>ux',
         function()
           require('treesitter-context').toggle()
         end,
-        desc = 'Toggle [C]ontext header',
+        desc = 'Toggle context header',
       },
     },
   },
