@@ -78,7 +78,6 @@ return {
   {
     'mrcjkb/rustaceanvim',
     version = '^5',
-    lazy = false, -- Load immediately for Rust files
     ft = { 'rust' },
     opts = {
       server = {

@@ -16,7 +16,6 @@ return {
   -- Main R IDE-like plugin: REPL, send code, object browser, help, plots
   {
     'R-nvim/R.nvim',
-    lazy = false,
     ft = { 'r', 'rmd', 'quarto', 'rnoweb' },
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
