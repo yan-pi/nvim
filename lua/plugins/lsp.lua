@@ -381,14 +381,16 @@ return {
           },
         },
 
-        -- ESLint as language server for linting
+        -- ESLint as language server for linting only.
+        -- Formatting is owned by conform.nvim (biome / prettier per project).
+        -- run = 'onSave' avoids per-keystroke validation in large TS workspaces.
         eslint = {
           settings = {
             codeActionOnSave = {
               enable = true,
               mode = 'all',
             },
-            format = true,
+            format = false,
             nodePath = '',
             onIgnoredFiles = 'off',
             packageManager = 'npm',
@@ -397,7 +399,7 @@ return {
             },
             quiet = false,
             rulesCustomizations = {},
-            run = 'onType',
+            run = 'onSave',
             useESLintClass = false,
             validate = 'on',
             workingDirectory = { mode = 'location' },
