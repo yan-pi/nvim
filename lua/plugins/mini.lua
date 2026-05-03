@@ -3,7 +3,6 @@
 return {
   {
     'echasnovski/mini.nvim',
-    dependencies = { 'amansingh-afk/milli.nvim' },
     config = function()
       -- Better Around/Inside textobjects
       --
