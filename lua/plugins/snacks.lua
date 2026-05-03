@@ -35,7 +35,8 @@ return {
           end)
         end,
       },
-      explorer = { enabled = true },
+      -- Disabled: mini.files is the primary explorer (<leader>e).
+      explorer = { enabled = false },
       image = { enabled = true },
       indent = { enabled = true },
       input = { enabled = true },
@@ -594,20 +595,7 @@ return {
         end,
         desc = 'Dismiss All Notifications',
       },
-      {
-        '<c-/>',
-        function()
-          Snacks.terminal()
-        end,
-        desc = 'Toggle Terminal',
-      },
-      {
-        '<c-_>',
-        function()
-          Snacks.terminal()
-        end,
-        desc = 'which_key_ignore',
-      },
+      -- Terminal is handled by toggleterm.nvim (<leader>th/tv/ti/ta/ts).
       {
         ']]',
         function()
