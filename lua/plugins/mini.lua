@@ -269,15 +269,7 @@ return {
       -- Start screen
       require('mini.starter').setup()
 
-      -- Animated splash (milli.nvim) — disabled while investigating an
-      -- amp-animator-based procedural alternative. See
-      -- docs/animated-splash-investigation.md.
-      -- local splash_name = vim.g.milli_splash or 'blackhole'
-      -- local splash = require('milli').load { splash = splash_name }
-      -- require('mini.starter').setup {
-      --   header = table.concat(splash.frames[1], '\n'),
-      -- }
-      -- require('milli').starter { splash = splash_name, loop = true }
+      -- Animated splash deferred — see docs/animated-splash-investigation.md.
 
       -- Navigate with ][ shortcuts (]b for next buffer, etc.)
       require('mini.bracketed').setup()
