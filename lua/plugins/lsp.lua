@@ -59,7 +59,10 @@ return {
       -- JSON schema store for better JSON support
       'b0o/schemastore.nvim',
     },
-    config = function()
+    -- Servers extension point: language-specific plugin files (go.lua,
+    -- rust.lua) can extend opts.servers via Lazy.nvim opts merging.
+    opts = { servers = {} },
+    config = function(_, opts)
       -- === LSP PERFORMANCE & RELIABILITY CONFIGURATION ===
       -- Reduce LSP log noise (only show warnings and errors)
       vim.lsp.set_log_level('WARN')
@@ -258,11 +261,17 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local servers = {
+      local servers = vim.tbl_deep_extend('force', {
         -- Bash/Shell scripting support
         bashls = {
           filetypes = { 'sh', 'bash', 'zsh' },
         },
+
+        -- rust_analyzer is owned by rustaceanvim (lua/plugins/rust.lua).
+        -- Listed here so Mason installs the binary and capabilities are
+        -- registered, but auto-enable is excluded below — rustaceanvim
+        -- spawns its own configured instance.
+        rust_analyzer = {},
 
         -- JSON language server with schema support
         jsonls = {
@@ -317,10 +326,6 @@ return {
             },
           },
         },
-
-        -- rust_analyzer is owned by rustaceanvim (lua/plugins/rust.lua).
-        -- Don't configure it here — duplicate setup spawns two LSP
-        -- instances and triggers schema-mismatch warnings.
 
         -- Tailwind CSS language server
         tailwindcss = {
@@ -464,11 +469,12 @@ return {
             },
           },
         },
-      }
+      }, opts.servers or {})
 
-      -- Note: Tool installation is now handled by mason-tool-installer
-      -- configured below. LSP servers from the 'servers' table above
-      -- will be automatically added to ensure_installed.
+      -- LSP installation: mason-lspconfig.ensure_installed below derives
+      -- from vim.tbl_keys(servers) — single source of truth.
+      -- mason-tool-installer (later in this file) handles non-LSP tools
+      -- (formatters, linters, DAP adapters) only.
 
       -- Register each server's config with the new vim.lsp.config API (nvim 0.11+).
       -- Default settings (cmd, root_markers, filetypes) come from nvim-lspconfig's
@@ -479,88 +485,39 @@ return {
       end
 
       require('mason-lspconfig').setup {
-        ensure_installed = {}, -- installs are populated via mason-tool-installer
+        ensure_installed = vim.tbl_keys(servers),
         automatic_installation = false,
-        -- mason-lspconfig 2.x auto-enables installed servers. Exclude
-        -- rust_analyzer because rustaceanvim owns its lifecycle — without
-        -- this, both spawn a process per Rust buffer.
+        -- Auto-enable every installed LSP except rust_analyzer
+        -- (rustaceanvim owns that one).
         automatic_enable = {
           exclude = { 'rust_analyzer' },
         },
       }
-
-      vim.lsp.enable(vim.tbl_keys(servers))
     end,
   },
 
-  -- Mason Tool Installer - Declarative tool installation
-  -- This plugin entry collects ensure_installed from all plugin files
-  -- (lsp.lua, go.lua, dap.lua, rust.lua) via Lazy.nvim's opts merging
+  -- Mason Tool Installer — non-LSP tooling only.
+  -- LSP servers live in mason-lspconfig.ensure_installed (derived from
+  -- the servers table). Other plugin files (rust.lua, dap.lua, go.lua)
+  -- extend opts.ensure_installed via Lazy.nvim opts merging for
+  -- formatters, linters, and DAP adapters.
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      
-      -- Add formatters and other core tools from lsp.lua
-      vim.list_extend(opts.ensure_installed, {
-        -- === LSP SERVERS (from servers table above) ===
-        'lua_ls',
-        'bashls',
-        'jsonls',
-        'ruff',
-        'basedpyright',
-        'rust_analyzer',
-        'tailwindcss',
-        'ts_ls',
-        'eslint',
-        'bacon_ls',
-        'gh_actions_ls',
-        'just',
-        'mdx_analyzer',
-        'texlab',
-
-        -- === FORMATTERS ===
-        -- Lua
+    opts = {
+      ensure_installed = {
+        -- Formatters
         'stylua',
-
-        -- JavaScript/TypeScript
         'prettier',
         'prettierd',
         'biome',
-
-        -- Python: ruff already declared above as LSP server (also provides formatting)
-
-        -- Shell
         'shfmt',
-      })
-      
-      return opts
-    end,
-    config = function(_, opts)
-      -- Remove deprecated tools before setup
-      -- pylsp is replaced by ruff + basedpyright for Python support
-      opts.ensure_installed = vim.tbl_filter(function(tool)
-        return tool ~= 'pylsp'
-      end, opts.ensure_installed)
-      
-      -- Remove duplicates (ruff appears twice)
-      local seen = {}
-      local unique = {}
-      for _, tool in ipairs(opts.ensure_installed) do
-        if not seen[tool] then
-          seen[tool] = true
-          table.insert(unique, tool)
-        end
-      end
-      
-      -- Setup mason-tool-installer with merged configuration from all files
-      require('mason-tool-installer').setup {
-        ensure_installed = unique,
-        auto_update = false, -- Manual updates via :MasonToolsUpdate
-        run_on_start = true, -- Install missing tools automatically
-        start_delay = 0, -- Install immediately (transparent, no hidden delays)
-      }
-    end,
+        -- ruff handles Python linting + formatting via its LSP server
+        -- (registered in opts.servers above), so no separate entry here.
+      },
+      auto_update = false,
+      run_on_start = true,
+      start_delay = 0,
+    },
   },
 }
 
