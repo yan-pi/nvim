@@ -481,8 +481,12 @@ return {
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- installs are populated via mason-tool-installer
         automatic_installation = false,
-        -- mason-lspconfig 2.x auto-enables installed servers; we still call
-        -- vim.lsp.enable below to cover servers installed outside Mason.
+        -- mason-lspconfig 2.x auto-enables installed servers. Exclude
+        -- rust_analyzer because rustaceanvim owns its lifecycle — without
+        -- this, both spawn a process per Rust buffer.
+        automatic_enable = {
+          exclude = { 'rust_analyzer' },
+        },
       }
 
       vim.lsp.enable(vim.tbl_keys(servers))
