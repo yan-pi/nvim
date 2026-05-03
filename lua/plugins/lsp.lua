@@ -324,73 +324,9 @@ return {
           },
         },
 
-        -- Rust language server with enhanced settings
-        rust_analyzer = {
-          settings = {
-            ['rust-analyzer'] = {
-              -- Performance optimizations
-              cachePriming = {
-                enable = true,
-                numThreads = 4, -- Adjust based on your CPU
-              },
-              cargo = {
-                allFeatures = true,
-                loadOutDirsFromCheck = true,
-                runBuildScripts = true,
-              },
-              checkOnSave = {
-                allFeatures = true,
-                command = 'clippy',
-                extraArgs = { '--no-deps' },
-              },
-              procMacro = {
-                enable = true,
-                ignored = {
-                  ['async-trait'] = { 'async_trait' },
-                  ['napi-derive'] = { 'napi' },
-                  ['async-recursion'] = { 'async_recursion' },
-                },
-              },
-              -- Enhanced completion
-              completion = {
-                postfix = { enable = true },
-                privateEditable = { enable = true },
-              },
-              inlayHints = {
-                bindingModeHints = {
-                  enable = false,
-                },
-                chainingHints = {
-                  enable = true,
-                },
-                closingBraceHints = {
-                  enable = true,
-                  minLines = 25,
-                },
-                closureReturnTypeHints = {
-                  enable = 'never',
-                },
-                lifetimeElisionHints = {
-                  enable = 'never',
-                  useParameterNames = false,
-                },
-                maxLength = 25,
-                parameterHints = {
-                  enable = true,
-                },
-                reborrowHints = {
-                  enable = 'never',
-                },
-                renderColons = true,
-                typeHints = {
-                  enable = true,
-                  hideClosureInitialization = false,
-                  hideNamedConstructor = false,
-                },
-              },
-            },
-          },
-        },
+        -- rust_analyzer is owned by rustaceanvim (lua/plugins/rust.lua).
+        -- Don't configure it here — duplicate setup spawns two LSP
+        -- instances and triggers schema-mismatch warnings.
 
         -- Tailwind CSS language server
         tailwindcss = {
