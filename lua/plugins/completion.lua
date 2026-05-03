@@ -16,9 +16,6 @@ return {
     version = '1.*',
     dependencies = {
       {
-        'Kaiser-Yang/blink-cmp-avante',
-      },
-      {
         'giuxtaposition/blink-cmp-copilot',
       },
       -- Snippet Engine
@@ -135,7 +132,7 @@ return {
       },
 
       sources = {
-        default = { 'copilot', 'avante', 'buffer', 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'copilot', 'buffer', 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
           --- Copilot AI completion provider (prioritized with score boost)
           copilot = {
@@ -158,12 +155,6 @@ return {
           },
           --- LazyDev completion provider for Neovim Lua API (prioritized)
           lazydev = { module = 'lazydev.integrations.blink', score_offset = LAZYDEV_PRIORITY_BOOST },
-          --- Avante AI completion provider
-          avante = {
-            module = 'blink-cmp-avante',
-            name = 'Avante',
-            opts = {},
-          },
         },
       },
 
