@@ -145,7 +145,10 @@ return {
                 enable = true,
               },
             },
-            checkOnSave = true,
+            -- checkOnSave disabled: bacon_ls owns continuous diagnostics
+            -- in the background. The check.* settings still apply to
+            -- manual :RustLsp flyCheck invocations.
+            checkOnSave = false,
             check = {
               command = 'clippy',
               allFeatures = true,
