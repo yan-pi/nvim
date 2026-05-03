@@ -115,45 +115,9 @@ return {
       chat.setup(opts)
     end,
     keys = {
-      -- Group descriptor
       { '<leader>cc', desc = '+Copilot Chat', mode = { 'n', 'x' } },
 
-      -- Toggle chat window (main interface)
-      {
-        '<leader>ccy',
-        function()
-          require('CopilotChat').toggle()
-        end,
-        desc = 'Toggle Chat',
-        mode = { 'n', 'x' },
-      },
-
-      -- Quick chat with input prompt and auto-focus
-      {
-        '<leader>ccq',
-        function()
-          vim.ui.input({ prompt = 'Quick Chat: ' }, function(input)
-            if input ~= '' then
-              require('CopilotChat').ask(input, {
-                callback = function(response)
-                  -- Auto-focus chat window after response
-                  vim.schedule(function()
-                    local chat_win = vim.fn.bufwinid(vim.fn.bufnr 'copilot-chat')
-                    if chat_win ~= -1 then
-                      vim.api.nvim_set_current_win(chat_win)
-                      vim.notify('Press <C-y> to accept diff, <C-a> to accept all, or q to close', vim.log.levels.INFO)
-                    end
-                  end)
-                end,
-              })
-            end
-          end)
-        end,
-        desc = 'Quick Chat',
-        mode = { 'n', 'x' },
-      },
-
-      -- Inline chat - floating window at cursor with auto-focus
+      -- Inline floating chat at cursor — primary entry point.
       {
         '<leader>cci',
         function()
@@ -167,8 +131,7 @@ return {
                   height = 0.4,
                   row = 1,
                 },
-                callback = function(response)
-                  -- Auto-focus chat window after response
+                callback = function()
                   vim.schedule(function()
                     local chat_win = vim.fn.bufwinid(vim.fn.bufnr 'copilot-chat')
                     if chat_win ~= -1 then
@@ -185,7 +148,29 @@ return {
         mode = { 'n', 'x' },
       },
 
-      -- Reset chat
+      -- Prompt actions picker — covers Explain/Tests/Refactor/Fix/Optimize/Docs/Commit/Review.
+      {
+        '<leader>ccp',
+        function()
+          local actions = require('CopilotChat.actions').prompt_actions()
+          local items = {}
+          for name, action in pairs(actions) do
+            table.insert(items, { text = name, action = action })
+          end
+          Snacks.picker.pick {
+            items = items,
+            format = function(item)
+              return item.text
+            end,
+            confirm = function(item)
+              vim.cmd(item.action)
+            end,
+          }
+        end,
+        desc = 'Chat Prompt Actions',
+        mode = { 'n', 'x' },
+      },
+
       {
         '<leader>ccx',
         function()
@@ -194,47 +179,6 @@ return {
         desc = 'Clear Chat',
         mode = { 'n', 'x' },
       },
-
-      -- Prompt actions menu
-      {
-        '<leader>ccp',
-        function()
-          local actions = require('CopilotChat.actions').prompt_actions()
-
-          -- Convert actions table to picker items
-          local items = {}
-          for name, action in pairs(actions) do
-            table.insert(items, {
-              text = name,
-              action = action,
-            })
-          end
-
-          -- Use Snacks picker instead of Telescope
-          Snacks.picker.pick {
-            items = items,
-            format = function(item)
-              return item.text
-            end,
-            confirm = function(item)
-              -- Execute the selected action
-              vim.cmd(item.action)
-            end,
-          }
-        end,
-        desc = 'CopilotChat Prompt Actions',
-        mode = { 'n', 'x' },
-      },
-
-      -- Existing prompt shortcuts
-      { '<leader>cce', '<cmd>CopilotChatExplain<cr>', desc = 'Explain Code', mode = { 'n', 'x' } },
-      { '<leader>cct', '<cmd>CopilotChatTests<cr>', desc = 'Generate Tests', mode = { 'n', 'x' } },
-      { '<leader>ccr', '<cmd>CopilotChatRefactor<cr>', desc = 'Refactor Code', mode = { 'n', 'x' } },
-      { '<leader>ccf', '<cmd>CopilotChatFix<cr>', desc = 'Fix Code', mode = { 'n', 'x' } },
-      { '<leader>cco', '<cmd>CopilotChatOptimize<cr>', desc = 'Optimize Code', mode = { 'n', 'x' } },
-      { '<leader>ccd', '<cmd>CopilotChatDocs<cr>', desc = 'Add Documentation', mode = { 'n', 'x' } },
-      { '<leader>ccm', '<cmd>CopilotChatCommit<cr>', desc = 'Generate Commit', mode = { 'n', 'x' } },
-      { '<leader>ccv', '<cmd>CopilotChatReview<cr>', desc = 'Code Review', mode = { 'n', 'x' } },
     },
   },
 }
