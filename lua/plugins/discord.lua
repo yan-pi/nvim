@@ -18,7 +18,12 @@ return {
     },
     text = {
       viewing = function(opts) return 'Viewing ' .. opts.filename end,
-      editing = function(opts) return 'Editing ' .. opts.filename end,
+      editing = function(opts)
+        if opts.filename:match('claude%-prompt%-[^/]+%.[^/]+$') then
+          return 'Editing config'
+        end
+        return 'Editing ' .. opts.filename
+      end,
       file_browser = function(opts) return 'Browsing files in ' .. opts.name end,
       plugin_manager = function(opts) return 'Managing plugins in ' .. opts.name end,
       workspace = function(opts) return 'In ' .. opts.workspace end,

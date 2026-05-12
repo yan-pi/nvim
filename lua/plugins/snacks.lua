@@ -630,6 +630,13 @@ return {
           }
         end,
       },
+      {
+        '<leader>K',
+        desc = 'Cheat Sheet (all keymaps)',
+        function()
+          vim.cmd 'WhichKey'
+        end,
+      },
     },
     init = function()
       vim.api.nvim_create_autocmd('User', {
