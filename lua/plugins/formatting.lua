@@ -247,6 +247,9 @@ return {
         -- LaTeX: latexindent (provided by texliveFull via nix)
         tex = { 'latexindent' },
         plaintex = { 'latexindent' },
+
+        -- Haskell: fourmolu (managed by Mason)
+        haskell = { 'fourmolu' },
       },
     },
   },
