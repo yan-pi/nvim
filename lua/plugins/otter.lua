@@ -31,6 +31,14 @@ return {
       vim.keymap.set('n', '<leader>oa', function()
         otter.activate()
       end, { desc = '[O]tter [A]ctivate embedded LSP' })
+
+      -- Workaround: suppress invalid buffer errors from otter diagnostics
+      local orig_set = vim.diagnostic.set
+      vim.diagnostic.set = function(namespace, bufnr, diagnostics, opts)
+        if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+          orig_set(namespace, bufnr, diagnostics, opts)
+        end
+      end
     end,
   },
 }
