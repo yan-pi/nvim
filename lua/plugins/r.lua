@@ -74,7 +74,7 @@ return {
 
       opts.formatters = opts.formatters or {}
       opts.formatters.air = {
-        command = 'air',
+        command = 'air-formatter',
         args = { 'format', '-' },
         stdin = true,
       }
