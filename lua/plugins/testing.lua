@@ -15,6 +15,8 @@ return {
       'nvim-neotest/neotest-python', -- Python unittest/pytest
       'nvim-neotest/neotest-jest', -- JavaScript/TypeScript Jest
       'marilari88/neotest-vitest', -- Vitest support
+      'mrcjkb/neotest-haskell', -- Haskell test support
+      'nvim-neotest/neotest-go', -- Go test support
     },
     keys = {
       {
@@ -129,6 +131,10 @@ return {
             end,
           },
           require 'neotest-vitest',
+          require('neotest-haskell') {
+            frameworks = { 'tasty', 'hspec', 'sydtest' },
+          },
+          require 'neotest-go',
         },
         discovery = {
           enabled = true,
