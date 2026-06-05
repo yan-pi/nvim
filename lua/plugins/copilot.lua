@@ -23,7 +23,7 @@ return {
             ratio = 0.4,
           },
         },
-        suggestion = { enabled = true },
+        suggestion = { enabled = true, auto_trigger = true },
         nes = {
           enabled = false, -- Set to true if you want NES functionality and have copilot-lsp installed
         },
