@@ -246,6 +246,7 @@ return {
         'codelldb', -- C/C++/Rust debugging (used in rust.lua)
         'js-debug-adapter', -- JavaScript/TypeScript debugging via vscode-js-debug
         'go-debug-adapter', -- Go debugging via Delve (also in go.lua)
+        'debugpy', -- Python debugging
       })
     end,
   },
