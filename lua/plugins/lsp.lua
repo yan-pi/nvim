@@ -65,7 +65,9 @@ return {
     config = function(_, opts)
       -- === LSP PERFORMANCE & RELIABILITY CONFIGURATION ===
       -- Reduce LSP log noise (only show warnings and errors)
-      vim.lsp.set_log_level('WARN')
+      -- NOTE: vim.lsp.set_log_level is deprecated in Neovim 0.11+
+      -- Use :lua vim.lsp.log.set_level(vim.lsp.log.levels.WARN) instead
+      require('vim.lsp.log').set_level(vim.lsp.log.levels.WARN)
 
       -- Brief aside: **What is LSP?**
       --
@@ -156,6 +158,9 @@ return {
           map('gW', function()
             Snacks.picker.lsp_workspace_symbols()
           end, 'Open Workspace Symbols')
+
+          -- Hover: show documentation/signature for symbol under cursor.
+          map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
           -- Jump to the type of the word under your cursor.
           --  Useful when you're not sure what type a variable is and you want to see
@@ -412,17 +417,15 @@ return {
         },
 
         -- Bacon language server for Rust background compilation
-        -- Provides real-time compilation feedback and diagnostics
-        bacon_ls = {
-          settings = {
-            bacon = {
-              -- Path to bacon executable (auto-detected if installed via Mason)
-              path = nil,
-              -- When to run bacon: 'on_save' or 'on_change'
-              trigger = 'on_save',
-            },
-          },
-        },
+        -- DISABLED: conflicts with rustaceanvim and rustfmt installation
+        -- bacon_ls = {
+        --   settings = {
+        --     bacon = {
+        --       path = nil,
+        --       trigger = 'on_save',
+        --     },
+        --   },
+        -- },
 
         -- GitHub Actions YAML language server
         -- Provides validation and completion for GitHub workflow files
@@ -484,13 +487,21 @@ return {
         vim.lsp.config(name, cfg)
       end
 
+      -- Enable hls manually (managed by nix, not mason)
+      vim.lsp.enable('hls')
+
+      -- Filter out nix-managed LSPs from Mason auto-installation
+      local mason_servers = vim.tbl_filter(function(name)
+        return name ~= 'hls' and name ~= 'leanls'
+      end, vim.tbl_keys(servers))
+
       require('mason-lspconfig').setup {
-        ensure_installed = vim.tbl_keys(servers),
+        ensure_installed = mason_servers,
         automatic_installation = false,
         -- Auto-enable every installed LSP except rust_analyzer
         -- (rustaceanvim owns that one).
         automatic_enable = {
-          exclude = { 'rust_analyzer' },
+          exclude = { 'rust_analyzer' }, -- rustaceanvim owns this one
         },
       }
     end,
