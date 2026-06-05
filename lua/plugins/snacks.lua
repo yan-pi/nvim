@@ -9,8 +9,8 @@ return {
       bigfile = {
         enabled = true,
         notify = true,
-        size = 100 * 1024, -- 100KB (reduced from 1.5MB for more aggressive optimization)
-        line_length = 500, -- Detect minified files (reduced from 1000)
+        size = 1024 * 1024, -- 1MB
+        line_length = 500, -- Detect minified files
         setup = function(ctx)
           -- Disable heavy features in big files
           vim.b[ctx.buf].snacks_scroll = false -- Disable smooth scroll
