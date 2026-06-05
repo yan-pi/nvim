@@ -216,7 +216,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, {
-        'bacon', -- Background Rust compiler/checker for real-time feedback
+        -- 'bacon', -- DISABLED: conflicts with rustfmt (see lsp.lua)
         'codelldb', -- Rust debugger (also in dap.lua, but listed here for clarity)
       })
     end,
