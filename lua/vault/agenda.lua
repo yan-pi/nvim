@@ -7,7 +7,7 @@ local M = {}
 
 -- Files scanned by the agenda. Override via `M.setup{ files = {...} }`.
 M.files = {
-  vim.fn.expand '~/www/vault/00-Index/001-Planning.md',
+  vim.fn.expand '~/vault/00-Index/001-Planning.md',
 }
 
 -- Status conventions (Obsidian Tasks plugin compatible)

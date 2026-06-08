@@ -3,6 +3,7 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -49,9 +50,9 @@ return {
         'git_rebase',
         'comment',
         -- LaTeX
-        'latex',
         'bibtex',
       },
+      ignore_install = { 'latex' }, -- VimTeX handles TeX; this parser fails with tree-sitter 0.26.x.
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

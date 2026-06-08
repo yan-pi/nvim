@@ -7,7 +7,7 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {
       workspaces = {
-        { name = 'Vault', path = '~/www/vault' },
+        { name = 'Vault', path = '~/vault' },
       },
 
       notes_subdir = nil,
