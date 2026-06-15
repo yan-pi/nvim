@@ -94,27 +94,6 @@ return {
     },
   },
 
-  -- {
-  --   'sainnhe/gruvbox-material',
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     -- Configure Gruvbox Material for both dark and light backgrounds
-  --     vim.g.gruvbox_material_enable_italic = true
-  --     vim.g.gruvbox_material_background = vim.o.background
-  --     if vim.o.background == 'dark' then
-  --       vim.g.gruvbox_material_foreground = 'material'
-  --       vim.g.gruvbox_material_ui_contrast = 'high'
-  --       vim.g.gruvbox_material_statusline_style = 'mix'
-  --     else
-  --       vim.g.gruvbox_material_foreground = 'mix'
-  --       vim.g.gruvbox_material_ui_contrast = 'low'
-  --       vim.g.gruvbox_material_statusline_style = 'original'
-  --     end
-  --     vim.cmd.colorscheme 'gruvbox-material'
-  --   end,
-  -- },
-
   {
     'RRethy/base16-nvim',
     lazy = false, -- load on startup so colors are ready
@@ -134,15 +113,23 @@ return {
       }
     end,
   },
-  { 'ThorstenRhau/token' },
+
+  { 'savq/melange-nvim' },
+
+  {
+    'wesleimp/min-theme.nvim',
+    lazy = false,
+    priority = 1000, -- load this before other plugins
+  },
+
+  -- { 'edeneast/nightfox.nvim' }, -- lazy
+
   -- {
   --   'snelling-a/base16.nvim',
   --   config = function()
   --     -- Configuration goes here (see Usage section below)
   --   end,
   -- },
-  { 'savq/melange-nvim' },
-  -- { 'edeneast/nightfox.nvim' }, -- lazy
 
   -- {
   --   'morhetz/gruvbox',
@@ -183,6 +170,27 @@ return {
   -- },
 
   -- {
+  --   'sainnhe/gruvbox-material',
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     -- Configure Gruvbox Material for both dark and light backgrounds
+  --     vim.g.gruvbox_material_enable_italic = true
+  --     vim.g.gruvbox_material_background = vim.o.background
+  --     if vim.o.background == 'dark' then
+  --       vim.g.gruvbox_material_foreground = 'material'
+  --       vim.g.gruvbox_material_ui_contrast = 'high'
+  --       vim.g.gruvbox_material_statusline_style = 'mix'
+  --     else
+  --       vim.g.gruvbox_material_foreground = 'mix'
+  --       vim.g.gruvbox_material_ui_contrast = 'low'
+  --       vim.g.gruvbox_material_statusline_style = 'original'
+  --     end
+  --     vim.cmd.colorscheme 'gruvbox-material'
+  --   end,
+  -- },
+
+  -- {
   --   'rebelot/kanagawa.nvim',
   --   priority = 1000,
   --   opts = {
@@ -207,68 +215,62 @@ return {
   --   --   vim.cmd.colorscheme 'kanagawa-wave'
   --   -- end,
   -- },
-  {
-    'wesleimp/min-theme.nvim',
-    lazy = false,
-    priority = 1000, -- load this before other plugins
-  },
 
-  -- {
-  --   'catppuccin/nvim',
-  --   name = 'catppuccin',
-  --   priority = 1000,
-  --   opts = {
-  --     flavour = 'mocha', -- latte, frappe, macchiato, mocha
-  --     background = {
-  --       light = 'latte',
-  --       dark = 'mocha',
-  --     },
-  --     transparent_background = false,
-  --     show_end_of_buffer = false,
-  --     term_colors = false,
-  --     dim_inactive = {
-  --       enabled = false,
-  --       shade = 'dark',
-  --       percentage = 0.15,
-  --     },
-  --     no_italic = false, -- Force no italic
-  --     no_bold = false, -- Force no bold
-  --     styles = {
-  --       comments = {},
-  --       conditionals = {},
-  --       loops = {},
-  --       functions = {},
-  --       keywords = {},
-  --       strings = {},
-  --       variables = {},
-  --       numbers = {},
-  --       booleans = {},
-  --       properties = {},
-  --       types = {},
-  --       operators = {},
-  --     },
-  --     integrations = {
-  --       cmp = true,
-  --       gitsigns = true,
-  --       nvimtree = true,
-  --       mini = true,
-  --     },
-  --   },
-  --   -- Uncomment to activate:
-  --   -- config = function(_, opts)
-  --   --   require('catppuccin').setup(opts)
-  --   --   vim.cmd.colorscheme 'catppuccin'
-  --   -- end,
-  -- },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+    opts = {
+      flavour = 'mocha', -- latte, frappe, macchiato, mocha
+      background = {
+        light = 'latte',
+        dark = 'mocha',
+      },
+      transparent_background = false,
+      show_end_of_buffer = false,
+      term_colors = false,
+      dim_inactive = {
+        enabled = false,
+        shade = 'dark',
+        percentage = 0.15,
+      },
+      no_italic = false, -- Force no italic
+      no_bold = false, -- Force no bold
+      styles = {
+        comments = {},
+        conditionals = {},
+        loops = {},
+        functions = {},
+        keywords = {},
+        strings = {},
+        variables = {},
+        numbers = {},
+        booleans = {},
+        properties = {},
+        types = {},
+        operators = {},
+      },
+      integrations = {
+        cmp = true,
+        gitsigns = true,
+        nvimtree = true,
+        mini = true,
+      },
+    },
+    -- Uncomment to activate:
+    -- config = function(_, opts)
+    --   require('catppuccin').setup(opts)
+    --   vim.cmd.colorscheme 'catppuccin'
+    -- end,
+  },
 
   -- { 'projekt0n/github-nvim-theme', name = 'github-theme' },
 
-  {
-    'nyoom-engineering/oxocarbon.nvim',
-    priority = 1000,
-    -- Uncomment to activate:
-    -- config = function()
-    --   vim.cmd.colorscheme 'oxocarbon'
-    -- end,
-  },
+  -- {
+  --   'nyoom-engineering/oxocarbon.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'oxocarbon'
+  --   end,
+  -- },
 }
