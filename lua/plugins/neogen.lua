@@ -13,13 +13,11 @@ return {
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = {
       snippet_engine = 'luasnip',
+      -- Language-specific templates moved to dedicated files:
+      -- rust.lua, go.lua, web.lua, python.lua
       languages = {
         rust = { template = { annotation_convention = 'rustdoc' } },
         go = { template = { annotation_convention = 'godoc' } },
-        typescript = { template = { annotation_convention = 'tsdoc' } },
-        typescriptreact = { template = { annotation_convention = 'tsdoc' } },
-        javascript = { template = { annotation_convention = 'jsdoc' } },
-        python = { template = { annotation_convention = 'google_docstrings' } },
       },
     },
     keys = {

@@ -2,6 +2,7 @@
 require 'core.options'
 require 'core.keymaps'
 require 'core.autocmds'
+require 'core.lang-toggles'
 require 'core.git'
 
 -- [[ Install `lazy.nvim` plugin manager ]]

@@ -9,41 +9,15 @@ return {
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       -- Comprehensive parser list to prevent runtime downloads
-      -- Includes all languages from LSP config + common web/config formats
+      -- Language-specific parsers moved to dedicated files:
+      -- bash.lua, lua.lua, python.lua, json.lua, yaml.lua, web.lua, rust.lua, go.lua, haskell.lua
       ensure_installed = {
-        -- Core/Required parsers
-        'bash',
+        -- Core/Required parsers (always installed)
         'c',
         'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
         'query',
         'vim',
         'vimdoc',
-        -- Programming languages (from LSP config)
-        'rust',
-        'haskell',
-        'go',
-        -- cabal parser not available in nvim-treesitter
-        'javascript',
-        'typescript',
-        'tsx',
-        'python',
-        'json',
-        -- Note: jsonc removed due to archive corruption (json parser handles .jsonc files)
-        -- Web development
-        'css',
-        'scss',
-        -- Note: tailwindcss parser doesn't exist (Tailwind uses CSS/HTML syntax)
-        --       Use tailwindcss-language-server for autocomplete instead
-        -- Config/Data formats
-        'yaml',
-        'toml',
-        'xml',
-        -- Additional useful parsers
         'regex',
         'gitignore',
         'gitcommit',
@@ -51,6 +25,11 @@ return {
         'comment',
         -- LaTeX
         'bibtex',
+        -- Remaining parsers (not yet moved to dedicated files)
+        'markdown',
+        'markdown_inline',
+        'toml',
+        'xml',
       },
       ignore_install = { 'latex' }, -- VimTeX handles TeX; this parser fails with tree-sitter 0.26.x.
       -- Autoinstall languages that are not installed

@@ -3,6 +3,7 @@
   "bash-language-server": "5.6.0",
   "biome": "2.4.16",
   "codelldb": "v1.12.2",
+  "debugpy": "1.8.21",
   "eslint-lsp": "4.10.0",
   "gh-actions-language-server": "0.3.57",
   "gopls": "v0.22.0",

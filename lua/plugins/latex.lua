@@ -14,6 +14,16 @@
 --   <leader>lP  math preview toggle inline (nabla virt text)
 
 return {
+  -- Formatter: latexindent
+  {
+    'stevearc/conform.nvim',
+    opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      opts.formatters_by_ft.tex = { 'latexindent' }
+      opts.formatters_by_ft.plaintex = { 'latexindent' }
+    end,
+  },
+
   -- Core LaTeX plugin: compilation, SyncTeX, TOC, motions, text objects
   {
     'lervag/vimtex',

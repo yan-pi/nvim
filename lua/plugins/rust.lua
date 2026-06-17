@@ -135,6 +135,19 @@ return {
           vim.keymap.set('n', '<leader>rj', function()
             vim.cmd.RustLsp 'joinLines'
           end, { desc = '[R]ust [J]oin lines', buffer = bufnr })
+
+          -- Format on save via LSP (rust-analyzer).
+          -- conform.nvim is configured with lsp_format = 'never', so Rust
+          -- formatting must be handled explicitly here.
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = bufnr,
+            callback = function()
+              if not vim.g.autoformat_enabled then
+                return
+              end
+              vim.lsp.buf.format { async = false, timeout_ms = 500 }
+            end,
+          })
         end,
         default_settings = {
           ['rust-analyzer'] = {

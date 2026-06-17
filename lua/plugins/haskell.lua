@@ -3,7 +3,20 @@
 -- - LSP completion, diagnostics, and code actions via haskell-language-server
 -- - Debugging support via haskell-debug-adapter
 
+if not vim.g.lang_enabled.haskell then
+  return {}
+end
+
 return {
+  -- Formatter: fourmolu
+  {
+    'stevearc/conform.nvim',
+    opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      opts.formatters_by_ft.haskell = { 'fourmolu' }
+    end,
+  },
+
   -- Configure haskell-language-server (hls)
   {
     'neovim/nvim-lspconfig',

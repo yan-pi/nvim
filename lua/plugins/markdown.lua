@@ -1,4 +1,24 @@
 return {
+  -- Formatter: project-aware (biome → prettier)
+  {
+    'stevearc/conform.nvim',
+    opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      local detect = require('core.formatting-utils').detect_formatter
+      opts.formatters_by_ft.markdown = function(bufnr)
+        return detect(bufnr, {
+          { files = { 'biome.json', 'biome.jsonc' }, formatters = { 'biome' } },
+          {
+            files = { '.prettierrc', '.prettierrc.json', '.prettierrc.js', '.prettierrc.yml', 'prettier.config.js', 'prettier.config.cjs' },
+            formatters = { 'prettierd', 'prettier', stop_after_first = true },
+          },
+        }, {
+          default = { 'prettierd', 'prettier', stop_after_first = true },
+        })
+      end
+    end,
+  },
+
   {
     'iamcco/markdown-preview.nvim',
     cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },

@@ -12,6 +12,10 @@
 --
 -- LSP/treesitter/formatter wiring lives here so the whole R stack is in one file.
 
+if not vim.g.lang_enabled.r then
+  return {}
+end
+
 return {
   -- Main R IDE-like plugin: REPL, send code, object browser, help, plots
   {

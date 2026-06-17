@@ -243,10 +243,8 @@ return {
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, {
         -- Debug adapters for various languages
-        'codelldb', -- C/C++/Rust debugging (used in rust.lua)
-        'js-debug-adapter', -- JavaScript/TypeScript debugging via vscode-js-debug
-        'go-debug-adapter', -- Go debugging via Delve (also in go.lua)
-        'debugpy', -- Python debugging
+        -- Language-specific adapters moved to dedicated files:
+        -- rust.lua (codelldb), python.lua (debugpy), web.lua (js-debug-adapter), go.lua (go-debug-adapter)
       })
     end,
   },

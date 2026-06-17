@@ -1,6 +1,10 @@
 -- Scheme (Lisp) support for SICP
 -- Provides REPL-driven development via Conjure with MIT Scheme / Guile
 
+if not vim.g.lang_enabled.scheme then
+  return {}
+end
+
 return {
   -- Conjure: Interactive REPL environment for Lisp-family languages
   {

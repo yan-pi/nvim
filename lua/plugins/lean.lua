@@ -7,6 +7,10 @@
 --   * lean.nvim   -> infoview, widgets, unicode abbreviations
 --   * nvim-treesitter -> syntax highlighting
 
+if not vim.g.lang_enabled.lean then
+  return {}
+end
+
 return {
   -- lean.nvim provides infoview, widgets, and unicode abbreviations.
   -- We disable its LSP management (deprecated/broken) and use native vim.lsp.config.
