@@ -18,6 +18,43 @@ return {
               vim.lsp.buf.hover()
             end
           end, { desc = 'Show crate documentation', buffer = bufnr })
+
+          -- Crate management keymaps
+          vim.keymap.set('n', '<leader>ct', function()
+            require('crates').toggle()
+          end, { desc = '[C]rates [T]oggle', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>cr', function()
+            require('crates').reload()
+          end, { desc = '[C]rates [R]eload', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>cu', function()
+            require('crates').update_crate()
+          end, { desc = '[C]rate [U]pdate', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>ca', function()
+            require('crates').update_all_crates()
+          end, { desc = '[C]rates Update [A]ll', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>cU', function()
+            require('crates').upgrade_crate()
+          end, { desc = '[C]rate [U]pgrade (breaking)', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>cA', function()
+            require('crates').upgrade_all_crates()
+          end, { desc = '[C]rates Upgrade [A]ll (breaking)', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>ch', function()
+            require('crates').open_homepage()
+          end, { desc = '[C]rate [H]omepage', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>cd', function()
+            require('crates').open_documentation()
+          end, { desc = '[C]rate [D]ocumentation', buffer = bufnr })
+
+          vim.keymap.set('n', '<leader>cg', function()
+            require('crates').open_repository()
+          end, { desc = '[C]rate [G]it repository', buffer = bufnr })
         end,
         actions = true,
         completion = true,
@@ -27,51 +64,6 @@ return {
         blink = { enabled = true },
       },
     },
-    config = function(_, opts)
-      require('crates').setup(opts)
-
-      -- Keymaps for crate management (only in Cargo.toml)
-      vim.api.nvim_create_autocmd('BufRead', {
-        pattern = 'Cargo.toml',
-        callback = function()
-          vim.keymap.set('n', '<leader>ct', function()
-            require('crates').toggle()
-          end, { desc = '[C]rates [T]oggle', buffer = true })
-
-          vim.keymap.set('n', '<leader>cr', function()
-            require('crates').reload()
-          end, { desc = '[C]rates [R]eload', buffer = true })
-
-          vim.keymap.set('n', '<leader>cu', function()
-            require('crates').update_crate()
-          end, { desc = '[C]rate [U]pdate', buffer = true })
-
-          vim.keymap.set('n', '<leader>ca', function()
-            require('crates').update_all_crates()
-          end, { desc = '[C]rates Update [A]ll', buffer = true })
-
-          vim.keymap.set('n', '<leader>cU', function()
-            require('crates').upgrade_crate()
-          end, { desc = '[C]rate [U]pgrade (breaking)', buffer = true })
-
-          vim.keymap.set('n', '<leader>cA', function()
-            require('crates').upgrade_all_crates()
-          end, { desc = '[C]rates Upgrade [A]ll (breaking)', buffer = true })
-
-          vim.keymap.set('n', '<leader>ch', function()
-            require('crates').open_homepage()
-          end, { desc = '[C]rate [H]omepage', buffer = true })
-
-          vim.keymap.set('n', '<leader>cd', function()
-            require('crates').open_documentation()
-          end, { desc = '[C]rate [D]ocumentation', buffer = true })
-
-          vim.keymap.set('n', '<leader>cg', function()
-            require('crates').open_repository()
-          end, { desc = '[C]rate [G]it repository', buffer = true })
-        end,
-      })
-    end,
   },
 
   -- Enhanced rust-analyzer integration (replaces built-in LSP for Rust)
@@ -142,6 +134,11 @@ return {
           vim.api.nvim_create_autocmd('BufWritePre', {
             buffer = bufnr,
             callback = function()
+              -- Buffer-local opt-out (nil = enabled, false = disabled).
+              -- Matches conform.nvim's <leader>uF buffer toggle in formatting.lua.
+              if vim.b.autoformat_enabled == false then
+                return
+              end
               if not vim.g.autoformat_enabled then
                 return
               end
@@ -219,19 +216,11 @@ return {
       },
     },
     config = function(_, opts)
+      -- rustaceanvim reads vim.g.rustaceanvim automatically on load
       vim.g.rustaceanvim = vim.tbl_deep_extend('keep', vim.g.rustaceanvim or {}, opts or {})
     end,
   },
 
-  -- Ensure Rust tools are installed via Mason
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, {
-        -- 'bacon', -- DISABLED: conflicts with rustfmt (see lsp.lua)
-        'codelldb', -- Rust debugger (also in dap.lua, but listed here for clarity)
-      })
-    end,
-  },
+  -- codelldb is Nix-managed (not a Mason package)
+  -- See dotfiles/home/packages.nix for installation
 }

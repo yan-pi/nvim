@@ -90,17 +90,4 @@ return {
     end,
   },
 
-  -- Ensure Haskell non-LSP tools are installed via Mason.
-  -- hls is auto-installed by mason-lspconfig (derived from opts.servers).
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, {
-        -- 'haskell-language-server', -- DISABLED: requires ghcup, using nix instead
-        'fourmolu', -- Haskell formatter (used by conform.nvim)
-        'haskell-debug-adapter', -- Haskell debugger adapter for DAP
-      })
-    end,
-  },
 }

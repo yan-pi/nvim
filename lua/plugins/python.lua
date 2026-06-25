@@ -59,17 +59,6 @@ return {
     end,
   },
 
-  -- DAP: debugpy via Mason
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, {
-        'debugpy', -- Python debugging
-      })
-    end,
-  },
-
   -- Venv: venv-selector for virtual environment management
   {
     'linux-cultist/venv-selector.nvim',

@@ -163,7 +163,11 @@ return {
         if not node then
           return true
         end
-        local locals = require 'nvim-treesitter.locals'
+        -- Guard against missing module in modern nvim-treesitter versions
+        local ok, locals = pcall(require, 'nvim-treesitter.locals')
+        if not ok then
+          return false
+        end
         local types = { unpack(pred, 3) }
         local _, _, kind = locals.find_definition(node, bufnr)
         return vim.tbl_contains(types, kind)

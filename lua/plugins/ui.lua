@@ -1,5 +1,3 @@
--- UI and appearance plugins
-
 return {
   -- Useful plugin to show you pending keybinds.
   {
@@ -256,20 +254,5 @@ return {
         mini = true,
       },
     },
-    -- Uncomment to activate:
-    -- config = function(_, opts)
-    --   require('catppuccin').setup(opts)
-    --   vim.cmd.colorscheme 'catppuccin'
-    -- end,
   },
-
-  -- { 'projekt0n/github-nvim-theme', name = 'github-theme' },
-
-  -- {
-  --   'nyoom-engineering/oxocarbon.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'oxocarbon'
-  --   end,
-  -- },
 }

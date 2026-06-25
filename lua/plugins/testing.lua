@@ -138,7 +138,7 @@ return {
         },
         discovery = {
           enabled = true,
-          concurrent = 1,
+          concurrent = 4, -- Parallel test discovery for faster startup
         },
         diagnostic = {
           enabled = true,

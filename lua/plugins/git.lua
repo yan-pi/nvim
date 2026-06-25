@@ -23,7 +23,7 @@ return {
         untracked = { text = '┆' },
       },
       -- Performance optimizations
-      max_file_length = 10000, -- Disable in files with >10k lines
+      max_file_length = 40000, -- Disable in files with >40k lines (default)
       attach_to_untracked = false, -- Don't attach to untracked files
     },
   },

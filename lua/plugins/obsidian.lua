@@ -68,15 +68,10 @@ return {
         min_chars = 2,
       },
 
-      wiki_link_func = function(opts)
-        if opts.id == nil then
-          return string.format('[[%s]]', opts.label)
-        elseif opts.label ~= opts.id then
-          return string.format('[[%s|%s]]', opts.id, opts.label)
-        else
-          return string.format('[[%s]]', opts.id)
-        end
-      end,
+      -- Link style (new API, replaces wiki_link_func)
+      link = {
+        style = 'markdown',
+      },
 
       -- Disable UI features (avoids conceallevel warning)
       ui = {

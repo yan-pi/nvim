@@ -19,7 +19,7 @@ return {
         mode = '',
         desc = '[F]ormat buffer',
       },
-      -- Toggle auto-format on save
+      -- Toggle auto-format on save (global, all buffers)
       {
         '<leader>uf',
         function()
@@ -27,7 +27,25 @@ return {
           local status = vim.g.autoformat_enabled and 'enabled' or 'disabled'
           vim.notify('Auto-format on save: ' .. status, vim.log.levels.INFO)
         end,
-        desc = 'Toggle auto-format on save',
+        desc = 'Toggle auto-format on save (global)',
+      },
+      -- Toggle auto-format on save (buffer-local)
+      -- Useful for dotfiles/rc configs (e.g. .yabairc) you don't want
+      -- auto-formatted, while keeping auto-format on elsewhere. Manual
+      -- format via <leader>f still works regardless of this toggle.
+      {
+        '<leader>uF',
+        function()
+          -- Treat nil as enabled; only flip when explicitly disabled
+          if vim.b.autoformat_enabled == false then
+            vim.b.autoformat_enabled = nil
+            vim.notify('Auto-format for buffer: enabled', vim.log.levels.INFO)
+          else
+            vim.b.autoformat_enabled = false
+            vim.notify('Auto-format for buffer: disabled', vim.log.levels.INFO)
+          end
+        end,
+        desc = 'Toggle auto-format on save (buffer)',
       },
     },
     init = function()
@@ -47,6 +65,13 @@ return {
         },
       },
       format_on_save = function(bufnr)
+        -- Check buffer-local toggle first (nil = enabled, false = disabled).
+        -- Lets you opt out of auto-format per-buffer (e.g. .yabairc) via
+        -- <leader>uF without disabling it globally.
+        if vim.b[bufnr].autoformat_enabled == false then
+          return nil
+        end
+
         -- Check global toggle
         if not vim.g.autoformat_enabled then
           return nil
@@ -55,7 +80,7 @@ return {
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = {}
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -65,12 +90,8 @@ return {
           }
         end
       end,
-      formatters_by_ft = {
-        -- Linguagens específicas movidas para arquivos dedicados:
-        -- lua.lua, python.lua, bash.lua, json.lua, yaml.lua, web.lua
-        --
-        -- Formatters remaining here (not yet moved to dedicated files):
-      },
+      -- formatters_by_ft is managed by language-specific files:
+      -- lua.lua, python.lua, bash.lua, json.lua, yaml.lua, web.lua, markdown.lua, latex.lua, haskell.lua
     },
   },
 }

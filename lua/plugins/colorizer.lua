@@ -6,10 +6,7 @@ return {
     vim.o.termguicolors = true
     local colorizer = require 'colorizer'
 
-    colorizer.setup {
-      user_default_options = {
-        tailwind = true,
-      },
-    }
+    -- Use defaults (tailwind = true is default)
+    colorizer.setup()
   end,
 }

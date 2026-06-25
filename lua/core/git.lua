@@ -103,7 +103,7 @@ function M.open_all_modified()
 end
 
 -- Keymaps
-vim.keymap.set('n', '<leader>go', M.open_modified_picker, { desc = '[G]it [O]pen modified (picker)' })
-vim.keymap.set('n', '<leader>gO', M.open_all_modified, { desc = '[G]it [O]pen all modified' })
+vim.keymap.set('n', '<leader>gm', M.open_modified_picker, { desc = '[G]it [M]odified (picker)' })
+vim.keymap.set('n', '<leader>gM', M.open_all_modified, { desc = '[G]it [M]odified (open all)' })
 
 return M

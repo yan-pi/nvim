@@ -19,10 +19,9 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\\\><C-n>', { desc = 'Exit terminal mode' })
 
--- Buffer management - Quick close buffer keybind
--- Note: <leader>x removed to avoid conflict with trouble.nvim (<leader>x* prefix)
--- Using <leader>d for "delete buffer" instead (common alternative)
-vim.keymap.set('n', '<leader>d', ':bd<CR>', { desc = '[D]elete/close current buffer', noremap = true, silent = true })
+-- Buffer management
+-- Note: <leader>bd closes buffer (defined in snacks.lua, tab-scoped)
+-- Note: <leader>d is reserved for DAP debug prefix
 vim.keymap.set('n', '<leader>b', ':enew<CR>', { desc = 'Create new empty buffer', noremap = true, silent = true })
 vim.keymap.set('t', '<C-n>', '<C-\\><C-n>', { desc = 'Enter normal mode in terminal' })
 

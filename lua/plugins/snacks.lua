@@ -20,10 +20,6 @@ return {
               return
             end
 
-            -- Disable expensive plugins
-            vim.b[ctx.buf].copilot_enabled = false
-            vim.b[ctx.buf].completion = false
-
             -- Optimize window options for performance
             vim.wo.foldmethod = 'manual'
             vim.wo.statuscolumn = ''

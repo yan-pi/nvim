@@ -236,16 +236,100 @@ return {
     },
   },
 
-  -- Ensure debug adapters are installed
+  -- JavaScript/TypeScript debugging via vscode-js-debug
   {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, {
-        -- Debug adapters for various languages
-        -- Language-specific adapters moved to dedicated files:
-        -- rust.lua (codelldb), python.lua (debugpy), web.lua (js-debug-adapter), go.lua (go-debug-adapter)
-      })
+    'mfussenegger/nvim-dap',
+    config = function()
+      local dap = require 'dap'
+
+      -- Only configure if js-debug-adapter is installed
+      local ok, mason_registry = pcall(require, 'mason-registry')
+      if not ok or not mason_registry.is_installed 'js-debug-adapter' then
+        return
+      end
+
+      -- Use Mason registry API to get installation path
+      local js_debug_package = mason_registry.get_package 'js-debug-adapter'
+      local js_debug_path = js_debug_package:get_install_path() .. '/js-debug/src/dapDebugServer.js'
+
+      dap.adapters['pwa-node'] = {
+        type = 'server',
+        host = 'localhost',
+        port = '${port}',
+        executable = {
+          command = 'node',
+          args = { js_debug_path, '${port}' },
+        },
+      }
+
+      local js_configs = {
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'Launch Current File (Node)',
+          program = '${file}',
+          cwd = '${workspaceFolder}',
+          sourceMaps = true,
+          protocol = 'inspector',
+          console = 'integratedTerminal',
+        },
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'Launch npm script',
+          runtimeExecutable = 'npm',
+          runtimeArgs = function()
+            local script = vim.fn.input 'npm script: '
+            return { 'run', script }
+          end,
+          cwd = '${workspaceFolder}',
+          sourceMaps = true,
+          protocol = 'inspector',
+          console = 'integratedTerminal',
+        },
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'Debug Jest Tests',
+          runtimeExecutable = 'node',
+          runtimeArgs = {
+            './node_modules/.bin/jest',
+            '--runInBand',
+            '--no-coverage',
+            '${file}',
+          },
+          rootPath = '${workspaceFolder}',
+          cwd = '${workspaceFolder}',
+          console = 'integratedTerminal',
+          internalConsoleOptions = 'neverOpen',
+          sourceMaps = true,
+        },
+        {
+          type = 'pwa-node',
+          request = 'attach',
+          name = 'Attach to Process',
+          processId = require('dap.utils').pick_process,
+          cwd = '${workspaceFolder}',
+          sourceMaps = true,
+          protocol = 'inspector',
+        },
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'Debug with --inspect',
+          program = '${file}',
+          cwd = '${workspaceFolder}',
+          runtimeArgs = { '--inspect' },
+          sourceMaps = true,
+          protocol = 'inspector',
+          console = 'integratedTerminal',
+        },
+      }
+
+      dap.configurations.javascript = js_configs
+      dap.configurations.typescript = js_configs
+      dap.configurations.javascriptreact = js_configs
+      dap.configurations.typescriptreact = js_configs
     end,
   },
 }

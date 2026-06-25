@@ -2,11 +2,12 @@ return {
   -- Load WakaTime after UI is ready (time tracking doesn't need to be immediate)
   { 'wakatime/vim-wakatime', event = 'VeryLazy' },
   {
-    'm4xshen/hardtime.nvim',
-    lazy = false,
-    dependencies = { 'MunifTanjim/nui.nvim' },
+    'nvzone/showkeys',
+    cmd = 'ShowkeysToggle',
     opts = {
-      enabled = false, -- Start with the plugin disabled
+      timeout = 1,
+      maxkeys = 5,
+      -- more opts
     },
   },
 }

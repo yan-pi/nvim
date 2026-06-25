@@ -15,7 +15,7 @@ return {
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
       'mason-org/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'mason-org/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP progress
       {
@@ -51,11 +51,19 @@ return {
     -- rust.lua) can extend opts.servers via Lazy.nvim opts merging.
     opts = { servers = {} },
     config = function(_, opts)
+      -- === VERSION CHECK ===
+      -- This config uses vim.lsp.config / vim.lsp.enable (Neovim 0.11+ API)
+      if vim.fn.has 'nvim-0.11' == 0 then
+        vim.notify('This Neovim config requires version 0.11+. LSP will not be configured.', vim.log.levels.ERROR)
+        return
+      end
+
       -- === LSP PERFORMANCE & RELIABILITY CONFIGURATION ===
       -- Reduce LSP log noise (only show warnings and errors)
-      -- NOTE: vim.lsp.set_log_level is deprecated in Neovim 0.11+
-      -- Use :lua vim.lsp.log.set_level(vim.lsp.log.levels.WARN) instead
-      require('vim.lsp.log').set_level(vim.lsp.log.levels.WARN)
+      -- Wrapped in pcall for cross-version compatibility
+      pcall(function()
+        require('vim.lsp.log').set_level('WARN')
+      end)
 
       -- Brief aside: **What is LSP?**
       --
@@ -223,8 +231,6 @@ return {
         virtual_text = {
           source = 'if_many',
           spacing = 2,
-          -- Performance optimizations
-          update_in_insert = false, -- Don't update in insert mode
           format = function(diagnostic)
             -- Truncate long messages for better scroll performance
             local max_width = 80
@@ -310,8 +316,8 @@ return {
 
       -- LSP installation: mason-lspconfig.ensure_installed below derives
       -- from vim.tbl_keys(servers) — single source of truth.
-      -- mason-tool-installer (later in this file) handles non-LSP tools
-      -- (formatters, linters, DAP adapters) only.
+      -- Non-LSP tools (formatters, linters, DAP adapters) are managed in
+      -- lua/plugins/mason.lua via mason-tool-installer.
 
       -- Register each server's config with the new vim.lsp.config API (nvim 0.11+).
       -- Default settings (cmd, root_markers, filetypes) come from nvim-lspconfig's
@@ -341,28 +347,5 @@ return {
     end,
   },
 
-  -- Mason Tool Installer — non-LSP tooling only.
-  -- LSP servers live in mason-lspconfig.ensure_installed (derived from
-  -- the servers table). Other plugin files (rust.lua, dap.lua, go.lua)
-  -- extend opts.ensure_installed via Lazy.nvim opts merging for
-  -- formatters, linters, and DAP adapters.
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = {
-      ensure_installed = {
-        -- Formatters
-        'stylua',
-        'prettier',
-        'prettierd',
-        'biome',
-        'shfmt',
-        -- ruff handles Python linting + formatting via its LSP server
-        -- (registered in opts.servers above), so no separate entry here.
-      },
-      auto_update = false,
-      run_on_start = true,
-      start_delay = 0,
-    },
-  },
 }
 

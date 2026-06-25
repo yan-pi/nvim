@@ -254,10 +254,6 @@ return {
 
       -- Initialize and make available globally
       _G.TabScopedBuffers = M
-      setup_autocmds()
-
-      -- Initialize current tab
-      M.add_buffer_to_tab()
 
       --- @class BufferlineFilterCache
       --- @field tab integer|nil Last processed tabpage number
@@ -272,6 +268,7 @@ return {
       }
 
       --- Update cache version when buffers change
+      --- MUST be done BEFORE setup_autocmds() so autocmds use the patched version
       local original_add = M.add_buffer_to_tab
       M.add_buffer_to_tab = function(...)
         original_add(...)
@@ -283,6 +280,11 @@ return {
         original_remove(...)
         filter_cache.version = filter_cache.version + 1
       end
+
+      setup_autocmds()
+
+      -- Initialize current tab
+      M.add_buffer_to_tab()
 
       -- Simple bufferline setup with optimized tab-scoped filtering
       bufferline.setup {
