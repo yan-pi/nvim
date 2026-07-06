@@ -8,22 +8,9 @@ return {
     event = { 'InsertEnter', 'BufReadPre' },
     config = function()
       require('copilot').setup {
-        panel = {
-          enabled = true,
-          auto_refresh = true,
-          keymap = {
-            jump_prev = '[[',
-            jump_next = ']]',
-            accept = '<CR>',
-            refresh = 'gr',
-            open = '<leader>cp',
-          },
-          layout = {
-            position = 'bottom',
-            ratio = 0.4,
-          },
-        },
-        suggestion = { enabled = true, auto_trigger = true },
+        -- Copilot is used as a backend for blink-cmp-copilot; blink owns menu + ghost text UI.
+        panel = { enabled = false },
+        suggestion = { enabled = false },
         nes = {
           enabled = false, -- Set to true if you want NES functionality and have copilot-lsp installed
         },
@@ -31,7 +18,8 @@ return {
         server_opts_overrides = {
           settings = {
             advanced = {
-              model = 'gpt-5.4-mini',
+              -- `model` removed: not a recognized key per SettingsOpts.md;
+              -- inline-completion model is backend-controlled (Auto on Student tier).
               temperature = 0.15,
               top_p = 0.95,
               listCount = 10,
@@ -61,7 +49,7 @@ return {
       local user = vim.env.USER or 'User'
       user = user:sub(1, 1):upper() .. user:sub(2)
       return {
-        model = 'gpt-5.4-mini',
+        model = 'auto', -- Auto model selection (CopilotChat.nvim PR #1518); required for Student tier
         auto_insert_mode = true,
         show_help = true,
         question_header = '  ' .. user .. ' ',

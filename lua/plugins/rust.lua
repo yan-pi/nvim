@@ -173,7 +173,7 @@ return {
             },
             inlayHints = {
               bindingModeHints = {
-                enable = false,
+                enable = true,
               },
               chainingHints = {
                 enable = true,
@@ -186,7 +186,7 @@ return {
                 enable = 'never',
               },
               lifetimeElisionHints = {
-                enable = 'never',
+                enable = 'always',
                 useParameterNames = false,
               },
               maxLength = 25,
@@ -194,7 +194,7 @@ return {
                 enable = true,
               },
               reborrowHints = {
-                enable = 'never',
+                enable = 'always',
               },
               renderColons = true,
               typeHints = {

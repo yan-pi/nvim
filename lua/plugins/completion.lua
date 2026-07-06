@@ -120,6 +120,7 @@ return {
             max_width = math.floor(vim.o.columns * DOC_MAX_WIDTH_RATIO),
           },
         },
+        -- Blink owns ghost text, including Copilot previews from blink-cmp-copilot.
         ghost_text = {
           enabled = true,
         },
