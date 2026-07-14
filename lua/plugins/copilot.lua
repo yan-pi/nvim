@@ -44,12 +44,80 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
-    cmd = 'CopilotChat',
+    cmd = {
+      'CopilotChat',
+      'CopilotChatPrompts',
+      'CopilotChatModels',
+      'CopilotChatOpen',
+      'CopilotChatClose',
+      'CopilotChatToggle',
+      'CopilotChatStop',
+      'CopilotChatReset',
+      'CopilotChatSave',
+      'CopilotChatLoad',
+    },
     opts = function()
       local user = vim.env.USER or 'User'
       user = user:sub(1, 1):upper() .. user:sub(2)
+
+      local providers = require 'CopilotChat.config.providers'
+
+      -- Copilot Free/Student accounts use auto model selection in official clients,
+      -- but CopilotChat.nvim's auto resolver currently returns models that this
+      -- account cannot use from third-party chat clients, e.g. `gpt-5.4-mini`.
+      -- These model IDs were verified against this account's Copilot Chat API.
+      providers.copilot.get_models = function(headers)
+        local base_url = headers['x-copilot-base-url'] or 'https://api.githubcopilot.com'
+        return {
+          {
+            id = 'gpt-4.1',
+            name = 'GPT-4.1',
+            tokenizer = 'o200k_base',
+            max_input_tokens = 128000,
+            max_output_tokens = 8192,
+            streaming = true,
+            tools = false,
+            policy = true,
+            version = '2025-04-14',
+            use_responses = false,
+            base_url = base_url,
+          },
+          {
+            id = 'gpt-4o',
+            name = 'GPT-4o',
+            tokenizer = 'o200k_base',
+            max_input_tokens = 128000,
+            max_output_tokens = 8192,
+            streaming = true,
+            tools = false,
+            policy = true,
+            version = '2024-11-20',
+            use_responses = false,
+            base_url = base_url,
+          },
+          {
+            id = 'gpt-4o-mini',
+            name = 'GPT-4o mini',
+            tokenizer = 'o200k_base',
+            max_input_tokens = 128000,
+            max_output_tokens = 8192,
+            streaming = true,
+            tools = false,
+            policy = true,
+            version = '2024-07-18',
+            use_responses = false,
+            base_url = base_url,
+          },
+        }
+      end
+
+      providers.copilot.resolve_model = function(_, model)
+        return model
+      end
+
       return {
-        model = 'auto', -- Auto model selection (CopilotChat.nvim PR #1518); required for Student tier
+        model = 'gpt-4.1',
+        providers = providers,
         auto_insert_mode = true,
         show_help = true,
         question_header = '  ' .. user .. ' ',
@@ -110,7 +178,7 @@ return {
         '<leader>cci',
         function()
           vim.ui.input({ prompt = 'Inline Chat: ' }, function(input)
-            if input ~= '' then
+            if input and input ~= '' then
               require('CopilotChat').ask(input, {
                 window = {
                   layout = 'float',
