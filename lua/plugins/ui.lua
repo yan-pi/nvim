@@ -111,14 +111,6 @@ return {
     end,
   },
 
-  { 'savq/melange-nvim' },
-
-  {
-    'wesleimp/min-theme.nvim',
-    lazy = false,
-    priority = 1000, -- load this before other plugins
-  },
-
   -- { 'edeneast/nightfox.nvim' }, -- lazy
 
   -- {
@@ -216,7 +208,7 @@ return {
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    priority = 1000,
+    event = 'VeryLazy',
     opts = {
       flavour = 'mocha', -- latte, frappe, macchiato, mocha
       background = {
@@ -255,4 +247,5 @@ return {
       },
     },
   },
+
 }

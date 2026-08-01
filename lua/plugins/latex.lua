@@ -27,7 +27,7 @@ return {
   -- Core LaTeX plugin: compilation, SyncTeX, TOC, motions, text objects
   {
     'lervag/vimtex',
-    lazy = false, -- VimTeX must hook into FileType events at startup
+    ft = { 'tex', 'plaintex' },
     init = function()
       -- PDF viewer: Skim (macOS, supports forward + inverse SyncTeX)
       vim.g.vimtex_view_method = 'skim'
@@ -69,35 +69,44 @@ return {
     end,
     config = function()
       -- Buffer-local keybinds for .tex buffers, all under <leader>l*
+      local function set_keymaps(buf)
+        local map = function(lhs, rhs, desc)
+          vim.keymap.set('n', lhs, rhs, { buffer = buf, desc = 'LaTeX: ' .. desc, silent = true })
+        end
+
+        -- Compile / build lifecycle
+        map('<leader>ll', '<cmd>VimtexCompile<cr>', 'Compile (toggle continuous)')
+        map('<leader>lo', '<cmd>VimtexCompileSS<cr>', 'Compile One-shot')
+        map('<leader>lk', '<cmd>VimtexStop<cr>', 'Kill compilation')
+        map('<leader>lc', '<cmd>VimtexClean<cr>', 'Clean aux files')
+
+        -- View / navigate
+        map('<leader>lv', '<cmd>VimtexView<cr>', 'View PDF (Skim)')
+        map('<leader>lt', '<cmd>VimtexTocOpen<cr>', 'TOC navigator')
+        map('<leader>le', '<cmd>VimtexErrors<cr>', 'Errors quickfix')
+        map('<leader>li', '<cmd>VimtexInfo<cr>', 'Info')
+
+        -- Math preview (nabla.nvim)
+        map('<leader>lp', function()
+          require('nabla').popup()
+        end, 'math Preview popup')
+        map('<leader>lP', function()
+          require('nabla').toggle_virt()
+        end, 'math Preview toggle inline')
+      end
+
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('latex-keymaps', { clear = true }),
         pattern = { 'tex', 'plaintex' },
         callback = function(ev)
-          local map = function(lhs, rhs, desc)
-            vim.keymap.set('n', lhs, rhs, { buffer = ev.buf, desc = 'LaTeX: ' .. desc, silent = true })
-          end
-
-          -- Compile / build lifecycle
-          map('<leader>ll', '<cmd>VimtexCompile<cr>', 'Compile (toggle continuous)')
-          map('<leader>lo', '<cmd>VimtexCompileSS<cr>', 'Compile One-shot')
-          map('<leader>lk', '<cmd>VimtexStop<cr>', 'Kill compilation')
-          map('<leader>lc', '<cmd>VimtexClean<cr>', 'Clean aux files')
-
-          -- View / navigate
-          map('<leader>lv', '<cmd>VimtexView<cr>', 'View PDF (Skim)')
-          map('<leader>lt', '<cmd>VimtexTocOpen<cr>', 'TOC navigator')
-          map('<leader>le', '<cmd>VimtexErrors<cr>', 'Errors quickfix')
-          map('<leader>li', '<cmd>VimtexInfo<cr>', 'Info')
-
-          -- Math preview (nabla.nvim)
-          map('<leader>lp', function()
-            require('nabla').popup()
-          end, 'math Preview popup')
-          map('<leader>lP', function()
-            require('nabla').toggle_virt()
-          end, 'math Preview toggle inline')
+          set_keymaps(ev.buf)
         end,
       })
+
+      -- FileType may already be active when Lazy loads VimTeX.
+      if vim.bo.filetype == 'tex' or vim.bo.filetype == 'plaintex' then
+        set_keymaps(0)
+      end
     end,
   },
 

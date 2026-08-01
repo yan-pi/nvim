@@ -121,6 +121,7 @@ return {
   -- DAP UI - Visual debugging interface
   {
     'rcarriga/nvim-dap-ui',
+    event = 'VeryLazy',
     dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
     config = function()
       local dap = require 'dap'
@@ -205,6 +206,7 @@ return {
   -- Virtual text - Show variable values inline
   {
     'theHamsta/nvim-dap-virtual-text',
+    event = 'VeryLazy',
     dependencies = { 'mfussenegger/nvim-dap' },
     opts = {
       enabled = true, -- Enable by default
