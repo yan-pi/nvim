@@ -229,5 +229,46 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   desc = 'Save colorscheme to file when changed',
 })
 
+-- Keep LSP reference highlights boxed while using the active theme's palette.
+local function set_lsp_reference_highlights()
+  local reference = vim.api.nvim_get_hl(0, { name = 'LspReferenceText', link = false })
+  local visual = vim.api.nvim_get_hl(0, { name = 'Visual', link = false })
+  local cursorline = vim.api.nvim_get_hl(0, { name = 'CursorLine', link = false })
+  local search = vim.api.nvim_get_hl(0, { name = 'Search', link = false })
+  local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
+
+  -- Prefer the theme's own reference color, then use other theme-native boxes.
+  local background = reference.bg or visual.bg or cursorline.bg or search.bg or normal.fg
+  local foreground = reference.fg or visual.fg or normal.fg
+  local highlight = {
+    bg = background,
+    fg = foreground,
+    underline = false,
+    undercurl = false,
+  }
+
+  for _, group in ipairs {
+    'LspReferenceText',
+    'LspReferenceRead',
+    'LspReferenceWrite',
+    'LspReferenceTarget',
+  } do
+    vim.api.nvim_set_hl(0, group, highlight)
+  end
+end
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = '*',
+  callback = function()
+    -- Run after theme callbacks that may redefine the reference groups.
+    vim.schedule(set_lsp_reference_highlights)
+  end,
+  desc = 'Use boxed LSP reference highlights',
+})
+set_lsp_reference_highlights()
+
 --- Load saved colorscheme on startup (delayed to ensure theme plugins are loaded)
-vim.defer_fn(load_colorscheme, COLORSCHEME_LOAD_DELAY_MS)
+vim.defer_fn(function()
+  load_colorscheme()
+  set_lsp_reference_highlights()
+end, COLORSCHEME_LOAD_DELAY_MS)
