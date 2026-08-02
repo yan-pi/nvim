@@ -257,18 +257,53 @@ local function set_lsp_reference_highlights()
   end
 end
 
+-- Keep the current relative line number visible without replacing the theme palette.
+local function set_current_line_number_highlight()
+  local current = vim.api.nvim_get_hl(0, { name = 'CursorLineNr', link = false })
+  local line_number = vim.api.nvim_get_hl(0, { name = 'LineNr', link = false })
+  local cursorline = vim.api.nvim_get_hl(0, { name = 'CursorLine', link = false })
+  local visual = vim.api.nvim_get_hl(0, { name = 'Visual', link = false })
+  local search = vim.api.nvim_get_hl(0, { name = 'Search', link = false })
+  local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
+
+  local foreground
+  for _, group in ipairs { 'Keyword', 'Special', 'Constant', 'Function', 'String', 'DiagnosticInfo' } do
+    local accent = vim.api.nvim_get_hl(0, { name = group, link = false })
+    if accent.fg and accent.fg ~= line_number.fg then
+      foreground = accent.fg
+      break
+    end
+  end
+  foreground = foreground or current.fg or normal.fg
+
+  local highlight = {
+    bg = current.bg or cursorline.bg or visual.bg or search.bg or normal.fg,
+    fg = foreground or normal.fg,
+    bold = true,
+    underline = false,
+    undercurl = false,
+  }
+
+  vim.api.nvim_set_hl(0, 'CursorLineNr', highlight)
+end
+
+local function set_theme_highlights()
+  set_lsp_reference_highlights()
+  set_current_line_number_highlight()
+end
+
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = '*',
   callback = function()
-    -- Run after theme callbacks that may redefine the reference groups.
-    vim.schedule(set_lsp_reference_highlights)
+    -- Run after theme callbacks that may redefine these groups.
+    vim.schedule(set_theme_highlights)
   end,
-  desc = 'Use boxed LSP reference highlights',
+  desc = 'Normalize theme-dependent highlights',
 })
-set_lsp_reference_highlights()
+set_theme_highlights()
 
 --- Load saved colorscheme on startup (delayed to ensure theme plugins are loaded)
 vim.defer_fn(function()
   load_colorscheme()
-  set_lsp_reference_highlights()
+  set_theme_highlights()
 end, COLORSCHEME_LOAD_DELAY_MS)
