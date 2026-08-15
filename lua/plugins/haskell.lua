@@ -34,7 +34,7 @@ return {
       }
     end,
     init = function()
-      -- Auto-enable hls for haskell files (excluded from mason-lspconfig automatic_enable)
+      -- Auto-enable the Nix-provided hls for Haskell files.
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('haskell-lsp-enable', { clear = true }),
         pattern = { 'haskell', 'lhaskell', 'cabal' },
@@ -51,7 +51,7 @@ return {
     'mfussenegger/nvim-dap',
     ft = 'haskell',
     config = function()
-      local dap = require('dap')
+      local dap = require 'dap'
       dap.adapters.haskell = {
         type = 'executable',
         command = 'haskell-debug-adapter',
@@ -65,12 +65,12 @@ return {
           workspace = '${workspaceFolder}',
           startup = '${file}',
           stopOnEntry = true,
-          logFile = vim.fn.stdpath('data') .. '/haskell-dap.log',
+          logFile = vim.fn.stdpath 'data' .. '/haskell-dap.log',
           logLevel = 'WARNING',
           ghciEnv = vim.empty_dict(),
           ghciPrompt = 'λ: ',
           ghciInitialPrompt = 'λ: ',
-          ghciCmd = 'cabal repl --with-compiler=gdc --repl-no-load --builddir=' .. vim.fn.stdpath('data') .. '/haskell-dap-dist',
+          ghciCmd = 'cabal repl --with-compiler=gdc --repl-no-load --builddir=' .. vim.fn.stdpath 'data' .. '/haskell-dap-dist',
         },
       }
     end,
@@ -81,13 +81,12 @@ return {
     'neovim/nvim-lspconfig',
     init = function()
       vim.keymap.set('n', 'K', function()
-        if vim.lsp.buf_is_attached(0) or not vim.tbl_isempty(vim.lsp.get_clients({ bufnr = 0 })) then
+        if vim.lsp.buf_is_attached(0) or not vim.tbl_isempty(vim.lsp.get_clients { bufnr = 0 }) then
           vim.lsp.buf.hover()
         else
-          vim.cmd('Man ' .. vim.fn.expand('<cword>'))
+          vim.cmd('Man ' .. vim.fn.expand '<cword>')
         end
       end, { desc = 'LSP Hover or Man', silent = true })
     end,
   },
-
 }

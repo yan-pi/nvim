@@ -10,7 +10,6 @@
 --   * treesitter         -> syntax highlighting
 --
 -- Nix installs: python3, ruff, basedpyright, debugpy
--- Mason installs: debugpy (if not in Nix)
 
 return {
   -- LSP: ruff (linting, formatting, imports) + basedpyright (type checking)
@@ -59,12 +58,22 @@ return {
     end,
   },
 
+  -- DAP: use the Nix-provided debugpy adapter.
+  {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = { 'mfussenegger/nvim-dap' },
+    config = function()
+      require('dap-python').setup 'debugpy-adapter'
+    end,
+  },
+
   -- Venv: venv-selector for virtual environment management
   {
     'linux-cultist/venv-selector.nvim',
     dependencies = {
       'neovim/nvim-lspconfig',
-      { 'mfussenegger/nvim-dap-python', ft = 'python' },
+      'mfussenegger/nvim-dap-python',
     },
     branch = 'regexp',
     ft = 'python',
@@ -138,7 +147,7 @@ return {
           if venv then
             print('Active venv: ' .. venv)
           else
-            print('No active virtual environment')
+            print 'No active virtual environment'
           end
         end,
         desc = 'Show Active Python Venv',

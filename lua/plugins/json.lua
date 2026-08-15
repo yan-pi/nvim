@@ -5,8 +5,7 @@
 --   * prettier/biome -> formatter (project-aware)
 --   * treesitter     -> syntax highlighting
 --
--- Nix installs: (JSON is universal)
--- Mason installs: jsonls
+-- Nix installs: vscode-langservers-extracted (jsonls), Biome/Prettier defaults
 
 return {
   -- LSP: jsonls with schema validation

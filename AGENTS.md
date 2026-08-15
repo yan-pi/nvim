@@ -38,13 +38,16 @@ Each plugin category has its own file in `lua/plugins/`:
 
 ### Configured Language Servers
 - **`lua_ls`** - Lua with enhanced completion
-- **`rust_analyzer`** - Rust with Cargo integration, Clippy linting, inlay hints
+- **`rust_analyzer`** - Rust via rustaceanvim
+- **`gopls`** - Go analysis and navigation
 - **`ts_ls`** - TypeScript/JavaScript with workspace detection
-- **`pylsp`** - Python with linting, type checking, auto-imports
+- **`ruff` + `basedpyright`** - Python linting and type checking
 - **`jsonls`** - JSON with schema validation via schemastore
 - **`bashls`** - Shell scripting (Bash, Zsh)
-- **`tailwindcss`** - Tailwind CSS with class completion
-- **`eslint`** - JavaScript/TypeScript linting as LSP
+- **`clangd`** - C/C++ analysis and navigation
+- **`tailwindcss`** - Tailwind CSS class completion
+- **`eslint`** - JavaScript/TypeScript linting
+- **`just`**, **`mdx_analyzer`**, and **`texlab`** - project-file support
 
 ### Formatting Configuration
 Uses Conform.nvim with **project-aware formatter detection**:
@@ -55,12 +58,13 @@ Uses Conform.nvim with **project-aware formatter detection**:
 - **Lua**: `stylua`
 - **Python**: `ruff_format` + `ruff_organize_imports`
 - **Rust**: LSP formatting via `rust_analyzer`
+- **Go**: `gofmt`
 - **Shell**: `shfmt`
 
 **Extensibility**: The `detect_formatter()` helper in `lua/plugins/formatting.lua` makes it easy to add new project-aware formatters.
 
 ### Tool Management
-All language tools are managed through Mason.nvim with automatic installation via `ensure_installed` lists in `lua/plugins/lsp.lua`.
+Language servers, formatters, linters, and debug adapters are installed declaratively by Nix/Home Manager. Neovim resolves them from `PATH`; project-local environments may override the Nix defaults. Neovim must never download missing development tools implicitly.
 
 ## Key Customizations
 
@@ -172,10 +176,11 @@ Full debugging support with visual interface:
 
 ### LSP Operations
 ```vim
-:Mason               " View/install language servers and tools
 :LspInfo            " View active language servers
 :LspRestart         " Restart LSP servers
 ```
+
+Use `darwin-rebuild` from the dotfiles repository to add or update language tools.
 
 ### Formatting
 ```vim
@@ -217,7 +222,7 @@ return {
 ```
 
 ### Adding Language Servers
-Add to the `servers` table in `lua/plugins/lsp.lua`:
+First add the server package to `dotfiles/home/packages.nix`, then add its client configuration to the `servers` table in `lua/plugins/lsp.lua`:
 ```lua
 new_server = {
   settings = {
@@ -240,6 +245,6 @@ Core keymaps are in `lua/core/keymaps.lua`. Plugin-specific keymaps are defined 
 - This configuration targets the latest stable Neovim versions
 - Nerd Font support is enabled via `vim.g.have_nerd_font = true`
 - The configuration uses Lazy.nvim's import system for automatic plugin loading
-- Mason tools are automatically installed based on `ensure_installed` lists
+- External language tools are supplied by the Nix-managed `PATH`
 - All formatters use fallback chains for reliability
 - LSP servers include comprehensive language-specific settings optimized for development

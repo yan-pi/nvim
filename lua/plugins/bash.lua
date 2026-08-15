@@ -5,8 +5,7 @@
 --   * shfmt         -> formatter
 --   * treesitter    -> syntax highlighting
 --
--- Nix installs: (bash is system-provided)
--- Mason installs: bashls, shfmt
+-- Nix installs: bash-language-server, shfmt (bash is system-provided)
 
 return {
   -- LSP: bashls

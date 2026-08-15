@@ -15,8 +15,8 @@ return {
       opts.servers.gopls = {
         settings = {
           gopls = {
-            -- Use gofumpt for stricter formatting
-            gofumpt = true,
+            -- Keep the OSS-safe language default; conform.nvim runs gofmt.
+            gofumpt = false,
 
             -- Enable code lenses for various actions
             codelenses = {
@@ -68,16 +68,22 @@ return {
     end,
   },
 
-  -- Go debugging with Delve (nvim-dap-go simplifies DAP setup)
+  -- Formatting: use the canonical Go formatter as the machine default.
+  {
+    'stevearc/conform.nvim',
+    opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      opts.formatters_by_ft.go = { 'gofmt' }
+    end,
+  },
+
+  -- Go debugging with Nix-provided Delve (nvim-dap-go simplifies DAP setup)
   {
     'leoluz/nvim-dap-go',
     ft = 'go',
     dependencies = { 'mfussenegger/nvim-dap' },
     config = function()
       require('dap-go').setup {
-        -- Uses go-debug-adapter installed via Mason
-        -- Automatically configures Delve debug adapter
-
         dap_configurations = {
           {
             type = 'go',
@@ -120,8 +126,7 @@ return {
 
         -- Delve CLI configuration
         delve = {
-          -- Path to Delve (leave nil to use go-debug-adapter from Mason)
-          path = nil,
+          path = 'dlv',
           -- Delve initialization parameters
           initialize_timeout_sec = 20,
           port = '${port}',
@@ -131,5 +136,4 @@ return {
       }
     end,
   },
-
 }

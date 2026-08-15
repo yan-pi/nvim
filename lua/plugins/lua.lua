@@ -6,8 +6,7 @@
 --   * stylua         -> formatter
 --   * treesitter     -> syntax highlighting (lua, luadoc)
 --
--- Nix installs: lua5_4
--- Mason installs: lua_ls, stylua
+-- Nix installs: lua5_4, lua-language-server, stylua
 
 return {
   -- LSP: lazydev for Neovim config annotations

@@ -6,7 +6,7 @@
 --   * codelldb           -> debugging via DAP
 --   * treesitter         -> syntax highlighting (c is core; cpp added here)
 --
--- Mason installs: clangd, clang-format, codelldb
+-- Nix installs: clangd, clang-format, and a codelldb PATH wrapper
 
 return {
   -- LSP: clangd for C/C++
@@ -67,63 +67,6 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { 'cpp' })
-    end,
-  },
-
-  -- DAP: C/C++ debugging via codelldb
-  {
-    'mfussenegger/nvim-dap',
-    config = function()
-      local dap = require 'dap'
-
-      -- codelldb adapter shared by C/C++ (Rust uses rustaceanvim's own adapter)
-      dap.adapters.codelldb = {
-        type = 'server',
-        port = '${port}',
-        executable = {
-          command = 'codelldb',
-          args = { '--port', '${port}' },
-        },
-      }
-
-      local cpp_configs = {
-        {
-          name = 'Launch current file',
-          type = 'codelldb',
-          request = 'launch',
-          program = function()
-            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-          end,
-          cwd = '${workspaceFolder}',
-          stopOnEntry = false,
-        },
-        {
-          name = 'Launch with arguments',
-          type = 'codelldb',
-          request = 'launch',
-          program = function()
-            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-          end,
-          args = function()
-            local input = vim.fn.input 'Program arguments: '
-            return vim.split(input, ' ', { trimempty = true })
-          end,
-          cwd = '${workspaceFolder}',
-          stopOnEntry = false,
-        },
-        {
-          name = 'Attach to process',
-          type = 'codelldb',
-          request = 'attach',
-          pid = require('dap.utils').pick_process,
-          cwd = '${workspaceFolder}',
-        },
-      }
-
-      dap.configurations.c = cpp_configs
-      dap.configurations.cpp = cpp_configs
-      dap.configurations.objc = cpp_configs
-      dap.configurations.objcpp = cpp_configs
     end,
   },
 }

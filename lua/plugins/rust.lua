@@ -221,6 +221,6 @@ return {
     end,
   },
 
-  -- codelldb is Nix-managed (not a Mason package)
+  -- codelldb is provided by the Nix-managed PATH wrapper.
   -- See dotfiles/home/packages.nix for installation
 }

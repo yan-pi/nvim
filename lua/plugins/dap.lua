@@ -1,6 +1,6 @@
 -- Debug Adapter Protocol (DAP) configuration
 -- Provides visual debugging interface and core DAP functionality
--- Language-specific DAP configurations are in respective files (go.lua, javascript.lua, rust.lua)
+-- Direct adapters are configured here; specialized integrations stay in go.lua, python.lua, and rust.lua.
 
 return {
   -- Core DAP plugin
@@ -218,7 +218,7 @@ return {
       only_first_definition = true, -- Only show virtual text at first definition
       all_references = false, -- Show virtual text on all references (not just first)
       clear_on_continue = false, -- Clear virtual text on "continue"
-      
+
       -- Customize virtual text display
       display_callback = function(variable, buf, stackframe, node, options)
         if options.virt_text_pos == 'inline' then
@@ -238,29 +238,69 @@ return {
     },
   },
 
-  -- JavaScript/TypeScript debugging via vscode-js-debug
+  -- Direct Nix-provided adapters for C/C++ and JavaScript/TypeScript.
   {
     'mfussenegger/nvim-dap',
     config = function()
       local dap = require 'dap'
 
-      -- Only configure if js-debug-adapter is installed
-      local ok, mason_registry = pcall(require, 'mason-registry')
-      if not ok or not mason_registry.is_installed 'js-debug-adapter' then
-        return
-      end
+      -- codelldb is shared by C/C++; rustaceanvim owns the Rust adapter.
+      dap.adapters.codelldb = {
+        type = 'server',
+        port = '${port}',
+        executable = {
+          command = 'codelldb',
+          args = { '--port', '${port}' },
+        },
+      }
 
-      -- Use Mason registry API to get installation path
-      local js_debug_package = mason_registry.get_package 'js-debug-adapter'
-      local js_debug_path = js_debug_package:get_install_path() .. '/js-debug/src/dapDebugServer.js'
+      local cpp_configs = {
+        {
+          name = 'Launch current file',
+          type = 'codelldb',
+          request = 'launch',
+          program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+          cwd = '${workspaceFolder}',
+          stopOnEntry = false,
+        },
+        {
+          name = 'Launch with arguments',
+          type = 'codelldb',
+          request = 'launch',
+          program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+          args = function()
+            local input = vim.fn.input 'Program arguments: '
+            return vim.split(input, ' ', { trimempty = true })
+          end,
+          cwd = '${workspaceFolder}',
+          stopOnEntry = false,
+        },
+        {
+          name = 'Attach to process',
+          type = 'codelldb',
+          request = 'attach',
+          pid = require('dap.utils').pick_process,
+          cwd = '${workspaceFolder}',
+        },
+      }
 
+      dap.configurations.c = cpp_configs
+      dap.configurations.cpp = cpp_configs
+      dap.configurations.objc = cpp_configs
+      dap.configurations.objcpp = cpp_configs
+
+      -- vscode-js-debug is installed by Nix and exposes the DAP server on PATH.
       dap.adapters['pwa-node'] = {
         type = 'server',
         host = 'localhost',
         port = '${port}',
         executable = {
-          command = 'node',
-          args = { js_debug_path, '${port}' },
+          command = 'js-debug',
+          args = { '${port}' },
         },
       }
 

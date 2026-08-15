@@ -10,8 +10,7 @@
 --   * neotest-jest/vitest -> testing
 --   * neogen             -> doc generation (jsdoc/tsdoc)
 --
--- Nix installs: nodejs
--- Mason installs: js-debug-adapter
+-- Nix installs: nodejs, TypeScript/ESLint/Tailwind LSPs, formatters, js-debug
 
 return {
   -- LSP: ts_ls, eslint, tailwindcss
@@ -74,10 +73,16 @@ return {
       -- Tailwind CSS
       opts.servers.tailwindcss = {
         filetypes = {
-          'css', 'scss', 'sass', 'html',
-          'javascript', 'javascriptreact',
-          'typescript', 'typescriptreact',
-          'vue', 'svelte',
+          'css',
+          'scss',
+          'sass',
+          'html',
+          'javascript',
+          'javascriptreact',
+          'typescript',
+          'typescriptreact',
+          'vue',
+          'svelte',
         },
         settings = {
           tailwindCSS = {

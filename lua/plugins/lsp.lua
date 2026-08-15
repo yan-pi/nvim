@@ -5,18 +5,29 @@ local FIDGET_MAX_PROGRESS_ITEMS = 5 -- Max concurrent progress notifications to 
 local FIDGET_DONE_MESSAGE_TTL_SEC = 2 -- How long to keep "done" messages visible (seconds)
 local FIDGET_PROGRESS_ANIMATION_PERIOD = 1 -- Animation speed for progress indicator
 
+local function nix_typescript_sdk()
+  local executable = vim.fn.exepath 'tsserver'
+  local resolved = executable ~= '' and vim.uv.fs_realpath(executable) or nil
+  if not resolved then
+    return nil
+  end
+
+  local package_root = vim.fs.dirname(vim.fs.dirname(resolved))
+  local sdk = vim.fs.joinpath(package_root, 'lib', 'node_modules', 'typescript', 'lib')
+  return vim.fn.isdirectory(sdk) == 1 and sdk or nil
+end
+
 return {
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
+    init = function()
+      vim.filetype.add { extension = { mdx = 'mdx' } }
+    end,
     dependencies = {
-      -- Automatically install LSPs and related tools to stdpath for Neovim
-      -- Mason must be loaded before its dependents so we need to set it up here.
-      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'mason-org/mason.nvim', opts = {} },
-      'mason-org/mason-lspconfig.nvim',
-      'mason-org/mason-tool-installer.nvim',
+      -- Language servers are installed declaratively by Nix/Home Manager and
+      -- resolved from PATH. Project environments may override those defaults.
 
       -- Useful status updates for LSP progress
       {
@@ -63,7 +74,7 @@ return {
       -- Reduce LSP log noise (only show warnings and errors)
       -- Wrapped in pcall for cross-version compatibility
       pcall(function()
-        require('vim.lsp.log').set_level('WARN')
+        require('vim.lsp.log').set_level 'WARN'
       end)
 
       -- Brief aside: **What is LSP?**
@@ -86,7 +97,7 @@ return {
       --  - and more!
       --
       -- Thus, Language Servers are external tools that must be installed separately from
-      -- Neovim. This is where `mason` and related plugins come into play.
+      -- Neovim. This setup obtains them from the project environment or Nix-managed PATH.
       --
       -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
@@ -103,7 +114,7 @@ return {
           --
           -- In this case, we create a function that lets us more easily define mappings specific
           -- for LSP related items. It sets the mode, buffer and description for us each time.
-          
+
           --- Helper to create LSP-specific keymaps with automatic buffer scoping
           --- @param keys string Key sequence to map
           --- @param func function|string Function to execute or command string
@@ -263,17 +274,9 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = vim.tbl_deep_extend('force', {
         -- rust_analyzer is owned by rustaceanvim (lua/plugins/rust.lua).
-        -- Listed here so Mason installs the binary and capabilities are
-        -- registered, but auto-enable is excluded below — rustaceanvim
-        -- spawns its own configured instance.
+        -- Keep it registered for shared capabilities, but rustaceanvim starts
+        -- the Nix-provided server process.
         rust_analyzer = {},
-
-        -- GitHub Actions YAML language server
-        -- Provides validation and completion for GitHub workflow files
-        gh_actions_ls = {
-          filetypes = { 'yaml.github' }, -- Only for .github/workflows/*.yml
-          settings = {},
-        },
 
         -- Justfile language server (similar to Makefiles)
         -- Provides syntax highlighting and validation for Justfiles
@@ -287,6 +290,15 @@ return {
         mdx_analyzer = {
           filetypes = { 'mdx' },
           settings = {},
+          capabilities = {
+            workspace = { didChangeWatchedFiles = { dynamicRegistration = false } },
+          },
+          before_init = function(_, config)
+            config.init_options = config.init_options or {}
+            config.init_options.typescript = config.init_options.typescript or {}
+            local project_sdk = require('lspconfig.util').get_typescript_server_path(config.root_dir)
+            config.init_options.typescript.tsdk = project_sdk ~= '' and project_sdk or nix_typescript_sdk()
+          end,
         },
 
         -- LaTeX language server: chktex diagnostics, label/citation completion,
@@ -315,11 +327,6 @@ return {
         },
       }, opts.servers or {})
 
-      -- LSP installation: mason-lspconfig.ensure_installed below derives
-      -- from vim.tbl_keys(servers) — single source of truth.
-      -- Non-LSP tools (formatters, linters, DAP adapters) are managed in
-      -- lua/plugins/mason.lua via mason-tool-installer.
-
       -- Register each server's config with the new vim.lsp.config API (nvim 0.11+).
       -- Default settings (cmd, root_markers, filetypes) come from nvim-lspconfig's
       -- bundled configs; the table here merges capabilities and overrides on top.
@@ -328,24 +335,12 @@ return {
         vim.lsp.config(name, cfg)
       end
 
-      -- Enable hls manually (managed by nix, not mason)
-      vim.lsp.enable('hls')
-
-      -- Filter out nix-managed LSPs from Mason auto-installation
-      local mason_servers = vim.tbl_filter(function(name)
-        return name ~= 'hls' and name ~= 'leanls'
+      -- Enable general-purpose servers directly. Specialized language plugins
+      -- own rust_analyzer, hls, leanls, and r_language_server lifecycles.
+      local enabled_servers = vim.tbl_filter(function(name)
+        return name ~= 'rust_analyzer' and name ~= 'hls' and name ~= 'leanls'
       end, vim.tbl_keys(servers))
-
-      require('mason-lspconfig').setup {
-        ensure_installed = mason_servers,
-        automatic_installation = false,
-        -- Auto-enable every installed LSP except rust_analyzer
-        -- (rustaceanvim owns that one).
-        automatic_enable = {
-          exclude = { 'rust_analyzer' }, -- rustaceanvim owns this one
-        },
-      }
+      vim.lsp.enable(enabled_servers)
     end,
   },
-
 }

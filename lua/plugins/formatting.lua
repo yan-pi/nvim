@@ -59,10 +59,6 @@ return {
         prettier = {
           prepend_args = { '--config-precedence', 'prefer-file' },
         },
-        -- Configure prettierd (faster prettier daemon) similarly
-        prettierd = {
-          prepend_args = { '--config-precedence', 'prefer-file' },
-        },
       },
       format_on_save = function(bufnr)
         -- Check buffer-local toggle first (nil = enabled, false = disabled).

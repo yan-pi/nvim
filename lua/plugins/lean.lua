@@ -76,7 +76,7 @@ return {
     end,
   },
 
-  -- Auto-enable leanls for lean files (not managed by mason-lspconfig)
+  -- Auto-enable the Nix-provided leanls for Lean files.
   {
     'neovim/nvim-lspconfig',
     init = function()
