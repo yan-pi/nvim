@@ -1,6 +1,27 @@
 -- Enhanced Rust development with crates.nvim and rustaceanvim
 
 return {
+  -- Formatter: rustfmt from the Nix-managed PATH/rustup toolchain
+  {
+    'stevearc/conform.nvim',
+    opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      opts.formatters_by_ft.rust = { 'rustfmt' }
+
+      opts.formatters = opts.formatters or {}
+      opts.formatters.rustfmt = {
+        -- Run rustup from the project root so rust-toolchain files are honored.
+        cwd = require('conform.util').root_file {
+          'Cargo.toml',
+          'rust-toolchain.toml',
+          'rust-toolchain',
+          'rustfmt.toml',
+          '.rustfmt.toml',
+        },
+      }
+    end,
+  },
+
   -- Inline crate version display and management for Cargo.toml
   {
     'saecki/crates.nvim',
@@ -127,24 +148,6 @@ return {
           vim.keymap.set('n', '<leader>rj', function()
             vim.cmd.RustLsp 'joinLines'
           end, { desc = '[R]ust [J]oin lines', buffer = bufnr })
-
-          -- Format on save via LSP (rust-analyzer).
-          -- conform.nvim is configured with lsp_format = 'never', so Rust
-          -- formatting must be handled explicitly here.
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            buffer = bufnr,
-            callback = function()
-              -- Buffer-local opt-out (nil = enabled, false = disabled).
-              -- Matches conform.nvim's <leader>uF buffer toggle in formatting.lua.
-              if vim.b.autoformat_enabled == false then
-                return
-              end
-              if not vim.g.autoformat_enabled then
-                return
-              end
-              vim.lsp.buf.format { async = false, timeout_ms = 500 }
-            end,
-          })
         end,
         default_settings = {
           ['rust-analyzer'] = {

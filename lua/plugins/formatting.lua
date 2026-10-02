@@ -87,7 +87,8 @@ return {
         end
       end,
       -- formatters_by_ft is managed by language-specific files:
-      -- lua.lua, python.lua, bash.lua, json.lua, yaml.lua, web.lua, markdown.lua, latex.lua, haskell.lua
+      -- lua.lua, python.lua, bash.lua, json.lua, yaml.lua, web.lua, markdown.lua,
+      -- latex.lua, haskell.lua, rust.lua
     },
   },
 }
