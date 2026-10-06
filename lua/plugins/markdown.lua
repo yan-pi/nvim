@@ -36,6 +36,23 @@ return {
     end,
   },
   {
+    '3rd/image.nvim',
+    build = false,
+    ft = { 'markdown' },
+    opts = {
+      backend = 'kitty',
+      processor = 'magick_cli',
+      integrations = {
+        markdown = {
+          enabled = true,
+          only_render_image_at_cursor = false,
+          only_render_image_at_cursor_mode = 'inline',
+          floating_windows = false,
+        },
+      },
+    },
+  },
+  {
     'MeanderingProgrammer/render-markdown.nvim',
     opts = {
       file_types = { 'markdown', 'Avante' },
