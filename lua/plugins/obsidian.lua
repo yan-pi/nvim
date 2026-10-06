@@ -1,4 +1,6 @@
 -- lua/plugins/obsidian.lua
+local workflow = require 'vault.obsidian_workflow'
+
 return {
   {
     'obsidian-nvim/obsidian.nvim', -- actively maintained fork
@@ -10,49 +12,43 @@ return {
         { name = 'Vault', path = '~/vault' },
       },
 
-      notes_subdir = nil,
-      new_notes_location = 'current_dir',
+      notes_subdir = '00-Inbox',
+      new_notes_location = 'notes_subdir',
       legacy_commands = false,
 
-      -- Folgezettel ID function (DDSSNN)
-      note_id_func = function(title, path)
-        local scandir = require 'plenary.scandir'
-        local dir = vim.fn.fnamemodify(path, ':t')
-        local dd = dir:match '^(%d%d)' or '10'
-        local parent = vim.fn.fnamemodify(path, ':h:t')
-        local ss = parent:match '^%d%d(%d%d)' or '01'
-        local max_nn = 0
-        for _, f in ipairs(scandir.scan_dir(path, { depth = 1 })) do
-          local base = vim.fn.fnamemodify(f, ':t')
-          local nn = base:match('^' .. dd .. ss .. '(%d%d)')
-          if nn then
-            max_nn = math.max(max_nn, tonumber(nn))
-          end
-        end
-        local next_nn = string.format('%02d', max_nn + 1)
-        local slug = (title and #title > 0) and ('-' .. title:lower():gsub('%W+', '-')) or ''
-        return dd .. ss .. next_nn .. slug
+      -- Generic Obsidian notes go to Inbox with a readable filename.
+      -- Semantic concept IDs are created by vault.obsidian_workflow.
+      note_id_func = function(title)
+        local slug = workflow.slugify(title)
+        return slug ~= '' and slug or 'untitled'
       end,
 
-      -- Frontmatter (new API)
       frontmatter = {
         enabled = true,
-        func = function(note)
-          return {
-            id = note.id,
-            title = note.title or '',
-            tags = note.tags or {},
-            aliases = note.aliases or {},
-            created = os.date '%Y-%m-%d',
-            modified = os.date '%Y-%m-%d',
-          }
-        end,
-        sort = { 'id', 'title', 'tags', 'aliases', 'created', 'modified' },
+        func = workflow.frontmatter,
+        sort = {
+          'id',
+          'type',
+          'title',
+          'primary_topic',
+          'topics',
+          'aliases',
+          'legacy_id',
+          'status',
+          'source_type',
+          'author',
+          'url',
+          'concepts',
+          'created',
+          'modified',
+          'captured',
+          'tags',
+        },
       },
 
       -- Daily notes
       daily_notes = {
-        folder = '40-Logbook/4001-Daily',
+        folder = '40-Logbook/Daily',
         date_format = '%Y-%m-%d',
         template = '[YYYY-MM-DD].md',
       },
@@ -68,9 +64,9 @@ return {
         min_chars = 2,
       },
 
-      -- Link style (new API, replaces wiki_link_func)
+      -- The vault uses Obsidian wikilinks.
       link = {
-        style = 'markdown',
+        style = 'wiki',
       },
 
       -- Disable UI features (avoids conceallevel warning)
@@ -82,16 +78,21 @@ return {
     -- Set up keymaps after plugin loads
     config = function(_, opts)
       require('obsidian').setup(opts)
+      workflow.setup()
 
-      -- Keymaps for finding notes
+      -- Navigation and search
       vim.keymap.set('n', '<leader>zf', '<cmd>Obsidian quick_switch<cr>', { desc = 'Find note' })
       vim.keymap.set('n', '<leader>zs', '<cmd>Obsidian search<cr>', { desc = 'Search notes' })
       vim.keymap.set('n', '<leader>zb', '<cmd>Obsidian backlinks<cr>', { desc = 'Show backlinks' })
       vim.keymap.set('n', '<leader>zl', '<cmd>Obsidian links<cr>', { desc = 'Show links' })
-      vim.keymap.set('n', '<leader>zg', '<cmd>Obsidian tags<cr>', { desc = 'Browse tags' })
+      vim.keymap.set('n', '<leader>zt', '<cmd>Obsidian tags<cr>', { desc = 'Browse tags' })
 
-      -- Keymaps for creating notes
-      vim.keymap.set('n', '<leader>zn', '<cmd>Obsidian new<cr>', { desc = 'New note' })
+      -- Vault workflow
+      vim.keymap.set('n', '<leader>zn', '<cmd>VaultCapture<cr>', { desc = 'Capture in Inbox' })
+      vim.keymap.set('n', '<leader>zr', '<cmd>VaultSource<cr>', { desc = 'Create source note' })
+      vim.keymap.set('n', '<leader>zc', '<cmd>VaultConceptRelated<cr>', { desc = 'Create related concept' })
+      vim.keymap.set('n', '<leader>zC', '<cmd>VaultConceptChild<cr>', { desc = 'Create child concept' })
+      vim.keymap.set('n', '<leader>zg', '<cmd>VaultConceptFamily<cr>', { desc = 'Create concept family' })
       vim.keymap.set('n', '<leader>zd', '<cmd>Obsidian today<cr>', { desc = 'Today daily note' })
       vim.keymap.set('n', '<leader>zy', '<cmd>Obsidian yesterday<cr>', { desc = 'Yesterday daily note' })
       vim.keymap.set('n', '<leader>zo', '<cmd>Obsidian open<cr>', { desc = 'Open in Obsidian app' })
@@ -100,9 +101,8 @@ return {
       vim.keymap.set('n', 'gf', function()
         if require('obsidian').util.cursor_on_markdown_link() then
           return '<cmd>Obsidian follow_link<cr>'
-        else
-          return 'gf'
         end
+        return 'gf'
       end, { expr = true, desc = 'Follow link' })
     end,
   },
