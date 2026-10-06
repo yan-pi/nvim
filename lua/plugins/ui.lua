@@ -1,251 +1,46 @@
 return {
-  -- Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    event = 'VimEnter',
     opts = {
-      -- delay between pressing a key and opening which-key (milliseconds)
-      -- this setting is independent of vim.o.timeoutlen
       delay = 0,
-      icons = {
-        -- set icon mappings to true if you have a Nerd Font
-        mappings = vim.g.have_nerd_font,
-        -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
-        -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
-        keys = vim.g.have_nerd_font and {} or {
-          Up = '<Up> ',
-          Down = '<Down> ',
-          Left = '<Left> ',
-          Right = '<Right> ',
-          C = '<C-…> ',
-          M = '<M-…> ',
-          D = '<D-…> ',
-          S = '<S-…> ',
-          CR = '<CR> ',
-          Esc = '<Esc> ',
-          ScrollWheelDown = '<ScrollWheelDown> ',
-          ScrollWheelUp = '<ScrollWheelUp> ',
-          NL = '<NL> ',
-          BS = '<BS> ',
-          Space = '<Space> ',
-          Tab = '<Tab> ',
-          F1 = '<F1>',
-          F2 = '<F2>',
-          F3 = '<F3>',
-          F4 = '<F4>',
-          F5 = '<F5>',
-          F6 = '<F6>',
-          F7 = '<F7>',
-          F8 = '<F8>',
-          F9 = '<F9>',
-          F10 = '<F10>',
-          F11 = '<F11>',
-          F12 = '<F12>',
-        },
-      },
-
-      -- Document existing key chains
+      icons = { mappings = false, rules = false },
       spec = {
-        { '<leader>f', group = '[F]ind & Files', icon = '🔍' },
-        { '<leader>s', group = '[S]earch & Navigation', icon = '🔎' },
-        { '<leader>g', group = '[G]it & GitHub', icon = '📊' },
-        { '<leader>t', group = '[T]abs & Terminal', icon = '📌' },
-        { '<leader>T', group = '[T]esting (neotest)', icon = '🧪' },
-        { '<leader>b', group = '[B]uffer Operations', icon = '📋' },
-        { '<leader>m', group = '[M]arks', icon = '📍' },
-        { '<leader>r', group = '[R]efactoring', icon = '🔧' },
-        { '<leader>d', group = '[D]ebug (DAP)', icon = '🐛' },
-        { '<leader>u', group = '[U]I Toggles & Utils', icon = '⚙️' },
-        { '<leader>e', desc = 'File Explorer (cwd)' },
-        { '<leader>E', desc = 'File Explorer (file)' },
-        { '<leader>z', desc = 'Zen Mode' },
-        { '<leader>c', group = '[C]ode Actions', icon = '💡' },
-        { '\\\\', group = 'Flash (motion)', icon = '⚡' },
-        { '<leader>o', group = '[O]bsidian', icon = '📓' },
-        { '<leader>x', group = 'Trouble & Diagnostics', icon = '⚠️' },
-        { '<leader>O', group = '[O]verseer Tasks', icon = '📝' },
-        { '<leader>1', desc = 'Buffer 1 (tab-scoped)' },
-        { '<leader>2', desc = 'Buffer 2 (tab-scoped)' },
-        { '<leader>3', desc = 'Buffer 3 (tab-scoped)' },
-        { '<leader>4', desc = 'Buffer 4 (tab-scoped)' },
-        { '<leader>5', desc = 'Buffer 5 (tab-scoped)' },
-        { '<leader>6', desc = 'Buffer 6 (tab-scoped)' },
-        { '<leader>7', desc = 'Buffer 7 (tab-scoped)' },
-        { '<leader>8', desc = 'Buffer 8 (tab-scoped)' },
-        { '<leader>9', desc = 'Buffer 9 (tab-scoped)' },
-        { '<Tab>', desc = 'Next buffer (tab-scoped)' },
-        { '<S-Tab>', desc = 'Prev buffer (tab-scoped)' },
+        { '<leader>b', group = 'Buffers' },
+        { '<leader>e', desc = 'File explorer' },
+        { '<leader>E', desc = 'File explorer (cwd)' },
+        { '<leader>f', group = 'Find' },
+        { '<leader>s', group = 'Search' },
+        { '<leader>t', group = 'Tabs & terminal' },
+        { '<leader>th', desc = 'Toggle horizontal terminal' },
+        { '<leader>tv', desc = 'Toggle vertical terminal' },
+        { '<leader>ti', desc = 'Toggle floating terminal' },
+        { '<leader>ta', desc = 'Toggle all terminals' },
+        { '<leader>ts', desc = 'Select terminal' },
+        { '<Tab>', desc = 'Next buffer in tab' },
+        { '<S-Tab>', desc = 'Previous buffer in tab' },
+        { '<leader>1', desc = 'Buffer 1' },
+        { '<leader>2', desc = 'Buffer 2' },
+        { '<leader>3', desc = 'Buffer 3' },
+        { '<leader>4', desc = 'Buffer 4' },
+        { '<leader>5', desc = 'Buffer 5' },
+        { '<leader>6', desc = 'Buffer 6' },
+        { '<leader>7', desc = 'Buffer 7' },
+        { '<leader>8', desc = 'Buffer 8' },
+        { '<leader>9', desc = 'Buffer 9' },
         { '<C-h>', desc = 'Move to left window' },
-        { '<C-l>', desc = 'Move to right window' },
         { '<C-j>', desc = 'Move to lower window' },
         { '<C-k>', desc = 'Move to upper window' },
-        { 'gd', desc = 'Goto Definition (LSP)' },
-        { 'gr', desc = 'Find References (LSP)' },
-        { 'gI', desc = 'Goto Implementation' },
-        { 'gy', desc = 'Goto Type Definition' },
-        { 's', mode = { 'n', 'x', 'o' }, desc = 'Flash jump (2-char)' },
-        { 'S', mode = { 'n', 'x', 'o' }, desc = 'Flash treesitter' },
-        { ']]', desc = 'Next reference (Snacks)' },
-        { '[[', desc = 'Prev reference (Snacks)' },
+        { '<C-l>', desc = 'Move to right window' },
       },
     },
   },
-
   {
     'RRethy/base16-nvim',
-    lazy = false, -- load on startup so colors are ready
-    priority = 1000, -- load before other UI plugins
+    lazy = false,
+    priority = 1000,
     config = function()
-      vim.opt.termguicolors = true
-      -- Pick any from the README list, e.g. "base16-gruvbox-dark-soft"
-      vim.cmd 'colorscheme base16-gruvbox-dark-soft'
-      -- Optional: tweak plugin integrations before setting colorscheme
-      require('base16-colorscheme').with_config {
-        indentblankline = true,
-        notify = true,
-        ts_rainbow = true,
-        cmp = true,
-        illuminate = true,
-        dapui = true,
-      }
+      vim.cmd.colorscheme 'base16-gruvbox-material-dark-hard'
     end,
   },
-
-  -- { 'edeneast/nightfox.nvim' }, -- lazy
-
-  -- {
-  --   'snelling-a/base16.nvim',
-  --   config = function()
-  --     -- Configuration goes here (see Usage section below)
-  --   end,
-  -- },
-
-  -- {
-  --   'morhetz/gruvbox',
-  --   priority = 1000,
-  --   config = function()
-  --     -- Gruvbox configuration
-  --     vim.g.gruvbox_contrast_dark = 'medium' -- soft, medium, hard
-  --     vim.g.gruvbox_contrast_light = 'medium'
-  --     vim.g.gruvbox_italic = 1 -- Disable italics
-  --     vim.g.gruvbox_bold = 1 -- Enable bold
-  --
-  --     -- Load the colorscheme
-  --     vim.cmd.colorscheme 'gruvbox'
-  --   end,
-  -- },
-  --
-  -- Alternative colorschemes (uncomment to use)
-  -- {
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000,
-  --   opts = {
-  --     style = 'night', -- storm, moon, night, day
-  --     styles = {
-  --       comments = { italic = true },
-  --       keywords = { italic = true },
-  --       functions = {},
-  --       variables = {},
-  --     },
-  --     on_colors = function(colors)
-  --       -- Customize colors if needed
-  --     end,
-  --   },
-  --   -- Uncomment to activate:
-  --   -- config = function()
-  --   --   require('tokyonight').setup(require('tokyonight').opts or {})
-  --   --   vim.cmd.colorscheme 'tokyonight-night'
-  --   -- end,
-  -- },
-
-  -- {
-  --   'sainnhe/gruvbox-material',
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     -- Configure Gruvbox Material for both dark and light backgrounds
-  --     vim.g.gruvbox_material_enable_italic = true
-  --     vim.g.gruvbox_material_background = vim.o.background
-  --     if vim.o.background == 'dark' then
-  --       vim.g.gruvbox_material_foreground = 'material'
-  --       vim.g.gruvbox_material_ui_contrast = 'high'
-  --       vim.g.gruvbox_material_statusline_style = 'mix'
-  --     else
-  --       vim.g.gruvbox_material_foreground = 'mix'
-  --       vim.g.gruvbox_material_ui_contrast = 'low'
-  --       vim.g.gruvbox_material_statusline_style = 'original'
-  --     end
-  --     vim.cmd.colorscheme 'gruvbox-material'
-  --   end,
-  -- },
-
-  -- {
-  --   'rebelot/kanagawa.nvim',
-  --   priority = 1000,
-  --   opts = {
-  --     compile = false,
-  --     undercurl = true,
-  --     commentStyle = { italic = true },
-  --     functionStyle = {},
-  --     keywordStyle = { italic = true },
-  --     statementStyle = { bold = true },
-  --     typeStyle = {},
-  --     transparent = false,
-  --     dimInactive = false,
-  --     terminalColors = true,
-  --     colors = {
-  --       palette = {},
-  --       theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-  --     },
-  --   },
-  --   -- Uncomment to activate:
-  --   -- config = function(_, opts)
-  --   --   require('kanagawa').setup(opts)
-  --   --   vim.cmd.colorscheme 'kanagawa-wave'
-  --   -- end,
-  -- },
-
-  {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    event = 'VeryLazy',
-    opts = {
-      flavour = 'mocha', -- latte, frappe, macchiato, mocha
-      background = {
-        light = 'latte',
-        dark = 'mocha',
-      },
-      transparent_background = false,
-      show_end_of_buffer = false,
-      term_colors = false,
-      dim_inactive = {
-        enabled = false,
-        shade = 'dark',
-        percentage = 0.15,
-      },
-      no_italic = false, -- Force no italic
-      no_bold = false, -- Force no bold
-      styles = {
-        comments = {},
-        conditionals = {},
-        loops = {},
-        functions = {},
-        keywords = {},
-        strings = {},
-        variables = {},
-        numbers = {},
-        booleans = {},
-        properties = {},
-        types = {},
-        operators = {},
-      },
-      integrations = {
-        cmp = true,
-        gitsigns = true,
-        nvimtree = true,
-        mini = true,
-      },
-    },
-  },
-
 }

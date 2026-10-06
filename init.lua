@@ -1,12 +1,11 @@
--- Load core configuration
+-- Minimal configuration for reading and navigating text and Bash files.
+local config_path = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h')
+vim.opt.rtp:prepend(config_path)
+
 require 'core.options'
 require 'core.keymaps'
 require 'core.autocmds'
-require 'core.lang-toggles'
-require 'core.git'
 
--- [[ Install `lazy.nvim` plugin manager ]]
---    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -16,48 +15,33 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end
 
----@type vim.Option
-local rtp = vim.opt.rtp
-rtp:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath)
 
--- [[ Configure and install plugins ]]
---
---  To check the current status of your plugins, run
---    :Lazy
---
---  You can press `?` in this menu for help. Use `:q` to close the window
---
---  To update plugins you can run
---    :Lazy update
---
--- NOTE: Here is where you install your plugins.
-require('lazy').setup({
-  -- Import plugin configurations from lua/plugins/ directory
-  { import = 'plugins' },
+local plugin_specs = {}
+for _, plugin in ipairs { 'mini', 'snacks', 'ui', 'bufferline', 'terminal' } do
+  vim.list_extend(plugin_specs, require('plugins.' .. plugin))
+end
 
-  -- You can also configure plugins directly here if needed
-  -- Example: { 'some-user/some-plugin', opts = {} }
-}, {
+require('lazy').setup(plugin_specs, {
+  change_detection = { notify = false },
+  checker = { enabled = false },
   ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
+    icons = {
+      cmd = ':',
+      config = 'C',
+      event = 'E',
+      ft = 'F',
+      init = 'I',
+      keys = 'K',
+      plugin = 'P',
+      runtime = 'R',
+      require = 'r',
+      source = 'S',
+      start = '>',
+      task = 'T',
+      lazy = 'L',
     },
   },
 })
 
--- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

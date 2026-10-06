@@ -4,6 +4,7 @@ return {
   {
     'akinsho/toggleterm.nvim',
     version = '*',
+    lazy = true,
     keys = {
       { '<leader>th', desc = '[T]erminal [H]orizontal toggle' },
       { '<leader>tv', desc = '[T]erminal [V]ertical toggle' },
@@ -193,4 +194,3 @@ return {
     end,
   },
 }
-

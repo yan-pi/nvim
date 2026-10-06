@@ -1,250 +1,54 @@
 # AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Scope
 
-## Overview
+This branch is the Kali Linux minimal profile for reading, navigating, and making
+small edits in text and Bash files. Keep the configuration portable and usable
+without a Nerd Font, Nix, Zellij, macOS tools, or development servers.
 
-This is a **modular Neovim configuration** based on kickstart.nvim, evolved from a single-file setup into a well-organized, multi-language development environment. The configuration provides comprehensive LSP support, intelligent formatting, and modern development tools for Rust, JavaScript/TypeScript, Python, Lua, JSON, and other languages.
+## Loaded plugins
 
-## Architecture
+`init.lua` explicitly loads only these plugin modules:
 
-### Core Structure
-- **`init.lua`** - Entry point that loads core modules and initializes Lazy.nvim plugin manager
-- **`lua/core/`** - Foundation configuration (options, keymaps, autocommands)
-- **`lua/plugins/`** - Modular plugin configurations, auto-loaded by Lazy.nvim
-- **`lua/custom/`** - User-specific customizations (preserved from kickstart structure)
-- **`lua/kickstart/`** - Legacy kickstart plugin examples (kept for reference)
+- `mini.nvim`: `mini.files` and `mini.statusline` only.
+- `snacks.nvim`: basic files, grep, buffers, recent files, help, and man pickers.
+- `which-key.nvim`: hints for retained shortcuts.
+- `bufferline.nvim`: tab-scoped buffers.
+- `base16-nvim`: `base16-gruvbox-material-dark-hard`.
+- `toggleterm.nvim`: the existing horizontal, vertical, floating, all-terminal,
+  and terminal-selection binds. It is intentionally included for the user's
+  workflow and lazy-loaded only when invoked.
 
-### Plugin Organization
-Each plugin category has its own file in `lua/plugins/`:
+Do not add LSP, completion, AI, DAP, testing, format-on-save, Treesitter,
+image, Obsidian, or language-specific stacks to this branch.
 
-- **`lsp.lua`** - Language Server Protocol configuration with 8 language servers
-- **`completion.lua`** - Blink.cmp autocompletion with custom Tab/Enter keymaps
-- **`formatting.lua`** - Conform.nvim with project-aware formatter detection (biome vs prettier)
-- **`dap.lua`** - Debug Adapter Protocol with UI, virtual text, and keybindings
-- **`go.lua`** - Go language server (gopls) and debugging (Delve)
-- **`javascript.lua`** - Node.js debugging configuration (vscode-js-debug)
-- **`rust.lua`** - Rust development with rust-analyzer and debugging
-- **`testing.lua`** - Neotest integration for Go, Rust, Python, JS/TS tests
-- **`snacks.lua`** - Snacks.nvim picker for all fuzzy finding (files, grep, LSP symbols, git, etc.)
-- **`treesitter.lua`** - Syntax highlighting and parsing
-- **`ui.lua`** - Appearance (themes, which-key)
-- **`git.lua`** - Git integration via Gitsigns
-- **`editor.lua`** - Editor enhancements (todo-comments, guess-indent)
-- **`mini.lua`** - Mini.nvim modules (files, move, starter, bracketed, indentscope, surround)
-- **`bufferline.lua`** - Tab-scoped buffer management with visual tabline
+## Requirements
 
-## Language Support
+On Kali, install the system prerequisites with:
 
-### Configured Language Servers
-- **`lua_ls`** - Lua with enhanced completion
-- **`rust_analyzer`** - Rust via rustaceanvim
-- **`gopls`** - Go analysis and navigation
-- **`ts_ls`** - TypeScript/JavaScript with workspace detection
-- **`ruff` + `basedpyright`** - Python linting and type checking
-- **`jsonls`** - JSON with schema validation via schemastore
-- **`bashls`** - Shell scripting (Bash, Zsh)
-- **`clangd`** - C/C++ analysis and navigation
-- **`tailwindcss`** - Tailwind CSS class completion
-- **`eslint`** - JavaScript/TypeScript linting
-- **`just`**, **`mdx_analyzer`**, and **`texlab`** - project-file support
-
-### Formatting Configuration
-Uses Conform.nvim with **project-aware formatter detection**:
-- **JS/TS/HTML/CSS/JSON/YAML/Markdown**: Detects `biome.json` or `.prettierrc` in project root
-  - If `biome.json` found → uses `biome`
-  - If `.prettierrc*` found → uses `prettierd` → `prettier` (fallback chain)
-  - Otherwise → uses `prettierd` → `prettier` (default)
-- **Lua**: `stylua`
-- **Python**: `ruff_format` + `ruff_organize_imports`
-- **Rust**: LSP formatting via `rust_analyzer`
-- **Go**: `gofmt`
-- **Shell**: `shfmt`
-
-**Extensibility**: The `detect_formatter()` helper in `lua/plugins/formatting.lua` makes it easy to add new project-aware formatters.
-
-### Tool Management
-Language servers, formatters, linters, and debug adapters are installed declaratively by Nix/Home Manager. Neovim resolves them from `PATH`; project-local environments may override the Nix defaults. Neovim must never download missing development tools implicitly.
-
-## Key Customizations
-
-### Completion (Blink.cmp)
-Custom keymaps configured for intuitive completion:
-- **Tab**: Navigate to next completion item
-- **Shift+Tab**: Navigate to previous completion item
-- **Enter**: Accept completion
-- **Ctrl+Space**: Show/hide completion menu
-- Intelligent fallback behavior when no completion menu is active
-
-### File Management
-Mini.files integration provides a modern file explorer experience, replacing traditional netrw.
-
-### Image Viewer
-Snacks.nvim image viewer is enabled, supporting inline image rendering using Kitty Graphics Protocol (compatible with Ghostty terminal).
-
-**Supported formats:**
-- Images: PNG, JPG, GIF, WebP, BMP
-- Videos: MP4, MOV (limited support)
-- Documents: PDF (converted to images)
-
-**Usage:** Open any image file in Neovim: `nvim screenshot.png`
-
-### Navigation & Search
-All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope):
-
-**Files & Buffers:**
-- `<leader><space>` - Smart file finder (git-aware)
-- `<leader>ff` - Find files
-- `<leader>fr` - Recent files
-- `<leader>,` - Buffer switcher
-- `<leader>bt` - Tab-scoped buffers
-- `<leader>fp` - Project switcher
-
-**Symbol Navigation:**
-- `<leader>a` - Document symbols (LSP, replaces Aerial)
-- `<leader>A` - Workspace symbols (LSP)
-- `<leader>ss` - LSP symbols
-- `<leader>sS` - LSP workspace symbols
-- `gd` - Go to definition
-- `gr` - Find references
-- `gI` - Go to implementation
-- `gy` - Go to type definition
-
-**Search:**
-- `<leader>/` - Live grep
-- `<leader>sg` - Grep files
-- `<leader>sw` - Search word under cursor
-- `<leader>sb` - Search buffer lines
-- `<leader>sB` - Grep open buffers
-
-**Git:**
-- `<leader>gb` - Git branches
-- `<leader>gl` - Git log
-- `<leader>gs` - Git status
-- `<leader>gd` - Git diff
-- `<leader>gf` - Git log file
-
-**GitHub CLI:**
-- `<leader>gi` - GitHub issues (open)
-- `<leader>gI` - GitHub issues (all)
-- `<leader>gp` - GitHub pull requests (open)
-- `<leader>gP` - GitHub pull requests (all)
-
-**Note:** Requires `gh` CLI installed and authenticated (`gh auth login`)
-
-**Vim Internals:**
-- `<leader>sc` - Commands
-- `<leader>sk` - Keymaps
-- `<leader>sh` - Help tags
-- `<leader>sm` - Man pages
-- `<leader>s"` - Registers
-- `<leader>s/` - Search history
-
-### Debugging (DAP)
-Full debugging support with visual interface:
-- **Go**: Delve debugger via nvim-dap-go
-- **JavaScript/TypeScript**: Node.js debugging via vscode-js-debug
-- **Rust**: CodeLLDB via rustaceanvim
-- **Python**: debugpy via nvim-dap-python
-
-**DAP UI**: Bottom panel layout (customizable) with auto-open/close  
-**Virtual Text**: Inline variable values during debugging
-
-#### Debug Keybindings (all under `<leader>d`)
-- `<leader>dc` - Continue/Start debugging
-- `<leader>ds` - Step over
-- `<leader>di` - Step into
-- `<leader>do` - Step out
-- `<leader>dx` - Terminate session
-- `<leader>db` - Toggle breakpoint
-- `<leader>dB` - Conditional breakpoint
-- `<leader>dl` - Log point
-- `<leader>du` - Toggle DAP UI
-- `<leader>dr` - Toggle REPL
-- `<leader>dk` - Hover/eval expression
-- `<leader>dp` - Preview value
-
-## Development Commands
-
-### Plugin Management
-```vim
-:Lazy                 " View plugin status
-:Lazy update         " Update all plugins
-:Lazy clean          " Remove unused plugins
-:Lazy profile        " View startup performance
+```sh
+sudo apt update
+sudo apt install neovim git ripgrep
 ```
 
-### LSP Operations
-```vim
-:LspInfo            " View active language servers
-:LspRestart         " Restart LSP servers
+Neovim plugins are installed by Lazy.nvim on first startup. Development tools
+are never downloaded or managed by this configuration. The generated
+`lazy-lock.json` is ignored because plugin state is local to this profile.
+
+## Validation
+
+Run the isolated test suite from this worktree:
+
+```sh
+NVIM_APPNAME=nvim-kali-test ./tests/kali-minimal.sh
 ```
 
-Use `darwin-rebuild` from the dotfiles repository to add or update language tools.
+For a manual startup, use an app name explicitly so this profile cannot touch a
+different Neovim data directory:
 
-### Formatting
-```vim
-<leader>f           " Format current buffer
-<leader>uf          " Toggle auto-format on save
-:ConformInfo        " View available formatters
+```sh
+NVIM_APPNAME=nvim-kali nvim -u /path/to/nvim-kali/init.lua
 ```
 
-### Debugging
-```vim
-<leader>dc          " Continue/Start debugging
-<leader>ds          " Step over
-<leader>di          " Step into
-<leader>do          " Step out
-<leader>dx          " Terminate session
-<leader>db          " Toggle breakpoint
-<leader>du          " Toggle DAP UI
-```
-
-### Health Checks
-```vim
-:checkhealth        " General health check
-:checkhealth lazy   " Lazy.nvim specific check
-:checkhealth lsp    " LSP configuration check
-```
-
-## Configuration Patterns
-
-### Adding New Plugins
-Create new files in `lua/plugins/` - they are automatically loaded:
-```lua
--- lua/plugins/new-plugin.lua
-return {
-  'author/plugin-name',
-  opts = {
-    -- plugin options
-  },
-}
-```
-
-### Adding Language Servers
-First add the server package to `dotfiles/home/packages.nix`, then add its client configuration to the `servers` table in `lua/plugins/lsp.lua`:
-```lua
-new_server = {
-  settings = {
-    -- server-specific settings
-  },
-},
-```
-
-### Adding Formatters
-Add to `formatters_by_ft` in `lua/plugins/formatting.lua`:
-```lua
-filetype = { 'formatter1', 'formatter2', stop_after_first = true },
-```
-
-### Keymaps
-Core keymaps are in `lua/core/keymaps.lua`. Plugin-specific keymaps are defined within their respective plugin configurations.
-
-## Important Notes
-
-- This configuration targets the latest stable Neovim versions
-- Nerd Font support is enabled via `vim.g.have_nerd_font = true`
-- The configuration uses Lazy.nvim's import system for automatic plugin loading
-- External language tools are supplied by the Nix-managed `PATH`
-- All formatters use fallback chains for reliability
-- LSP servers include comprehensive language-specific settings optimized for development
+Run `stylua --check init.lua lua tests` when Stylua is available. Do not run the
+main profile's `nvim` without `NVIM_APPNAME` while validating this branch.
