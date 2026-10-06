@@ -5,6 +5,11 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Free Ctrl+Space for the Zellij unlock toggle (dotfiles/config/zellij/config.kdl).
+-- Ctrl+Space sends NUL, which Neovim calls <C-@>; this neutralizes the
+-- insert-mode i_CTRL-@ built-in so behavior is consistent outside Zellij too.
+vim.keymap.set('i', '<C-Space>', '<Nop>', { desc = 'Free Ctrl+Space for Zellij' })
+
 -- Map ; to : in normal mode for faster command entry
 vim.keymap.set('n', ';', ':', { desc = 'Enter command mode' })
 
