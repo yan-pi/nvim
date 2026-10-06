@@ -23,16 +23,10 @@ return {
           '--header-insertion=iwyu',
           '--completion-style=bundled',
           '--pch-storage=memory',
-          '--cross-file-rename',
           '--fallback-style=llvm',
         },
         root_markers = { '.clangd', 'compile_commands.json', '.git' },
         filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' },
-        capabilities = {
-          -- clangd warns if offsetEncoding is not utf-16; nvim-lspconfig
-          -- normally sets this, but we make it explicit here.
-          offsetEncoding = { 'utf-16' },
-        },
         settings = {
           clangd = {
             -- Inlay hints are available in clangd 14+; enable useful ones.
