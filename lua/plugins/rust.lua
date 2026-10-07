@@ -95,6 +95,9 @@ return {
     opts = {
       server = {
         on_attach = function(client, bufnr)
+          -- rust-analyzer provides hints; enable Neovim's renderer for Rust buffers.
+          vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+
           -- Rustacean-specific keybindings
           vim.keymap.set('n', '<leader>rr', function()
             vim.cmd.RustLsp 'runnables'
