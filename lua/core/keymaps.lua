@@ -8,6 +8,9 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Map ; to : in normal mode for faster command entry
 vim.keymap.set('n', ';', ':', { desc = 'Enter command mode' })
 
+-- Quickly leave insert mode
+vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Return to normal mode' })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
