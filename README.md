@@ -46,10 +46,19 @@ Nix-provided machine defaults are used:
 
 Keymaps:
 
-- `<leader>f`: format the current buffer.
+- `<leader>cf`: format the current buffer (Code → Format).
 - `<leader>uf`: toggle format-on-save globally.
 - `<leader>uF`: toggle format-on-save for the current buffer.
 - `:ConformInfo`: inspect formatter resolution.
+
+## Navigation and code actions
+
+- `s` / `S`: Flash jump / Treesitter selection.
+- `[t` / `]t`: previous / next Treesitter node; Neotest failed-test navigation is under `<leader>T[` / `<leader>T]`.
+- `gI`: go to implementation; `<leader>gI`: list all GitHub issues.
+- `<leader>csa` / `<leader>csd` / `<leader>csr`: add / delete / replace surrounding (quotes, brackets, tags).
+- `<leader>uz`: toggle Zen mode; `<leader>uB`: toggle Git blame.
+- `<leader>Re`: extract function from a visual selection; `<leader>Rr`: refactoring menu.
 
 ## LSP
 

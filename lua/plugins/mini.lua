@@ -271,18 +271,27 @@ return {
 
       -- Animated splash deferred — see docs/animated-splash-investigation.md.
 
-      -- Navigate with ][ shortcuts (]b for next buffer, etc.)
-      require('mini.bracketed').setup()
+      -- Navigate with ][ shortcuts (]b for next buffer, [t/]t for Treesitter nodes).
+      require('mini.bracketed').setup {
+        treesitter = { suffix = 't' },
+      }
 
       -- Indent scope visualization
       -- require('mini.indentscope').setup()
 
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- Surround actions live under Code -> Surround, leaving s/S to Flash.
+      require('mini.surround').setup {
+        mappings = {
+          add = '<leader>csa',
+          delete = '<leader>csd',
+          find = '<leader>csf',
+          find_left = '<leader>csF',
+          highlight = '<leader>csh',
+          replace = '<leader>csr',
+          suffix_last = 'l',
+          suffix_next = 'n',
+        },
+      }
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,

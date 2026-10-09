@@ -90,14 +90,14 @@ return {
         desc = '[T]est [d]ebug nearest test',
       },
       {
-        '[t',
+        '<leader>T[',
         function()
           require('neotest').jump.prev { status = 'failed' }
         end,
         desc = 'Jump to previous failed test',
       },
       {
-        ']t',
+        '<leader>T]',
         function()
           require('neotest').jump.next { status = 'failed' }
         end,
@@ -131,7 +131,7 @@ return {
             end,
           },
           require 'neotest-vitest',
-          require('neotest-haskell') {
+          require 'neotest-haskell' {
             frameworks = { 'tasty', 'hspec', 'sydtest' },
           },
           require 'neotest-go',

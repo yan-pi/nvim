@@ -12,12 +12,12 @@ return {
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>cf',
         function()
           require('conform').format { async = true, lsp_format = 'never' }
         end,
         mode = '',
-        desc = '[F]ormat buffer',
+        desc = '[C]ode [F]ormat buffer',
       },
       -- Toggle auto-format on save (global, all buffers)
       {
@@ -32,7 +32,7 @@ return {
       -- Toggle auto-format on save (buffer-local)
       -- Useful for dotfiles/rc configs (e.g. .yabairc) you don't want
       -- auto-formatted, while keeping auto-format on elsewhere. Manual
-      -- format via <leader>f still works regardless of this toggle.
+      -- format via <leader>cf still works regardless of this toggle.
       {
         '<leader>uF',
         function()

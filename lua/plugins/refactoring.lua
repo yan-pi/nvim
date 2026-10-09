@@ -1,4 +1,3 @@
--- lua/plugins/refactoring.lua
 -- Advanced refactoring operations for multiple languages
 
 return {
@@ -32,97 +31,85 @@ return {
     show_success_message = true,
   },
   keys = {
-    -- Extract function (visual mode)
+    -- Refactoring actions use uppercase R, leaving lowercase r for Rust.
     {
-      '<leader>re',
+      '<leader>Re',
       function()
-        require('refactoring').refactor('Extract Function')
+        require('refactoring').refactor 'Extract Function'
       end,
       mode = 'x',
       desc = 'Extract Function',
     },
     {
-      '<leader>rf',
+      '<leader>Rf',
       function()
-        require('refactoring').refactor('Extract Function To File')
+        require('refactoring').refactor 'Extract Function To File'
       end,
       mode = 'x',
       desc = 'Extract Function To File',
     },
-    -- Extract variable (visual mode)
     {
-      '<leader>rv',
+      '<leader>Rv',
       function()
-        require('refactoring').refactor('Extract Variable')
+        require('refactoring').refactor 'Extract Variable'
       end,
       mode = 'x',
       desc = 'Extract Variable',
     },
-    -- Inline variable (normal and visual mode)
     {
-      '<leader>ri',
+      '<leader>Ri',
       function()
-        require('refactoring').refactor('Inline Variable')
+        require('refactoring').refactor 'Inline Variable'
       end,
       mode = { 'n', 'x' },
       desc = 'Inline Variable',
     },
-    -- Extract block (normal mode)
     {
-      '<leader>rb',
+      '<leader>Rb',
       function()
-        require('refactoring').refactor('Extract Block')
+        require('refactoring').refactor 'Extract Block'
       end,
       desc = 'Extract Block',
     },
     {
-      '<leader>rB',
+      '<leader>RB',
       function()
-        require('refactoring').refactor('Extract Block To File')
+        require('refactoring').refactor 'Extract Block To File'
       end,
       desc = 'Extract Block To File',
     },
-    -- Inline function (normal mode)
     {
-      '<leader>rI',
+      '<leader>RI',
       function()
-        require('refactoring').refactor('Inline Function')
+        require('refactoring').refactor 'Inline Function'
       end,
       desc = 'Inline Function',
     },
-    -- Debug operations
+    -- Debug print actions share a dedicated sub-prefix.
     {
-      '<leader>rp',
+      '<leader>Rdp',
       function()
         require('refactoring').debug.printf { below = false }
       end,
       desc = 'Debug Print',
     },
     {
-      '<leader>rv',
+      '<leader>Rdv',
       function()
         require('refactoring').debug.print_var { normal = true }
       end,
+      mode = { 'n', 'x' },
       desc = 'Debug Print Variable',
     },
     {
-      '<leader>rv',
-      function()
-        require('refactoring').debug.print_var {}
-      end,
-      mode = 'x',
-      desc = 'Debug Print Variable',
-    },
-    {
-      '<leader>rc',
+      '<leader>Rdc',
       function()
         require('refactoring').debug.cleanup {}
       end,
       desc = 'Debug Cleanup',
     },
-    -- Refactor menu (uses vim.ui.select which auto-detects available pickers)
     {
-      '<leader>rr',
+      '<leader>Rr',
       function()
         require('refactoring').select_refactor {
           show_success_message = true,

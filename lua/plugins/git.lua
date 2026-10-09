@@ -38,7 +38,7 @@ return {
     },
     keys = {
       {
-        '<leader>gB',
+        '<leader>uB',
         '<cmd>GitBlameToggle<cr>',
         desc = 'Toggle Git Blame',
       },

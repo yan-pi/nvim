@@ -98,6 +98,7 @@ All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope
 - `<leader>fr` - Recent files
 - `<leader>,` - Buffer switcher
 - `<leader>bt` - Tab-scoped buffers
+- `<leader>bN` - Create a new buffer
 - `<leader>fp` - Project switcher
 
 **Symbol Navigation:**
@@ -110,6 +111,15 @@ All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope
 - `gI` - Go to implementation
 - `gy` - Go to type definition
 
+**Code actions:**
+- `<leader>cf` - Format current buffer
+- `<leader>cDd` - Generate documentation
+- `<leader>csa` / `<leader>csd` / `<leader>csr` - Add / delete / replace surrounding
+- `s` / `S` - Flash jump / Treesitter selection
+- `[t` / `]t` - Previous / next Treesitter node
+- `<leader>T[` / `<leader>T]` - Previous / next failed test
+- `<leader>Re` / `<leader>Rr` - Extract function / refactoring menu
+
 **Search:**
 - `<leader>/` - Live grep
 - `<leader>sg` - Grep files
@@ -119,6 +129,8 @@ All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope
 
 **Git:**
 - `<leader>gb` - Git branches
+- `<leader>gB` - Open file/revision in browser
+- `<leader>uB` - Toggle Git blame
 - `<leader>gl` - Git log
 - `<leader>gs` - Git status
 - `<leader>gd` - Git diff
@@ -131,6 +143,9 @@ All file/symbol/grep navigation uses **Snacks picker** exclusively (no Telescope
 - `<leader>gP` - GitHub pull requests (all)
 
 **Note:** Requires `gh` CLI installed and authenticated (`gh auth login`)
+
+**UI:**
+- `<leader>uz` - Toggle Zen mode
 
 **Vim Internals:**
 - `<leader>sc` - Commands
@@ -184,13 +199,16 @@ Use `darwin-rebuild` from the dotfiles repository to add or update language tool
 
 ### Formatting
 ```vim
-<leader>f           " Format current buffer
+<leader>cf          " Format current buffer
 <leader>uf          " Toggle auto-format on save
 :ConformInfo        " View available formatters
 ```
 
 ### Debugging
 ```vim
+<leader>uz          " Toggle Zen mode
+<leader>Re          " Extract function (visual selection)
+<leader>Rr          " Refactoring menu
 <leader>dc          " Continue/Start debugging
 <leader>ds          " Step over
 <leader>di          " Step into

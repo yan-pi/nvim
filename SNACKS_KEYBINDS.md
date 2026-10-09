@@ -1,6 +1,18 @@
-# Snacks Picker Keybindings Reference
+# Keybinding Reference
 
-This document provides a comprehensive reference for all Snacks.nvim picker keybindings configured in this Neovim setup.
+This document summarizes the navigation, code-action, and Snacks.nvim mappings configured in this Neovim setup.
+
+## Code Actions and Navigation
+
+| Keybinding | Description |
+|------------|-------------|
+| `<leader>cf` | Format current buffer |
+| `<leader>csa` / `<leader>csd` / `<leader>csr` | Add / delete / replace surrounding |
+| `s` / `S` | Flash jump / Treesitter selection |
+| `[t` / `]t` | Previous / next Treesitter node |
+| `<leader>T[` / `<leader>T]` | Previous / next failed test |
+| `<leader>Re` / `<leader>Rr` | Extract function / refactoring menu |
+| `gI` | Go to implementation |
 
 ## Quick Access Pickers
 
@@ -22,6 +34,7 @@ This document provides a comprehensive reference for all Snacks.nvim picker keyb
 | `<leader>fp` | Project switcher |
 | `<leader>fb` | Buffers |
 | `<leader>bt` | Tab-scoped buffers (current tab only) |
+| `<leader>bN` | Create a new buffer |
 
 ## Git
 
@@ -104,6 +117,8 @@ This document provides a comprehensive reference for all Snacks.nvim picker keyb
 
 | Keybinding | Description |
 |------------|-------------|
+| `<leader>uB` | Toggle Git blame |
+| `<leader>uz` | Toggle Zen mode |
 | `<leader>uC` | Colorscheme picker |
 
 ## Other Snacks Features
@@ -111,7 +126,6 @@ This document provides a comprehensive reference for all Snacks.nvim picker keyb
 ### Window Management
 | Keybinding | Description |
 |------------|-------------|
-| `<leader>z` | Toggle Zen mode |
 | `<leader>Z` | Toggle Zoom |
 
 ### Scratch Buffers
@@ -211,11 +225,3 @@ Quickly reopen the last picker with the same query/filters. Useful for iterating
 
 ### Tab-Scoped Buffers (`<leader>bt`)
 Shows only buffers that have been opened in the current tab. Works with the bufferline.nvim tab-scoped buffer management.
-
-## Total Keybindings
-
-**Pickers:** 79 keybindings  
-**Other Snacks features:** 15 keybindings  
-**Toggle options:** 11 keybindings  
-
-**Grand Total:** 105 keybindings configured

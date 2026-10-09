@@ -3,8 +3,7 @@
 -- format (rustdoc ///, godoc //, TSDoc /** */).
 --
 -- Aligns with the project policy of doc-comments on all public APIs.
--- Keybind <leader>cD (capital D) to avoid collision with crates.nvim
--- <leader>cd (Crate Documentation, buffer-local in Cargo.toml).
+-- Keybinds use <leader>cD… (Code -> Documentation), separate from crates.nvim's <leader>cd.
 
 return {
   {
@@ -21,7 +20,7 @@ return {
       },
     },
     keys = {
-      { '<leader>cD', '<cmd>Neogen<cr>', desc = '[C]ode generate [D]oc' },
+      { '<leader>cDd', '<cmd>Neogen<cr>', desc = 'Generate documentation (default)' },
       { '<leader>cDf', '<cmd>Neogen func<cr>', desc = 'Doc function' },
       { '<leader>cDc', '<cmd>Neogen class<cr>', desc = 'Doc class/struct' },
       { '<leader>cDt', '<cmd>Neogen type<cr>', desc = 'Doc type' },

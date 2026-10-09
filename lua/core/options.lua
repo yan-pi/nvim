@@ -44,11 +44,8 @@ vim.o.signcolumn = 'yes'
 -- Decrease update time (increased slightly for better performance)
 vim.o.updatetime = 300 -- Increased from 250ms for less frequent LSP/autocmd updates
 
--- Decrease mapped sequence wait time
--- Optimized to 75ms for ultra-responsive input with <Space> (leader key)
--- This provides near-zero delay when typing while still allowing fast leader key sequences
--- Note: Requires fast typing of leader key combinations (e.g., <Space>ff in <75ms)
-vim.o.timeoutlen = 75
+-- Allow enough time for multi-key mappings without making them feel sluggish.
+vim.o.timeoutlen = 500
 
 -- Configure how new splits should be opened
 vim.o.splitright = true

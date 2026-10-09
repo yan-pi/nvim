@@ -5,11 +5,6 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Free Ctrl+Space for the Zellij unlock toggle (dotfiles/config/zellij/config.kdl).
--- Ctrl+Space sends NUL, which Neovim calls <C-@>; this neutralizes the
--- insert-mode i_CTRL-@ built-in so behavior is consistent outside Zellij too.
-vim.keymap.set('i', '<C-Space>', '<Nop>', { desc = 'Free Ctrl+Space for Zellij' })
-
 -- Map ; to : in normal mode for faster command entry
 vim.keymap.set('n', ';', ':', { desc = 'Enter command mode' })
 
@@ -22,12 +17,12 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Buffer management
--- Note: <leader>bd closes buffer (defined in snacks.lua, tab-scoped)
+-- Note: <leader>bd closes buffer and <leader>bN creates one.
 -- Note: <leader>d is reserved for DAP debug prefix
-vim.keymap.set('n', '<leader>b', ':enew<CR>', { desc = 'Create new empty buffer', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bN', ':enew<CR>', { desc = '[B]uffer [N]ew', noremap = true, silent = true })
 vim.keymap.set('t', '<C-n>', '<C-\\><C-n>', { desc = 'Enter normal mode in terminal' })
 
 -- TIP: Disable arrow keys in normal mode
