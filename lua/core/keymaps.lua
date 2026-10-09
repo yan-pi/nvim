@@ -11,6 +11,16 @@ vim.keymap.set('n', ';', ':', { desc = 'Enter command mode' })
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Folding (Tree-sitter folds are enabled in core.options)
+vim.keymap.set('n', '<leader>zc', '<cmd>normal! zc<CR>', { desc = 'Close fold' })
+vim.keymap.set('n', '<leader>zo', '<cmd>normal! zo<CR>', { desc = 'Open fold' })
+vim.keymap.set('n', '<leader>za', '<cmd>normal! za<CR>', { desc = 'Toggle fold' })
+vim.keymap.set('n', '<leader>zC', '<cmd>normal! zC<CR>', { desc = 'Close fold recursively' })
+vim.keymap.set('n', '<leader>zO', '<cmd>normal! zO<CR>', { desc = 'Open fold recursively' })
+vim.keymap.set('n', '<leader>zA', '<cmd>normal! zA<CR>', { desc = 'Toggle fold recursively' })
+vim.keymap.set('n', '<leader>zM', '<cmd>normal! zM<CR>', { desc = 'Close all folds' })
+vim.keymap.set('n', '<leader>zR', '<cmd>normal! zR<CR>', { desc = 'Open all folds' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.

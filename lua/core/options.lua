@@ -31,6 +31,12 @@ end)
 -- Enable break indent
 vim.o.breakindent = true
 
+-- Enable indentation-based folds without triggering synchronous Tree-sitter
+-- parsing across every buffer. Keep folds open on startup.
+vim.o.foldmethod = 'indent'
+vim.o.foldenable = true
+vim.o.foldlevel = 99
+
 -- Save undo history
 vim.o.undofile = true
 
