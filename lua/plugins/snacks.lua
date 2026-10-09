@@ -41,6 +41,12 @@ return {
         timeout = 3000,
       },
       picker = { enabled = true },
+      -- Center the editing window in a fixed-width float on ultrawide displays.
+      zen = {
+        enabled = true,
+        center = true,
+        win = { style = 'zen', width = 120 },
+      },
       quickfile = { enabled = true },
       scope = { enabled = true },
       -- Optimized smooth scroll configuration

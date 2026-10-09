@@ -87,7 +87,11 @@ local formatting_keys = get_plugin_keys('plugins.formatting', 'stevearc/conform.
 assert(has_key(formatting_keys, '<leader>cf', 'n'), 'Code -> Format mapping is missing')
 assert(not has_key(formatting_keys, '<leader>f', 'n'), 'formatting still owns the files prefix')
 
+local snacks_spec = require('plugins.snacks')[1]
 local snacks_keys = get_plugin_keys('plugins.snacks', 'folke/snacks.nvim')
+assert(snacks_spec.opts.zen.enabled, 'Snacks Zen module must be enabled')
+assert(snacks_spec.opts.zen.center, 'Zen mode must center the editor window')
+assert(snacks_spec.opts.zen.win.width == 120, 'Zen editor width should be capped at 120 columns')
 assert(has_key(snacks_keys, '<leader>uz', 'n'), 'UI -> Zen mapping is missing')
 assert(not has_key(snacks_keys, '<leader>z', 'n'), 'Zen still owns the vault prefix')
 assert(has_key(snacks_keys, '<leader>gB', 'n'), 'Git Browse mapping is missing')
